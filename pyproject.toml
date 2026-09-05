@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-arrow = ["ttalk-fast", "pyarrow>=15"]
+arrow = ["pyarrow>=15"]  # plus the ttalk_fast wheel built from crates/ttalk-fast-py (not on PyPI)
 dev = [
   "pytest>=8",
   "pytest-asyncio>=0.23",
