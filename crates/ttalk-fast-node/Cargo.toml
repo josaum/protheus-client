@@ -1,0 +1,21 @@
+[package]
+name = "ttalk-fast-node"
+description = "N-API bindings for ttalk-fast-core (module `ttalk_fast_node`)."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lib]
+name = "ttalk_fast_node"
+crate-type = ["cdylib"]
+
+[dependencies]
+ttalk-fast-core = { path = "../ttalk-fast-core" }
+serde_json = { workspace = true }
+napi = { version = "2", features = ["serde-json", "napi4"] }
+napi-derive = "2"
+
+[build-dependencies]
+napi-build = "2.2"

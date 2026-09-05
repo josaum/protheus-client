@@ -1,0 +1,19 @@
+{
+  "name": "ttalk-fast-node",
+  "version": "0.1.0",
+  "description": "TOTVS TTALK spec engine and DOM-free Arrow page decoder (Rust, N-API); parity with the ttalk_fast Python wheel.",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "license": "MIT",
+  "author": "Dionisio Chiuratto Agourakis <dionisio@getjai.com>",
+  "files": ["index.js", "index.d.ts", "*.node", "README.md"],
+  "engines": { "node": ">=16" },
+  "napi": { "name": "ttalk_fast_node" },
+  "os": ["darwin", "linux", "win32"],
+  "cpu": ["x64", "arm64"],
+  "scripts": {
+    "build": "../../build-node.sh",
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": ["totvs", "protheus", "ttalk", "openapi", "arrow", "rust", "native", "napi"]
+}

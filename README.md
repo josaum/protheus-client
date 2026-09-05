@@ -11,6 +11,7 @@ protheus-client/
 ├── crates/ttalk-fast-core   spec engine: load, bundle, normalise, index, examples, JSON-Schema verdicts, JSON→Arrow
 ├── crates/ttalk-fast-cli    `ttalk-fast index <repo> --product Protheus --out DIR` / `ttalk-fast decode …`
 ├── crates/ttalk-fast-py     PyO3 wheel `ttalk_fast` (abi3, py>=3.8): build_spec_index(), Decoder
+├── crates/ttalk-fast-node   N-API module `ttalk-fast-node` (napi 2, node>=16): buildSpecIndex(), Decoder (+ decodeAsync)
 ├── src/protheus             the Python package (client, auth, paging, arrow, generated apis/ models/ spec/)
 ├── tools/build.py           runs the engine, emits the Python surface
 └── tests                    contract tests over every operation, fixture and verdict
@@ -98,6 +99,23 @@ demotion is in the report and the offending rows keep being flagged.
 `ttalk-fast decode bundle.json PagedCustomerVendors page.json` does the same
 from the shell.
 
+The same decoder is available to Node (`crates/ttalk-fast-node`, built by
+`./build-node.sh`), for jai-pay and other JS consumers:
+
+```js
+const { Decoder } = require('ttalk-fast-node');
+const { tableFromIPC } = require('apache-arrow');
+
+const dec = new Decoder(fs.readFileSync('src/protheus/spec/schemas/customer_vendor_v1.json', 'utf8'),
+                        'PagedCustomerVendors');
+const { ipc, report } = await dec.decodeAsync(bodyBuffer);   // off the event loop
+const table = tableFromIPC(ipc);                               // report.violations, report.demoted_fields
+```
+
+Measured in Node 22 on the same 200-row page: 13 ms sync (validation + IPC)
+against 6.8 ms for a bare `JSON.parse` that validates nothing; eight pages in
+flight through `decodeAsync` complete in ~66 ms on two cores.
+
 ## Runtime behaviour
 
 - **Auth.** `BasicAuth`, `BearerAuth`, or `OAuth2PasswordAuth` — password grant
@@ -141,6 +159,7 @@ cargo test --workspace                                        # engine unit test
 cargo build --release -p ttalk-fast-cli                       # target/release/ttalk-fast
 pip install maturin && maturin build --release -m crates/ttalk-fast-py/Cargo.toml -o dist
 pip install dist/ttalk_fast-*.whl                             # enables protheus.arrow
+./build-node.sh && (cd crates/ttalk-fast-node && npm test)    # ttalk_fast_node.node + node:test
 
 git clone https://github.com/totvs/ttalk-standard-message
 pip install -e '.[dev]'

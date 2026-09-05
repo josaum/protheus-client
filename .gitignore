@@ -10,3 +10,5 @@ build/
 dist/
 artifacts/wheels/
 .leio-code/
+node_modules/
+*.node

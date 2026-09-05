@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/ttalk-fast-core", "crates/ttalk-fast-cli", "crates/ttalk-fast-py"]
+members = ["crates/ttalk-fast-core", "crates/ttalk-fast-cli", "crates/ttalk-fast-py", "crates/ttalk-fast-node"]
 
 [workspace.package]
 version = "0.1.0"
