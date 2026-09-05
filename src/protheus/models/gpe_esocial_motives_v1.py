@@ -1,0 +1,43 @@
+"""Motivos de Afastamento — generated from GPEEsocialMotives_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+
+from __future__ import annotations
+
+from pydantic import AnyUrl, BaseModel, Field
+
+
+class Paging(BaseModel):
+    has_next: bool | None = Field(None, alias="hasNext", examples=[False])
+
+
+class ListMotives(BaseModel):
+    motives_code_: str = Field(
+        ..., alias="motivesCode ", description="Código do motivo de afastamento", examples=["01"], max_length=2
+    )
+    motives_description_: str = Field(
+        ...,
+        alias="motivesDescription ",
+        description="Descrição do motivo de afastamento",
+        examples=["Acidente/Doença do trabalho"],
+        max_length=60,
+    )
+
+
+class ErrorModelBase(BaseModel):
+    code: str = Field(..., description="Código identificador do erro.")
+    message: str = Field(..., description="Literal no idioma da requisição descrevendo o erro para o usuário.")
+    detailed_message: str = Field(
+        ..., alias="detailedMessage", description="Mensagem técnica e mais detalhada do erro."
+    )
+    help_url: AnyUrl | None = Field(None, alias="helpUrl", description="URI para documentação do erro.")
+
+
+class ErrorDetail(BaseModel):
+    details: list[ErrorModelBase] | None = None
+
+
+class PagedItens(Paging):
+    items: list[ListMotives] | None = None
+
+
+class ErrorModel(ErrorModelBase, ErrorDetail):
+    pass
