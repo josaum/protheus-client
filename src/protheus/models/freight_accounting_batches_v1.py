@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Any
 
 from pydantic import AnyUrl, BaseModel, Field
 
@@ -50,7 +49,7 @@ class FinancialStatus1(StrEnum):
 class ReversalProvisionSubBatch(BaseModel):
     code: str | None = Field(None, alias="Code", description="Codigo Sublote de Estorno", examples=["99999999"])
     period: str | None = Field(None, alias="Period", description="Periodo", examples=["2019/10"])
-    creation_date: Any | None = Field(None, alias="CreationDate", description="Data Criacao", examples=["20191010"])
+    creation_date: str | None = Field(None, alias="CreationDate", description="Data Criacao", examples=["20191010"])
     financial_status: FinancialStatus1 | None = Field(
         None, alias="FinancialStatus", description="Situacao da Integracao", examples=["2"]
     )
@@ -60,7 +59,7 @@ class ReversalProvisionSubBatch(BaseModel):
 
 
 class ReversalEntry(BaseModel):
-    entry_date: Any | None = Field(None, alias="EntryDate", description="Data do Lançamento", examples=["20191010"])
+    entry_date: str | None = Field(None, alias="EntryDate", description="Data do Lançamento", examples=["20191010"])
     cost_center: str | None = Field(None, alias="CostCenter", description="Centro Custo Debito", examples=["9999999"])
     ledger_account: str | None = Field(None, alias="LedgerAccount", description="Conta Contabil", examples=["4132301"])
     business_unit: str | None = Field(None, alias="BusinessUnit", description="Unidade de Negocio.", examples=["001"])

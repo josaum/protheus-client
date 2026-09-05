@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Any
 
 from pydantic import AnyUrl, BaseModel, Field
 
@@ -45,19 +44,19 @@ class ContaminantValuesType(BaseModel):
         ge=0,
         le=9999999999.99999,
     )
-    end_range: Any | None = Field(
-        None, alias="EndRange", description="Faixa Final", examples=["9,999,999,999.99999"], ge=0, le=9999999999.99999
+    end_range: float | None = Field(
+        None, alias="EndRange", description="Faixa Final", examples=["9,999,999,999.99999"], ge=0.0, le=9999999999.99999
     )
-    inclusion_date_value: Any | None = Field(
+    inclusion_date_value: str | None = Field(
         None, alias="InclusionDateValue", description="Data de inclusão", examples=["20181105"]
     )
-    inclusion_hour_value: Any | None = Field(
+    inclusion_hour_value: str | None = Field(
         None, alias="InclusionHourValue", description="Hora de inclusão", examples=["17:54:31"]
     )
-    update_date_value: Any | None = Field(
+    update_date_value: str | None = Field(
         None, alias="UpdateDateValue", description="Data de atualização", examples=["20181105"]
     )
-    update_hour_value: Any | None = Field(
+    update_hour_value: str | None = Field(
         None, alias="UpdateHourValue", description="Hora de atualização", examples=["17:59:01"]
     )
 
@@ -105,14 +104,14 @@ class ContaminantsType(BaseModel):
     propagation_level: str | None = Field(
         None, alias="PropagationLevel", description="Nível de propagação", examples=["99"], ge=1, le=99
     )
-    inclusion_date: Any | None = Field(
+    inclusion_date: str | None = Field(
         None, alias="InclusionDate", description="Data de inclusão", examples=["20181105"]
     )
-    inclusion_hour: Any | None = Field(
+    inclusion_hour: str | None = Field(
         None, alias="InclusionHour", description="Hora de inclusão", examples=["17:54:31"]
     )
-    update_date: Any | None = Field(None, alias="UpdateDate", description="Data de atualização", examples=["20181105"])
-    update_hour: Any | None = Field(None, alias="UpdateHour", description="Hora de atualização", examples=["17:59:00"])
+    update_date: str | None = Field(None, alias="UpdateDate", description="Data de atualização", examples=["20181105"])
+    update_hour: str | None = Field(None, alias="UpdateHour", description="Hora de atualização", examples=["17:59:00"])
     list_of_contaminant_values: (
         ListOfContaminantValues | None
     ) = Field(None, alias="ListOfContaminantValues", description="Lista dos valores do contaminante.")

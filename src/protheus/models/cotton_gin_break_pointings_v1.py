@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Any
 
 from pydantic import AnyUrl, BaseModel, Field
 
@@ -33,15 +32,15 @@ class CottonGinBreakPointingsType(BaseModel):
         None, alias="CottonGinBreakCode", description="Código do motivo de parada.", examples=["001"]
     )
     shift_code: str | None = Field(None, alias="ShiftCode", description="Código do turno.", examples=["001"])
-    start_date: Any | None = Field(
+    start_date: str | None = Field(
         None, alias="StartDate", description="Data de início da parada.", examples=["20181022"]
     )
     start_time: str | None = Field(None, alias="StartTime", description="Hora de início da parada.", examples=["09:00"])
-    end_date: Any | None = Field(None, alias="EndDate", description="Data de término da parada.", examples=["20181022"])
+    end_date: str | None = Field(None, alias="EndDate", description="Data de término da parada.", examples=["20181022"])
     end_time: str | None = Field(None, alias="EndTime", description="Hora de término da parada.", examples=["11:00"])
     status: Status | None = Field(None, alias="Status", description="Status da parada.", examples=["1"])
-    user_code: Any | None = Field(None, alias="UserCode", description="Código do usuário.", examples=["0000000001"])
-    note: Any | None = Field(
+    user_code: str | None = Field(None, alias="UserCode", description="Código do usuário.", examples=["0000000001"])
+    note: str | None = Field(
         None, alias="Note", description="Observação da parada.", examples=["Esteira necessita de lavagem."]
     )
 

@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
-
-from pydantic import AnyUrl, Base64Str, BaseModel, Field
+from pydantic import AnyUrl, AwareDatetime, Base64Str, BaseModel, Field
 
 
 class CandidateSave(BaseModel):
@@ -16,7 +14,9 @@ class CandidateSave(BaseModel):
     )
     branch_id: str | None = Field(None, alias="branchId", description="Código da Filial", examples=["01 ou D MG 01"])
     name: str | None = Field(None, description="Nome da Pessoa", examples=["João Pereira da Silva"])
-    birth: Any | None = Field(None, description="Data de aniversário da Pessoa", examples=["1975-05-26 00:00:00"])
+    birth: AwareDatetime | None = Field(
+        None, description="Data de aniversário da Pessoa", examples=["1975-05-26 00:00:00"]
+    )
     home_state: str | None = Field(None, alias="homeState", description="Estado natal da pessoa", examples=["MG"])
     naturalness: str | None = Field(None, description="Naturalidade da Pessoa", examples=["Belo Horizonte"])
     nick_name: str | None = Field(None, alias="nickName", description="Apelido da Pessoa", examples=["Jão"])
@@ -59,7 +59,7 @@ class CandidateSave(BaseModel):
         Field(None, alias="identityNumberEmitterAgency", description="Orgão emissor da identidade da pessoa", examples=["SSP"])
     )
     identity_number_emission_date: (
-        Any | None
+        AwareDatetime | None
     ) = (
         Field(None, alias="identityNumberEmissionDate", description="Data de emissão da identidade da pessoa", examples=["1975-05-26 00:00:00"])
     )
@@ -87,7 +87,7 @@ class CandidateSave(BaseModel):
         description="Estado emissor da carteira de trabalho da pessoa",
         examples=["MG"],
     )
-    work_card_emission_date: Any | None = Field(
+    work_card_emission_date: AwareDatetime | None = Field(
         None,
         alias="workCardEmissionDate",
         description="Data de emissão da carteira de trabalho da pessoa",
@@ -101,7 +101,7 @@ class CandidateSave(BaseModel):
         None, alias="driversLicenseType", description="Tipo de carteira de habilitação da pessoa", examples=["A"]
     )
     drivers_license_expiration_date: (
-        Any | None
+        AwareDatetime | None
     ) = (
         Field(None, alias="driversLicenseExpirationDate", description="Data de vencimento da carteira de habilitação da pessoa", examples=["1975-05-26 00:00:00"])
     )
@@ -127,7 +127,7 @@ class CandidateSave(BaseModel):
     )
     email: str | None = Field(None, description="Email da pessoa", examples=["teste@totvs.com.br"])
     previous_training_investment: (
-        Any | None
+        float | None
     ) = (
         Field(None, alias="previousTrainingInvestment", description="Valor de investimentos em treinamentos anteriores da pessoa", examples=["2300.00"])
     )
@@ -160,7 +160,7 @@ class CandidateSave(BaseModel):
     mentally_impaired_person: bool | None = Field(
         None, alias="mentallyImpairedPerson", description="Indicador de pessoa com deficiencia mental", examples=[0]
     )
-    curriculum_approval_date: Any | None = Field(
+    curriculum_approval_date: AwareDatetime | None = Field(
         None,
         alias="curriculumApprovalDate",
         description="Data de aprovação do currículo da pessoa",
@@ -183,7 +183,7 @@ class CandidateSave(BaseModel):
     )
     deceased: bool | None = Field(None, description="Indicador de pessoa falecida", examples=[0])
     age: int | None = Field(None, description="idade da pessoa", examples=[53])
-    registry_date: Any | None = Field(
+    registry_date: AwareDatetime | None = Field(
         None, alias="registryDate", description="Data de cadastramento", examples=["1975-05-26 00:00:00"]
     )
     wage_expectation: float | None = Field(
@@ -242,24 +242,24 @@ class CandidateSave(BaseModel):
     personal_email: str | None = Field(None, alias="personalEmail", description="Email Pessoal")
     marital_state: str | None = Field(None, alias="maritalState", description="Estado Civil")
     complement: str | None = Field(None, description="Estado Civil")
-    arrival_date: Any | None = Field(
+    arrival_date: AwareDatetime | None = Field(
         None, alias="arrivalDate", description="Data de Chegada ao Brasil", examples=["1975-05-26 00:00:00"]
     )
     letter_model19: str | None = Field(None, alias="letterModel19", description="Carta modelo 19")
     rne: str | None = Field(None, description="Registro Geral - RNE")
     immigration_decree: str | None = Field(None, alias="immigrationDecree", description="Decreto de Imigração")
-    rne_expiration_date: Any | None = Field(
+    rne_expiration_date: AwareDatetime | None = Field(
         None, alias="rneExpirationDate", description="Data de Venc. RNE", examples=["1975-05-26 00:00:00"]
     )
     work_card_expiration_date: (
-        Any | None
+        AwareDatetime | None
     ) = (
         Field(None, alias="workCardExpirationDate", description="Data de Venc. Carteira Trabalho", examples=["1975-05-26 00:00:00"])
     )
     visa_type: str | None = Field(None, alias="visaType", description="Tipo de Visto")
     passport_number: str | None = Field(None, alias="passportNumber", description="Número do Passaporte")
     native_country: str | None = Field(None, alias="nativeCountry", description="País de origem")
-    passport_expiration_date: Any | None = Field(
+    passport_expiration_date: AwareDatetime | None = Field(
         None, alias="passportExpirationDate", description="Data Validade Passaporte", examples=["1975-05-26 00:00:00"]
     )
     accessibility_features_for_job_local: (
@@ -269,7 +269,7 @@ class CandidateSave(BaseModel):
     )
     military_division: str | None = Field(None, alias="militaryDivision", description="CSM")
     military_certificate_emission_date: (
-        Any | None
+        AwareDatetime | None
     ) = (
         Field(None, alias="militaryCertificateEmissionDate", description="Data Emissão C.Militar", examples=["1975-05-26 00:00:00"])
     )
@@ -287,7 +287,7 @@ class CandidateSave(BaseModel):
         None, alias="neighborhoodTypeCode", description="Cód. Tipo Bairro", examples=["15"]
     )
     naturalness_code: str | None = Field(None, alias="naturalnessCode", description="Tipo sanguíneo")
-    naturalisation_date: Any | None = Field(
+    naturalisation_date: AwareDatetime | None = Field(
         None, alias="naturalisationDate", description="Data de Naturalização", examples=["1975-05-26 00:00:00"]
     )
     drivers_license_emitter_agency: (
@@ -295,7 +295,7 @@ class CandidateSave(BaseModel):
     ) = Field(None, alias="driversLicenseEmitterAgency", description="Orgão Emissor CNH")
     rne_emitter_agency: str | None = Field(None, alias="rneEmitterAgency", description="Orgão e UF Emissor RNE")
     country_id: int | None = Field(None, alias="countryId", description="Id Pais", examples=["1"])
-    decease_date: Any | None = Field(
+    decease_date: AwareDatetime | None = Field(
         None, alias="deceaseDate", description="Data de falecimento", examples=["1975-05-26 00:00:00"]
     )
     death_certificate_number: str | None = Field(
@@ -308,7 +308,7 @@ class CandidateSave(BaseModel):
         str | None
     ) = Field(None, alias="brazilConditionClassification", description="Portaria de Naturalização")
     drivers_license_first_emission_date: (
-        Any | None
+        AwareDatetime | None
     ) = (
         Field(None, alias="driversLicenseFirstEmissionDate", description="Data Primeira CNH", examples=["1975-05-26 00:00:00"])
     )

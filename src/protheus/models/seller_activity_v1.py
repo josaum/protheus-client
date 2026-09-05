@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import AnyUrl, AwareDatetime, BaseModel, Field
 
@@ -11,13 +11,13 @@ class Paging(BaseModel):
     has_next: bool | None = Field(None, alias="hasNext", examples=[False])
 
 
-class Type(Enum):
+class Type(StrEnum):
     field_1 = "1"
     field_2 = "2"
     field_3 = "3"
 
 
-class Status(Enum):
+class Status(StrEnum):
     field_1 = "1"
     field_2 = "2"
     field_3 = "3"
@@ -29,13 +29,13 @@ class Status(Enum):
     field_9 = "9"
 
 
-class Priority(Enum):
+class Priority(StrEnum):
     field_1 = "1"
     field_2 = "2"
     field_3 = "3"
 
 
-class CompletionPercentage(Enum):
+class CompletionPercentage(StrEnum):
     field_1 = "1"
     field_2 = "2"
     field_3 = "3"
@@ -43,7 +43,7 @@ class CompletionPercentage(Enum):
     field_5 = "5"
 
 
-class RegisterSituation(Enum):
+class RegisterSituation(StrEnum):
     field_1 = "1"
     field_2 = "2"
 

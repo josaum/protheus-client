@@ -63,7 +63,7 @@ class ListStatus(BaseModel):
 
 
 class ListAuditValue(BaseModel):
-    items: Any | None = Field(None, description="Array com os itens a ser retornado", max_length=20)
+    items: list[Any] | None = Field(None, description="Array com os itens a ser retornado", max_length=20)
     has_next: bool | None = Field(
         None,
         alias="hasNext",

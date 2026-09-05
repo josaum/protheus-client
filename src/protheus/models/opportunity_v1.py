@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from enum import Enum, StrEnum
+from enum import StrEnum
 from typing import Any
 
 from pydantic import AnyUrl, AwareDatetime, BaseModel, Field
@@ -12,7 +12,7 @@ class Paging(BaseModel):
     has_next: bool | None = Field(None, alias="hasNext", examples=[False])
 
 
-class ConsumerType(Enum):
+class ConsumerType(StrEnum):
     field_1 = "1"
     field_2 = "2"
 

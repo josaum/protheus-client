@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Any
 
 from pydantic import AnyUrl, BaseModel, Field
 
@@ -90,7 +89,7 @@ class EntitiesType(BaseModel):
     dap_incentive: DapIncentive | None = Field(
         None, alias="DAPIncentive", description="Possui o incentivo DAP?", examples=["1"]
     )
-    dap_expiration_date: Any | None = Field(
+    dap_expiration_date: str | None = Field(
         None, alias="DAPExpirationDate", description="Data de vencimento do incentivo DAP.", examples=[20200101]
     )
     dap_register_number: str | None = Field(

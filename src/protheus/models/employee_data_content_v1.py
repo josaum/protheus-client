@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Any
-
 from pydantic import AnyUrl, AwareDatetime, BaseModel, Field
 
 
@@ -168,7 +166,7 @@ class ErrorDetail(BaseModel):
 
 
 class PagedEmployeeDataContent(Paging):
-    total: Any | None = Field(None, examples=["1"])
+    total: int | None = Field(None, examples=["1"])
     employees: list[EmployeeDataContentItem] | None = None
 
 

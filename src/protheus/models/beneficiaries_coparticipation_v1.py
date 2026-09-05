@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Any
 
 from pydantic import AnyUrl, AwareDatetime, BaseModel, Field
 
@@ -80,7 +79,7 @@ class BeneficiariesCoparticipationItem(BaseModel):
     ) = (
         Field(None, alias="ServiceProviderContract", description="Número do Contrato do Prestador de Serviço indicado no lançamento da Coparticipação do Beneficiário.")
     )
-    coparticipation_value: Any | None = Field(
+    coparticipation_value: int | None = Field(
         None,
         alias="CoparticipationValue",
         description="Valor referente ao lançamento da coparticipação do beneficiário no Produto TOTVS.",
@@ -141,7 +140,7 @@ class ErrorDetail(BaseModel):
 
 
 class PagedBeneficiariesCoparticipation(Paging):
-    total: Any | None = Field(None, examples=["1"])
+    total: int | None = Field(None, examples=["1"])
     items: list[BeneficiariesCoparticipationItem] | None = None
 
 

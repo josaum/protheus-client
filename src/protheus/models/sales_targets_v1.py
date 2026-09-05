@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Any
 
 from pydantic import AnyUrl, BaseModel, Field
 
@@ -24,7 +23,7 @@ class ListOfSalesTarget(BaseModel):
         description="InternalId do item da metas de venda no ERP",
         examples="D MG 01 000000001/001",
     )
-    sales_target_item: Any | None = Field(
+    sales_target_item: str | None = Field(
         None, alias="SalesTargetItem", description="Item da meta de venda.", examples=["001"], max_length=3
     )
     billing_date: str | None = Field(
@@ -106,7 +105,7 @@ class ListSalesTarget(BaseModel):
         description="InternalId do item da metas de venda no ERP",
         examples="D MG 01 000000001/001",
     )
-    sales_target_item: Any | None = Field(
+    sales_target_item: str | None = Field(
         None, alias="SalesTargetItem", description="Item da meta de venda.", examples=["001"], max_length=3
     )
     billing_date: str | None = Field(

@@ -19,6 +19,7 @@ def test_provenance_is_pinned() -> None:
     assert prov["repository"].endswith("totvs/ttalk-standard-message")
     assert len(prov["commit"]) == 40 and prov["commit_date"]
     assert prov["product"] == "Protheus"
+    assert prov["generator"].startswith("crates/ttalk-fast-core")
 
 
 def test_only_protheus_available_operations_are_indexed() -> None:

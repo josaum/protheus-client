@@ -5,3 +5,8 @@ __pycache__/
 .venv/
 dist/
 *.egg-info/
+target/
+build/
+dist/
+artifacts/wheels/
+.leio-code/

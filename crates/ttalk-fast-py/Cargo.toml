@@ -1,0 +1,17 @@
+[package]
+name = "ttalk-fast-py"
+description = "PyO3 bindings for ttalk-fast-core (module `ttalk_fast`)."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lib]
+name = "ttalk_fast"
+crate-type = ["cdylib"]
+
+[dependencies]
+ttalk-fast-core = { path = "../ttalk-fast-core" }
+serde_json = { workspace = true }
+pyo3 = { workspace = true }

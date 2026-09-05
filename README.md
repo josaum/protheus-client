@@ -2,7 +2,19 @@
 
 Typed Python client for the TOTVS Protheus REST APIs, generated from the official
 TTALK OpenAPI specifications (`totvs/ttalk-standard-message`). No Mycelia
-dependency; runtime needs only `httpx` and `pydantic>=2`, Python 3.12+.
+dependency; runtime needs only `httpx` and `pydantic>=2`, Python 3.12+. The spec
+engine and the Arrow page decoder are Rust (`crates/`), exposed to Python as the
+optional `ttalk_fast` wheel.
+
+```
+protheus-client/
+├── crates/ttalk-fast-core   spec engine: load, bundle, normalise, index, examples, JSON-Schema verdicts, JSON→Arrow
+├── crates/ttalk-fast-cli    `ttalk-fast index <repo> --product Protheus --out DIR` / `ttalk-fast decode …`
+├── crates/ttalk-fast-py     PyO3 wheel `ttalk_fast` (abi3, py>=3.8): build_spec_index(), Decoder
+├── src/protheus             the Python package (client, auth, paging, arrow, generated apis/ models/ spec/)
+├── tools/build.py           runs the engine, emits the Python surface
+└── tests                    contract tests over every operation, fixture and verdict
+```
 
 ```python
 from protheus import ProtheusClient, OAuth2PasswordAuth
@@ -31,12 +43,16 @@ client.sales_charge_v1.create_sales_charge(body={...})      # dict or pydantic m
 
 ## What is generated, from what
 
-| Artifact | Source | Notes |
+| Artifact | Made by | Notes |
 |---|---|---|
-| `protheus/spec/index.json` | `jsonschema/apis/*.json` `x-totvs` metadata | 122 APIs, 550 operations; provenance (`commit`, `commit_date`) pinned |
-| `protheus/apis/<api>_v<n>.py` | operations available on Protheus | one class per API/version, sync + async, one method per operation |
-| `protheus/models/<api>_v<n>.py` | response/request schemas (`jsonschema/schemas`) | pydantic v2, wire names kept as aliases |
-| `tests/fixtures/responses.json` | the specs' own `example` values | one example per 2xx response |
+| `protheus/spec/index.json` | Rust engine, model names + pydantic verdicts added by `build.py` | 122 APIs, 550 operations; provenance (`commit`, `commit_date`) pinned |
+| `protheus/spec/schemas/<api>.json` | Rust engine | bundled component schemas, used by the runtime Arrow decoder |
+| `protheus/apis/<api>_v<n>.py` | `build.py` | one class per API/version, sync + async, one method per operation |
+| `protheus/models/<api>_v<n>.py` | `build.py` (datamodel-code-generator) | pydantic v2, wire names kept as aliases |
+| `tests/fixtures/responses.json` | Rust engine | one example per 2xx response, from the specs' own `example` values |
+
+The engine is product-agnostic: `ttalk-fast index <repo> --product RM` indexes
+the 199 RM specs the same way (this package only ships the Protheus surface).
 
 Selection rule: an API is included when `info.x-totvs.productInformation`
 lists Protheus; an operation is included unless it carries
@@ -51,6 +67,36 @@ path parameters in path order; query, header and standard TTALK parameters
 (`fields`, `order`, `page`, `page_size`, `filter`, `expand`) are keyword-only;
 `extra_query` passes anything the spec does not declare. Each docstring carries
 the TOTVS minimal version and product note verbatim.
+
+## Arrow extraction (Rust decoder)
+
+For bulk reads — syncing a customer base into DuckDB/Mycelia — decoding JSON
+into Python objects and pydantic models costs ~22 ms per 200-row page (1.2 MB,
+79 columns). With the `ttalk_fast` wheel installed, `protheus.arrow` does the
+same page in ~11 ms measured from Python, validation and Arrow IPC included,
+without building a DOM or a single Python object:
+
+```python
+from protheus.arrow import raw, iter_arrow_pages
+
+group = raw(client.customer_vendor_v1)                 # same methods, raw bytes back
+for page in iter_arrow_pages(group.get_customer_vendor_by_entity_type,
+                             "customer_vendor_v1.get_customer_vendor_by_entity_type",
+                             entity_type="customer", page_size=500):
+    table = page.to_pyarrow()                          # or feed page.ipc to polars / duckdb
+    page.report["invalid_rows"], page.report["violations"], page.report["demoted_fields"]
+```
+
+The rows are sliced out of the raw bytes, decoded by arrow-json's tape decoder,
+and the schema's constraints (required, enum, length, pattern, range, `date` /
+`date-time`, declared type) are checked on the Arrow columns; violations carry
+the row and a JSON pointer (`/address/city`, `/contacts/1/email`) and are
+reported, never dropped. A primitive field whose live values cannot be decoded
+as declared (`"5,2"` in a number column) is demoted to Utf8 for the rest of the
+decoder's life, so column types stay stable across pages once settled; the
+demotion is in the report and the offending rows keep being flagged.
+`ttalk-fast decode bundle.json PagedCustomerVendors page.json` does the same
+from the shell.
 
 ## Runtime behaviour
 
@@ -71,30 +117,43 @@ the TOTVS minimal version and product note verbatim.
 
 ## What the specs got wrong (recorded, not hidden)
 
-`tools/build.py` normalises what would otherwise break generation and writes
-each fix into `index.json` under the API's `spec_quirks`: draft-03
-`required: true` on properties (12 specs), numeric constraints written as
-strings (`"999,999,999.99"`), parameters without `name`/`in`, one Latin-1
-encoded schema, path parameters missing from `parameters[]`.
+The engine normalises what would otherwise break generation and writes each
+fix into `index.json` under the API's `spec_quirks`: draft-03 `required: true`
+on properties (12 specs), numeric constraints written as strings
+(`"999,999,999.99"`), `type` values that are not JSON Schema types (`Date`,
+`String`, `int32`, `varchar`, `decimal`…), parameters without `name`/`in`, one
+Latin-1 encoded schema, path parameters missing from `parameters[]`.
 
-Separately, 165 of the 517 spec examples violate the schema they illustrate
+Separately, many of the 517 spec examples violate the schema they illustrate
 (`entityType: "1-Company"` against enum `1..4`, `ISSRate: "5,2"`, date-times
-without timezone, enum labels used where codes are declared, `maxLength` on
-numbers). The generator validates every example against its model and stores
-the verdict on the operation as `example_validation`; the test-suite pins it
+without timezone, enum labels used where codes are declared). Each operation
+carries two verdicts on its example under `example_validation`: `schema` (JSON
+Schema draft-4 with format assertions, computed in Rust: 168 failures) and
+`model` (the generated pydantic class: 165 failures). The test-suite pins them
 both ways, so an upstream fix shows up as a failing test that says
-"regenerate". Treat those constraints as unreliable when parsing live data.
+"regenerate". Treat those constraints as unreliable when parsing live data —
+which is why models are opt-in and the Arrow decoder demotes instead of drops.
 
-## Regenerating
+## Building and regenerating
 
 ```sh
+cargo test --workspace                                        # engine unit tests
+cargo build --release -p ttalk-fast-cli                       # target/release/ttalk-fast
+pip install maturin && maturin build --release -m crates/ttalk-fast-py/Cargo.toml -o dist
+pip install dist/ttalk_fast-*.whl                             # enables protheus.arrow
+
 git clone https://github.com/totvs/ttalk-standard-message
 pip install -e '.[dev]'
-python tools/build.py ./ttalk-standard-message     # ~6 s, deterministic
-TTALK_REPO=./ttalk-standard-message pytest         # 1052 passed, 165 xfailed
+python tools/build.py ./ttalk-standard-message                # engine 0.4 s + codegen ~5 s
+TTALK_REPO=./ttalk-standard-message pytest                    # 1573 passed, 165 xfailed
 ```
 
-The determinism test regenerates and asserts `index.json` is byte-identical.
+`build.py` uses the wheel when importable, else the CLI binary, else
+`cargo run`. The determinism test regenerates and asserts `index.json` is
+byte-identical. Porting note: the Rust engine reproduces the original Python
+generator field for field (the committed index was the oracle), the only
+intentional change being the `type` normalisation above, which turned a
+handful of `Any` fields into real types.
 
 ## Using the index without the client
 

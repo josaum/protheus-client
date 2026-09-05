@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from pydantic import AnyUrl, BaseModel, Field
@@ -12,7 +12,7 @@ class Paging(BaseModel):
     has_next: bool | None = Field(None, alias="hasNext", examples=[False])
 
 
-class WeekDayFixed(Enum):
+class WeekDayFixed(StrEnum):
     field_1 = "1"
     field_2 = "2"
     field_3 = "3"
@@ -22,7 +22,7 @@ class WeekDayFixed(Enum):
     field_7 = "7"
 
 
-class DaysCondition(Enum):
+class DaysCondition(StrEnum):
     field_1 = "1"
     field_2 = "2"
     field_3 = "3"
@@ -170,7 +170,7 @@ class PaymentConditionInfo(BaseModel):
     payment_situation: int | None = Field(
         None, alias="PaymentSituation", description="Situação de Pagamento.", examples=[2]
     )
-    start_counting: Any | None = Field(
+    start_counting: str | None = Field(
         None, alias="StartCounting", description="Início da contagem dos dias das parcelas.", examples=["N"]
     )
     plots: Plots | None = Field(

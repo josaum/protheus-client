@@ -143,7 +143,7 @@ class JobSchedulerType(BaseModel):
     monthly: MonthlyType | None = None
     range_executions: RangeExecutionsType | None = Field(None, alias="rangeExecutions")
     execs: int | None = Field(None, description="Número de execuções no mesmo dia")
-    enddate: Any | None = Field(None, description="Data de término do processo")
+    enddate: str | None = Field(None, description="Data de término do processo")
     discard: bool | None = Field(None, description="Identifica se as tarefas atrasadas serão descartadas")
     interval: str | None = Field(None, description="Intervalo entre cada execução no mesmo dia (HH:mm)")
 

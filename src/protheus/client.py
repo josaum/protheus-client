@@ -70,10 +70,14 @@ class _ClientBase:
         return kwargs
 
     @staticmethod
-    def _finish(response: httpx.Response, operation: str) -> Any:
+    def _check(response: httpx.Response, operation: str) -> httpx.Response:
         if response.status_code >= 400:
             raise ProtheusError.from_response(response, operation)
-        return _decode(response)
+        return response
+
+    @classmethod
+    def _finish(cls, response: httpx.Response, operation: str) -> Any:
+        return _decode(cls._check(response, operation))
 
 
 class ProtheusClient(_ClientBase, SyncApis):
@@ -103,12 +107,18 @@ class ProtheusClient(_ClientBase, SyncApis):
             transport=transport,
         )
 
-    def send(self, prepared: PreparedRequest) -> Any:
+    def _send(self, prepared: PreparedRequest) -> httpx.Response:
         try:
-            response = self._http.request(prepared.method, prepared.path, **self._kwargs(prepared))
+            return self._http.request(prepared.method, prepared.path, **self._kwargs(prepared))
         except httpx.RequestError as exc:
             raise ProtheusTransportError(exc, prepared.operation) from exc
-        return self._finish(response, prepared.operation)
+
+    def send(self, prepared: PreparedRequest) -> Any:
+        return self._finish(self._send(prepared), prepared.operation)
+
+    def send_bytes(self, prepared: PreparedRequest) -> bytes:
+        """Like :meth:`send` but returns the undecoded body (for the Arrow decoder)."""
+        return self._check(self._send(prepared), prepared.operation).content
 
     def close(self) -> None:
         self._http.close()
@@ -148,12 +158,18 @@ class AsyncProtheusClient(_ClientBase, AsyncApis):
             transport=transport,
         )
 
-    async def send(self, prepared: PreparedRequest) -> Any:
+    async def _send(self, prepared: PreparedRequest) -> httpx.Response:
         try:
-            response = await self._http.request(prepared.method, prepared.path, **self._kwargs(prepared))
+            return await self._http.request(prepared.method, prepared.path, **self._kwargs(prepared))
         except httpx.RequestError as exc:
             raise ProtheusTransportError(exc, prepared.operation) from exc
-        return self._finish(response, prepared.operation)
+
+    async def send(self, prepared: PreparedRequest) -> Any:
+        return self._finish(await self._send(prepared), prepared.operation)
+
+    async def send_bytes(self, prepared: PreparedRequest) -> bytes:
+        """Like :meth:`send` but returns the undecoded body (for the Arrow decoder)."""
+        return self._check(await self._send(prepared), prepared.operation).content
 
     async def aclose(self) -> None:
         await self._http.aclose()

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Any
 
 from pydantic import AnyUrl, BaseModel, Field
 
@@ -65,12 +64,12 @@ class CottonPoisoningPointingsType(BaseModel):
     result_text: str | None = Field(
         None, alias="ResultText", description="Texto resultado da análise.", examples=["BAIXA CONTAMINACAO"]
     )
-    result_date: Any | None = Field(
+    result_date: str | None = Field(
         None, alias="ResultDate", description="Data resultado da análise.", examples=[20181101]
     )
     income_tax: IncomeTax | None = Field(None, alias="IncomeTax", description="Imposto de renda?", examples=["1"])
     active: Active | None = Field(None, alias="Active", description="Lançamento ativo?", examples=["1"])
-    update_date: Any | None = Field(
+    update_date: str | None = Field(
         None, alias="UpdateDate", description="Data de atualização do lançamento.", examples=[20181115]
     )
     update_user: str | None = Field(

@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Any
-
 from pydantic import AnyUrl, BaseModel, Field
 
 
@@ -49,7 +47,7 @@ class ErrorDetail(BaseModel):
 
 
 class PagedEmployeesManagerDataContent(Paging):
-    total: Any | None = Field(None, description="Indica o total de registros retornados.", examples=["1"])
+    total: int | None = Field(None, description="Indica o total de registros retornados.", examples=["1"])
     items: list[EmployeesManagerDataContentItem] | None = Field(
         None, description="Lista dos líderes diretos dos empregados."
     )

@@ -25,11 +25,11 @@ class ReserveItemType(BaseModel):
     warehouse_code: str | None = Field(
         None, alias="WarehouseCode", description="Código do Local de Estoque(Armazem)", examples=["01"]
     )
-    quantity: Any | None = Field(None, alias="Quantity", description="Quantidade do Item", examples=["1"])
-    reserve_expiration: Any | None = Field(
+    quantity: float | None = Field(None, alias="Quantity", description="Quantidade do Item", examples=["1"])
+    reserve_expiration: str | None = Field(
         None, alias="ReserveExpiration", description="Data de Vencimento da Reserva", examples=["2018-11-10"]
     )
-    issue_date_reserve: Any | None = Field(
+    issue_date_reserve: str | None = Field(
         None, alias="IssueDateReserve", description="Data de Emissão da Reserva", examples=["2018-11-10"]
     )
     lot_number: str | None = Field(
@@ -104,11 +104,11 @@ class ItemReserveItems(BaseModel):
     warehouse_code: str | None = Field(
         None, alias="WarehouseCode", description="Código do Local de Estoque(Armazem)", examples=["01"]
     )
-    quantity: Any | None = Field(None, alias="Quantity", description="Quantidade do Item", examples=["1"])
-    reserve_expiration: Any | None = Field(
+    quantity: float | None = Field(None, alias="Quantity", description="Quantidade do Item", examples=["1"])
+    reserve_expiration: str | None = Field(
         None, alias="ReserveExpiration", description="Data de Vencimento da Reserva", examples=["2018-11-10"]
     )
-    issue_date_reserve: Any | None = Field(
+    issue_date_reserve: str | None = Field(
         None, alias="IssueDateReserve", description="Data de Emissão da Reserva", examples=["2018-11-10"]
     )
     lot_number: str | None = Field(

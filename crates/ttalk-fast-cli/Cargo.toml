@@ -1,0 +1,16 @@
+[package]
+name = "ttalk-fast-cli"
+description = "CLI over ttalk-fast-core: `ttalk-fast index <ttalk-repo> --product Protheus --out <dir>`."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "ttalk-fast"
+path = "src/main.rs"
+
+[dependencies]
+ttalk-fast-core = { path = "../ttalk-fast-core" }
+serde_json = { workspace = true }

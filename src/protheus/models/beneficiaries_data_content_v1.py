@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Any
 
 from pydantic import AnyUrl, AwareDatetime, BaseModel, Field
 
@@ -135,7 +134,7 @@ class ErrorDetail(BaseModel):
 
 
 class PagedBeneficiariesDataContent(Paging):
-    total: Any | None = Field(None, examples=["1"])
+    total: int | None = Field(None, examples=["1"])
     items: list[BeneficiariesDataContentItem] | None = None
 
 

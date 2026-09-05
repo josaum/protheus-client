@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Any
-
 from pydantic import AnyUrl, BaseModel, Field
 
 
@@ -14,7 +12,7 @@ class Paging(BaseModel):
 class ListErrors(BaseModel):
     branch_code: str = Field(..., alias="branchCode", description="Codigo da Filial", examples=["D MG 01"])
     layout_error: str = Field(..., alias="layoutError", description="Layout do erro", examples=["C20 - Notas fiscais"])
-    integration_date: Any = Field(
+    integration_date: str = Field(
         ..., alias="integrationDate", description="Data da Integração", examples=["2022-05-25"]
     )
     integration_time: str = Field(..., alias="integrationTime", description="Hora de integração", examples=["15:50:45"])

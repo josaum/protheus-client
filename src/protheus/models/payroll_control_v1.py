@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Any
-
 from pydantic import AnyUrl, AwareDatetime, BaseModel, Field
 
 
@@ -28,7 +26,7 @@ class PayrollControlItem(BaseModel):
     payroll_identifier: str | None = Field(
         None, alias="payrollIdentifier", description="Identificador do cálculo da folha de pagamento"
     )
-    payment_amount: Any | None = Field(None, alias="paymentAmount", description="Valor do pagamento")
+    payment_amount: int | None = Field(None, alias="paymentAmount", description="Valor do pagamento")
     payment_date: AwareDatetime | None = Field(None, alias="paymentDate", description="Data de pagamento")
     payment_period: str | None = Field(None, alias="paymentPeriod", description="Competencia de pagamento")
 
@@ -47,7 +45,7 @@ class ErrorDetail(BaseModel):
 
 
 class PagedPayrollControl(Paging):
-    total: Any | None = Field(None, examples=["1"])
+    total: int | None = Field(None, examples=["1"])
     payments: list[PayrollControlItem] | None = None
 
 

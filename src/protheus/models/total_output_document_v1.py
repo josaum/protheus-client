@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Any
-
 from pydantic import AnyUrl, BaseModel, Field
 
 
@@ -12,8 +10,8 @@ class TotalOutputDocument(BaseModel):
         None, alias="Quantity", description="quantidade de notas de saída com sucesso ", ge=-9999.99, le=9999.99
     )
     amount: float | None = Field(None, alias="Amount", description="valor total de notas de saída com sucesso ")
-    from_date: Any | None = Field(None, alias="FromDate", description="Data inicio de emissão", examples=["2018-11-10"])
-    to_date: Any | None = Field(None, alias="ToDate", description="Data até de emissão", examples=["2018-11-10"])
+    from_date: str | None = Field(None, alias="FromDate", description="Data inicio de emissão", examples=["2018-11-10"])
+    to_date: str | None = Field(None, alias="ToDate", description="Data até de emissão", examples=["2018-11-10"])
 
 
 class ErrorModelBase(BaseModel):

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Any
 
 from pydantic import AnyUrl, BaseModel, Field
 
@@ -231,10 +230,10 @@ class CottonGinMachinesType(BaseModel):
     average_yield: str | None = Field(
         None, alias="AverageYield", description="Porcentagem de rendimento médio.", examples=["42,00"], ge=0, le=99.99
     )
-    expected_start_date: Any | None = Field(
+    expected_start_date: str | None = Field(
         None, alias="ExpectedStartDate", description="Data prevista do início do beneficiamento.", examples=[20180301]
     )
-    expected_end_date: Any | None = Field(
+    expected_end_date: str | None = Field(
         None, alias="ExpectedEndDate", description="Data prevista do término do beneficiamento.", examples=[20190201]
     )
     number_saws: str | None = Field(
