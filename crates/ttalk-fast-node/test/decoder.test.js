@@ -86,4 +86,6 @@ test('resource limits have stable errors and malformed JSON remains a decode err
   const limited = new Decoder(schemas, 'PagedRegionGroups', 'items', 100, { maxRows: 1 });
   assert.throws(() => limited.decode(page(1)), /resource_limit_exceeded: rows limit exceeded/);
   assert.throws(() => limited.decode(Buffer.from('{"items":[}')), /decode_failed: invalid JSON/);
+  const ipcLimited = new Decoder(schemas, 'PagedRegionGroups', 'items', 100, { maxIpcBytes: 16 });
+  assert.throws(() => ipcLimited.decode(page(1)), /resource_limit_exceeded: ipc_bytes limit exceeded/);
 });

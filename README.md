@@ -1,181 +1,383 @@
-# totvs-protheus
+# Observatory
 
-Typed Python client for the TOTVS Protheus REST APIs, generated from the official
-TTALK OpenAPI specifications (`totvs/ttalk-standard-message`). No Mycelia
-dependency; runtime needs only `httpx` and `pydantic>=2`, Python 3.12+. The spec
-engine and the Arrow page decoder are Rust (`crates/`), exposed to Python as the
-optional `ttalk_fast` wheel.
+A native macOS workspace for understanding business data, running reproducible
+transformations, and keeping evidence behind every result.
 
-```
-protheus-client/
-├── crates/ttalk-fast-core   spec engine: load, bundle, normalise, index, examples, JSON-Schema verdicts, JSON→Arrow
-├── crates/ttalk-fast-cli    `ttalk-fast index <repo> --product Protheus --out DIR` / `ttalk-fast decode …`
-├── crates/ttalk-fast-py     PyO3 wheel `ttalk_fast` (abi3, py>=3.8): build_spec_index(), Decoder
-├── crates/ttalk-fast-node   N-API module `ttalk-fast-node` (napi 2, node>=16): buildSpecIndex(), Decoder (+ decodeAsync)
-├── src/protheus             the Python package (client, auth, paging, arrow, generated apis/ models/ spec/)
-├── tools/build.py           runs the engine, emits the Python surface
-└── tests                    contract tests over every operation, fixture and verdict
-```
+Observatory connects to a database or opens a local DuckDB file, saves a bounded
+snapshot, and does subsequent analysis on local data. A SwiftUI app provides the
+interface; a compiled Rust engine processes Arrow batches; Python coordinates
+connectors, semantic projections and worker operations. An optional MCP plugin
+makes the same local workflows available to an AI assistant.
 
-```python
-from protheus import ProtheusClient, OAuth2PasswordAuth
-from protheus.paging import iter_items
-from protheus.models.customer_vendor_v1 import PagedCustomerVendors
+The project started with Alberflex's migration from Logix 11 to Protheus: changes
+in dimensions or finishes were creating new product codes and duplicated
+engineering structures, alongside duplicate supplier accounts and payment terms.
+That problem motivated a generic foundation: preserve the source records,
+understand what each entity represents, and make decisions traceable to evidence.
+Manufacturing is a domain pack; source connectors and the execution engine are
+usable independently of TOTVS.
 
-client = ProtheusClient(
-    "http://erp.example.com:8080/rest",          # everything before /api/…
-    auth=OAuth2PasswordAuth("admin", "secret"),  # or BasicAuth / BearerAuth
-    accept_language="pt-BR",
-)
+**Current stage:** a working local developer platform with bounded extraction,
+quality checks, model pipelines, verified reuse and restoration, knowledge
+navigation, human observations, and MCP tools. The longer-term goal is to retire
+separate ingestion, transformation and observability tools workflow by workflow.
+Full replacement depends on the [acceptance gates](docs/observatory-platform.md).
 
-page = client.customer_vendor_v1.get_customer_vendor_by_entity_type(
-    "customer", fields="code,name,shortName", order=["-code"], page=1, page_size=50
-)
-typed = PagedCustomerVendors.model_validate(page)          # optional typed view
+The repository also contains the original generated Python REST client and its
+Rust TTALK tooling. Their API usage, generation and benchmarks are preserved in
+[the Protheus client guide](docs/PROTHEUS-CLIENT.md).
 
-for cv in iter_items(client.customer_vendor_v1.get_customer_vendor_by_entity_type,
-                     entity_type="customer", page_size=200):
-    ...
+## What you can do today
 
-client.sales_charge_v1.create_sales_charge(body={...})      # dict or pydantic model
-```
+| Workflow | Implemented behavior |
+| --- | --- |
+| Connect and capture | Configure SQL Server or select an existing DuckDB database; test, discover columns and extract a bounded snapshot |
+| Inspect saved data | Browse provenance, schema, row counts, null counts and a small native preview |
+| Check data quality | Evaluate row-count bounds, required non-null columns and maximum null fractions against actual Parquet data |
+| Transform data | Run restricted SQL models and dependency pipelines against pinned local snapshots |
+| Import selected dbt workflows | Preview a supported compiled DuckDB manifest, bind its sources to snapshots, then explicitly build |
+| Reuse previous work | Reuse eligible artifacts when definitions, sources, dependencies and engine identity match; verify them again |
+| Restore a saved version | Inspect complete saved outputs, review the result and safely change the current pipeline version |
+| Explore knowledge | Navigate an asserted graph by selection, local filtering or an Atlas Brain + LiteLLM navigation plan |
+| Capture process knowledge | Preserve a person's exact account with attribution, context and snapshot references |
+| Investigate manufacturing data | Review duplicate candidates, mapped family sales, supplier spend and sales exceptions from an explicitly normalized import |
+| Work through an assistant | Use eleven local MCP tools scoped to a configured workspace and tenant |
 
-`AsyncProtheusClient` has the same surface with `await` (and `paging.aiter_items`).
+## How the system works
 
-## What is generated, from what
-
-| Artifact | Made by | Notes |
-|---|---|---|
-| `protheus/spec/index.json` | Rust engine, model names + pydantic verdicts added by `build.py` | 122 APIs, 550 operations; provenance (`commit`, `commit_date`) pinned |
-| `protheus/spec/schemas/<api>.json` | Rust engine | bundled component schemas, used by the runtime Arrow decoder |
-| `protheus/apis/<api>_v<n>.py` | `build.py` | one class per API/version, sync + async, one method per operation |
-| `protheus/models/<api>_v<n>.py` | `build.py` (datamodel-code-generator) | pydantic v2, wire names kept as aliases |
-| `tests/fixtures/responses.json` | Rust engine | one example per 2xx response, from the specs' own `example` values |
-
-The engine is product-agnostic: `ttalk-fast index <repo> --product RM` indexes
-the 199 RM specs the same way (this package only ships the Protheus surface).
-
-Selection rule: an API is included when `info.x-totvs.productInformation`
-lists Protheus; an operation is included unless it carries
-`available: false` for Protheus. Operations without an operation-level flag
-are kept and tagged `availability: "inherited"` (2 of 550, both in
-`RetailSalesOrders`). Three Protheus-tagged APIs have no available operation
-and are dropped (`Currency`, `ProductSupplierRelationship`, `RetailSales_v2`).
-
-Method names derive from method + path so they never collide
-(`operationId`s collide 91 times across specs). Positional arguments are the
-path parameters in path order; query, header and standard TTALK parameters
-(`fields`, `order`, `page`, `page_size`, `filter`, `expand`) are keyword-only;
-`extra_query` passes anything the spec does not declare. Each docstring carries
-the TOTVS minimal version and product note verbatim.
-
-## Arrow extraction (Rust decoder)
-
-For bulk reads — syncing a customer base into DuckDB/Mycelia — decoding JSON
-into Python objects and pydantic models costs ~22 ms per 200-row page (1.2 MB,
-79 columns). With the `ttalk_fast` wheel installed, `protheus.arrow` does the
-same page in ~11 ms measured from Python, validation and Arrow IPC included,
-without building a DOM or a single Python object:
-
-```python
-from protheus.arrow import raw, iter_arrow_pages
-
-group = raw(client.customer_vendor_v1)                 # same methods, raw bytes back
-for page in iter_arrow_pages(group.get_customer_vendor_by_entity_type,
-                             "customer_vendor_v1.get_customer_vendor_by_entity_type",
-                             entity_type="customer", page_size=500):
-    table = page.to_pyarrow()                          # or feed page.ipc to polars / duckdb
-    page.report["invalid_rows"], page.report["violations"], page.report["demoted_fields"]
+```mermaid
+flowchart TD
+    DB[SQL Server or local DuckDB] --> C[Python read-only source adapter]
+    JSON[Normalized domain import] --> S[Immutable local snapshot]
+    C --> S
+    S --> R[Rust Arrow and DataFusion engine]
+    R --> Q[Quality receipts and model outputs]
+    S --> K[Provenance and semantic graphs]
+    P[Human process account] --> O[Unverified observation receipt]
+    S -. snapshot reference .-> O
+    Q --> UI[Native SwiftUI workspace]
+    K --> UI
+    O --> UI
+    MCP[Optional stdio MCP plugin] --> W[Scoped local worker gateway]
+    W --> R
+    W --> S
+    W --> O
+    W --> Q
 ```
 
-The rows are sliced out of the raw bytes, decoded by arrow-json's tape decoder,
-and the schema's constraints (required, enum, length, pattern, range, `date` /
-`date-time`, declared type) are checked on the Arrow columns; violations carry
-the row and a JSON pointer (`/address/city`, `/contacts/1/email`) and are
-reported, never dropped. A primitive field whose live values cannot be decoded
-as declared (`"5,2"` in a number column) is demoted to Utf8 for the rest of the
-decoder's life, so column types stay stable across pages once settled; the
-demotion is in the report and the offending rows keep being flagged.
-`ttalk-fast decode bundle.json PagedCustomerVendors page.json` does the same
-from the shell.
+A **snapshot** is a saved observation of a selected source at a particular time.
+It carries its identity, tenant, capture time, classification, row count and
+content digest. Database extracts store bulk data in Parquet. Normalized domain
+imports preserve their JSON input and calculated reports. Source records retain
+their original identifiers.
 
-The same decoder is available to Node (`crates/ttalk-fast-node`, built by
-`./build-node.sh`), for jai-pay and other JS consumers:
+A **model** reads declared snapshots or upstream model outputs and produces a new
+local result. A **pipeline** connects models in dependency order. A **receipt**
+records what ran, the inputs and checks it used, and the observed outcome. A
+small catalog pointer identifies the currently published version; older complete
+runs remain available.
 
-```js
-const { Decoder } = require('ttalk-fast-node');
-const { tableFromIPC } = require('apache-arrow');
+The implementation has distinct responsibilities:
 
-const dec = new Decoder(fs.readFileSync('src/protheus/spec/schemas/customer_vendor_v1.json', 'utf8'),
-                        'PagedCustomerVendors');
-const { ipc, report } = await dec.decodeAsync(bodyBuffer);   // off the event loop
-const table = tableFromIPC(ipc);                               // report.violations, report.demoted_fields
+| Component | Responsibility |
+| --- | --- |
+| SwiftUI | Native navigation, connection forms, snapshot selection, graph exploration, evidence views and explicit actions |
+| Python worker | Database adapters, Parquet writing, domain calculations, RDF/SHACL projections, local persistence and coordination |
+| Rust engine | Direct Parquet profiling, Arrow batch processing, supported quality checks, DataFusion SQL execution, artifact verification and compiled dbt import |
+| MCP plugin | Protocol discovery, strict tool schemas, fixed workspace/tenant scope and bounded calls to the existing worker |
+
+Arrow is the in-memory representation inside the Rust execution path. Parquet is
+the durable local data format. Small JSON messages carry control information and
+results between processes. An Arrow Flight service, an in-process Arrow C Data
+bridge and end-to-end zero-copy transport remain future work.
+
+## Extract once, investigate locally
+
+Source access is often the scarce resource. Observatory lets quality checks,
+model builds, graph exploration and saved-run verification reuse local evidence
+without acquiring another source database connection.
+
+1. Choose a table and explicit columns; set a row cap.
+2. Acquire the workspace source lock and perform the bounded read.
+3. Finish writing Parquet and release the source lock.
+4. Profile and analyze the local artifact, then publish the completed snapshot.
+5. Pin that snapshot for subsequent work. A refresh creates a new version.
+
+The current source lock coordinates processes using the **same workspace**. An
+overlapping request receives a busy error. A queue and shared lease across
+workspaces accessing the same endpoint are still needed for managed acquisition.
+
+An extract currently supports up to 100 columns and 100,000 unordered rows. Its
+coverage is a bounded sample, even when the connection is live. Complete database
+replication, incremental checkpoints, deletes and CDC require additional connector
+work. Repeated local analysis still consumes local I/O; it does not imply a
+measured performance gain or eliminate hashing and verification costs.
+
+## Models, quality and publication
+
+Models declare their inputs, SQL and optional quality contract. The Rust engine
+accepts a supported read-query subset over authorized local inputs. It rejects
+external table functions, writes and unsupported semantics. Decimal aggregation
+has explicit range checks; details and examples live in the
+[native runtime guide](apps/alberflex-native/README.md).
+
+```mermaid
+flowchart TD
+    D[Definition and pinned source snapshots] --> V[Validate identities, digests and dependencies]
+    V --> N[Process next ready model]
+    N --> C{Eligible previous artifact?}
+    C -->|Yes| R[Copy, hash and profile saved output]
+    C -->|No| E[Execute supported SQL]
+    R --> Q[Evaluate configured checks]
+    E --> Q
+    Q -->|Failure| F[Record diagnostics and block descendants]
+    Q -->|Success| O[Make output available to this run's dependents]
+    O --> A{Whole pipeline complete?}
+    A -->|More models| N
+    A -->|All successful| P[Save immutable run and atomically publish pointer]
+    F --> K[Preserve previous publication]
 ```
 
-Measured in Node 22 on the same 200-row page: 13 ms sync (validation + IPC)
-against 6.8 ms for a bare `JSON.parse` that validates nothing; eight pages in
-flight through `decodeAsync` complete in ~66 ms on two cores.
+A pipeline supports up to eight sources and eight models, including imported data
+tests. Models run sequentially in dependency order. A failed node blocks its
+descendants; independent branches can finish diagnostics. Any failure prevents
+publication of the whole pipeline and discards its candidate data files.
 
-## Runtime behaviour
+Quality status and execution status are separate. A successful check operation
+can report a failed rule. A dataset with no configured checks is shown as
+**No checks configured**. Publication does not by itself establish business
+correctness.
 
-- **Auth.** `BasicAuth`, `BearerAuth`, or `OAuth2PasswordAuth` — password grant
-  on `POST <base_url>/api/oauth2/v1/token` with credentials in the query
-  string, cached token, refresh grant on expiry, one password re-grant on 401.
-  The spec enum says `PASSWORD`/`REFRESH_TOKEN`; TOTVS documentation and
-  servers use lowercase, which is what is sent. The auth object is not
-  synchronised: concurrent first requests may fetch the token twice.
-- **Errors.** Status >= 400 raises `ProtheusError` with the TTALK `ErrorModel`
-  fields (`code`, `message`, `detailed_message`, `help_url`, `details`) or the
-  raw body when the response is not an envelope. Network failures raise
-  `ProtheusTransportError`. Both carry the operation id.
-- **Responses** are returned as decoded JSON (`None` on 204). Models are opt-in
-  on purpose: real Protheus data violates the spec's enums and lengths often
-  enough that strict-by-default parsing would break production reads.
-- **Paging.** `paging.iter_pages / iter_items` follow `hasNext`.
+Reuse considers the immediately previous publication in the same pipeline and
+tenant. Its fingerprints include SQL, quality contracts, source snapshot IDs and
+digests, dependencies and the engine executable. Reused files are copied into the
+new run and checked again. If a parent rebuilds, its descendants rebuild too.
+**Force rebuild** bypasses reuse. This is artifact reuse; incremental row updates,
+a global cache and storage deduplication are not implemented.
 
-## What the specs got wrong (recorded, not hidden)
+The dbt path accepts a constrained **compiled manifest v12 from the DuckDB
+adapter**. It supports selected compiled models and data-test behavior, with
+explicit source bindings. Observatory does not execute dbt, Jinja or hooks.
+Unsupported features block import readiness. A ready preview still requires a
+separate build; it is not certification of an entire dbt project.
 
-The engine normalises what would otherwise break generation and writes each
-fix into `index.json` under the API's `spec_quirks`: draft-03 `required: true`
-on properties (12 specs), numeric constraints written as strings
-(`"999,999,999.99"`), `type` values that are not JSON Schema types (`Date`,
-`String`, `int32`, `varchar`, `decimal`…), parameters without `name`/`in`, one
-Latin-1 encoded schema, path parameters missing from `parameters[]`.
+## Verify and restore a saved version
 
-Separately, many of the 517 spec examples violate the schema they illustrate
-(`entityType: "1-Company"` against enum `1..4`, `ISSRate: "5,2"`, date-times
-without timezone, enum labels used where codes are declared). Each operation
-carries two verdicts on its example under `example_validation`: `schema` (JSON
-Schema draft-4 with format assertions, computed in Rust: 168 failures) and
-`model` (the generated pydantic class: 165 failures). The test-suite pins them
-both ways, so an upstream fix shows up as a failing test that says
-"regenerate". Treat those constraints as unreliable when parsing live data —
-which is why models are opt-in and the Arrow decoder demotes instead of drops.
+A complete historical run can become current again:
 
-## Building and regenerating
+1. **Verify saved version:** Rust reads the actual output files and compares
+   digests, rows, column names/types and null counts, then reruns the saved checks.
+   The worker also verifies source provenance and tenant.
+2. **Review:** inspect the result, original capture times and exact inspection
+   digest.
+3. **Make current / Restore:** reverify the target and require that the current
+   catalog pointer still matches the reviewed state before replacing it.
+
+Publication records intent and outcome in a journal. If completion is uncertain,
+**Retry publication** uses the same reviewed inspection ID and digest. It can
+reconcile that action without overwriting a later publication. Restoring an old
+version leaves its original data age unchanged.
+
+Unfinished staging folders are diagnostics only: they may belong to active
+builds. Automatic build resumption, cross-launch journal selection in the app,
+backup restoration and power-loss certification remain separate work.
+
+## Knowledge: meaning, observations and provenance
+
+The knowledge model distinguishes kinds of evidence instead of flattening them
+into one undifferentiated graph:
+
+| Layer | Meaning |
+| --- | --- |
+| TBox | Proposed vocabulary, relationships and structural constraints: what a dataset, family, configuration or event represents |
+| Snapshot ABox | Assertions derived from a particular imported snapshot, with source identity and provenance |
+| Event ABox | Assertions from supplied logs, retaining the fact that a log reported an event |
+| Human observations | Separate immutable accounts recording what someone said, who they attributed it to and the relevant snapshot/context |
+
+RDF named graphs preserve semantic scopes, and SHACL validates supported domain
+structure. A missing assertion remains unknown. Similarity does not automatically
+create an identity relation or merge ERP records. A logged update does not prove
+that every real-world action was captured.
+
+The graph can be explored through native selection and filtering. With the Atlas
+Brain demo runtime configured, **Ask** uses its LiteLLM language plane:
+
+```mermaid
+flowchart LR
+    Q[Ordinary-language question] --> L[Atlas Brain demo language plane via LiteLLM]
+    C[Bounded catalog of actual graph entities] --> L
+    L --> P[Proposed typed navigation plan]
+    P --> V[Validate IDs, properties, types and allowed operation]
+    V -->|Valid| G[Traverse the pinned local graph]
+    V -->|Invalid| F[Explicit failure]
+    G --> R[Selected entities and navigation receipt]
+```
+
+The model proposes selection, neighbors or a bounded path. Local validation and
+graph execution determine the result. Model-authored SQL, SPARQL and executable
+code do not run. Navigation receipts include the graph digest, validated plan and
+model usage. This is grounded navigation; governed formal business answers still
+require approved mappings, ontology contracts and Atlas Brain routes.
+
+**People can contribute without writing formulas.** For example, an operator can
+record: “Changing this finish only changes the coating step.” Observatory stores
+the original words and context as an **unverified** account. It does not silently
+turn that statement into a proven BOM rule. Assisted interpretation, reviewed
+rule creation and comparison with source evidence are planned; speech, images
+and walkthrough capture are also future adapters.
+
+LEIO Code supplies repository structure, implementation lineage and engineering
+checks. Atlas Brain business assurance remains a separate contract. Local
+receipts and attached tool evidence do not become signed business truth merely
+because an assistant can explain them.
+
+## The manufacturing domain pack
+
+The [Alberflex workbench](docs/ALBERFLEX-WORKBENCH.md) operates on an explicitly
+normalized input contract. It includes product/configuration and recursive
+structure comparisons, supplier and payment-condition candidates, dated family
+mappings, family-sales reconciliation, supplier spend and policy-based sales
+exceptions.
+
+A SKU, product family, configuration, engineering revision and BOM have different
+identities. Supplier legal identity, establishment and ERP account also need to
+remain distinguishable. The pack preserves those distinctions and keeps
+unclassified sales visible. Reporting depends on supplied reviewed mappings and
+transaction semantics; raw database columns do not acquire that meaning
+automatically.
+
+The command-line pilot also has a finite-capacity scheduling heuristic and
+release-delay scenarios over supplied calendars and operations. These are
+exploratory calculations with explicit assumptions. Production optimization,
+validated setup/material constraints and dispatch to the plant remain future
+work. No Observatory workflow writes business records to the ERP.
+
+## Work through MCP
+
+The [optional plugin](apps/alberflex-native/plugin/README.md) exposes eleven tools
+through local stdio MCP. It provides snapshot and pipeline discovery, quality
+checks, human observation capture/history, builds, inspection and restoration.
+It reuses the native worker and compiled engine.
+
+Startup fixes the workspace, tenant and runtime. Tool arguments cannot override
+those choices. The gateway checks identifiers, tenant scope, file bounds and
+regular paths. Results contain matching structured JSON and text; errors remain
+errors. The server caps control messages, refuses overlapping operations and
+terminates its owned worker process group on timeout or cancellation.
+
+The MCP surface exposes local saved data, with no source extraction or remote
+model tool. An assistant can request a build or reviewed restoration through
+these explicit tools. Tool results are visible to the host and its configured
+model; a local MCP server does not guarantee that the host processes them offline.
+
+## Run the native app
+
+Prerequisites: macOS 14+, Swift 6 tooling, Rust/Cargo, and `uv` with Python 3.13.
+From the repository root:
 
 ```sh
-cargo test --workspace                                        # engine unit tests
-cargo build --release -p ttalk-fast-cli                       # target/release/ttalk-fast
-pip install maturin && maturin build --release -m crates/ttalk-fast-py/Cargo.toml -o dist
-pip install dist/ttalk_fast-*.whl                             # enables protheus.arrow
-./build-node.sh && (cd crates/ttalk-fast-node && npm test)    # ttalk_fast_node.node + node:test
-
-git clone https://github.com/totvs/ttalk-standard-message
-pip install -e '.[dev]'
-python tools/build.py ./ttalk-standard-message                # engine 0.4 s + codegen ~5 s
-TTALK_REPO=./ttalk-standard-message pytest                    # 1573 passed, 165 xfailed
+cd apps/alberflex-native
+uv venv .venv --python 3.13
+uv pip install --python .venv/bin/python -e ../.. rdflib pyshacl pytest duckdb pyarrow
+./script/build_and_run.sh --verify
 ```
 
-`build.py` uses the wheel when importable, else the CLI binary, else
-`cargo run`. The determinism test regenerates and asserts `index.json` is
-byte-identical. Porting note: the Rust engine reproduces the original Python
-generator field for field (the committed index was the oracle), the only
-intentional change being the `type` normalisation above, which turned a
-handful of `Any` fields into real types.
+This builds and launches `dist/Observatory.app`. It is a developer build tied to
+this checkout. Signed, self-contained distribution remains future work.
 
-## Using the index without the client
+For a first real-data session, choose an existing DuckDB file in **Connections**,
+test it, discover a table, select columns and extract a Bronze snapshot. Open
+**Investigations** for its measured profile and contract checks. Use **Models →
+Pipelines** for a supported definition and **Knowledge** for graph exploration.
+An explicitly labeled synthetic demo is available separately.
 
-`protheus.spec` exposes the vendored index (`provenance()`, `apis()`,
-`iter_operations(side_effect=...)`, `get_operation(id)`) so a catalog, an MCP
-tool list or documentation can be built from the same data the facade was.
+SQL Server requires the optional ADBC manager, the `mssql` driver and an authorized
+read-only account. Knowledge Ask requires the separately configured Atlas Brain
+demo runtime and LiteLLM. See the [native setup guide](apps/alberflex-native/README.md)
+for those instructions. Connection credentials use macOS Keychain.
+
+To use MCP, install its optional pinned SDK and configure the four variables in
+the [plugin guide](apps/alberflex-native/plugin/README.md), then load the plugin in
+a temporary Claude Code session. No global host registration is required by the
+plugin files.
+
+## What persists
+
+The native workspace defaults to
+`~/Library/Application Support/AlberflexObservatory`. Existing internal package and
+bundle identifiers are retained for compatibility with earlier builds.
+
+```text
+workspace/
+├── snapshots/               saved source artifacts, manifests and projections
+├── quality-runs/            contracts and observed quality receipts
+├── model-runs/              standalone model definitions and results
+├── models/                  standalone model publication pointers
+├── pipeline-runs/           immutable pipeline definitions, receipts and outputs
+├── pipelines/               current pipeline pointers and lane locks
+├── pipeline-inspections/    saved verification reports
+├── pipeline-publications/   publication intent and outcome journals
+├── observations/            original attributed process accounts
+├── navigation/              validated graph-navigation receipts
+└── graph-cache/             bounded graph projections
+```
+
+Content digests identify the bytes used in an operation. They help detect changes
+and reproduce evidence; they do not certify that a source was complete or correct.
+Every result keeps its scope and unsigned assurance. Synthetic fixtures remain
+labeled synthetic, and failed source or model calls never substitute demo results.
+
+## What remains to build
+
+| Area | Next capability |
+| --- | --- |
+| Managed ingestion | Consistent full/incremental capture, deletes, schema drift, resumable chunks and endpoint-wide source leases |
+| Larger workloads | Measured memory/throughput budgets, spill strategies and broader operator support |
+| Operational reliability | Durable scheduling, backfills, cross-launch recovery UX, backup/restore and power-loss acceptance |
+| Shared semantics | Visual mappings, accountable review, ontology evolution, governed formal QA and generic reconciled metrics |
+| Human knowledge | Multimodal intake, inspectable interpretation, corroboration and reviewed executable checks |
+| Business monitoring | Calibrated anomalies, freshness/distribution checks and permitted source-server telemetry |
+| Plant decisions | Validated routing/capacity/material models, solver guarantees and authorized dispatch adapters |
+| Distribution and sharing | Signed packaging, multi-user access policy and remote serving |
+
+The storage foundation is immutable local Parquet plus manifests and JSON catalog
+pointers. SQLite catalog transactions, Iceberg tables and Arrow Flight serving
+are architectural options, not implemented services. Local process measurements
+do not establish SQL Server memory pressure. The runtime's bounded processing
+checks are not a hard operating-system RSS ceiling.
+
+## Verification and project map
+
+Recorded acceptance on **2026-09-06** includes 76 Rust tests and 39 Swift tests for
+the native execution/recovery work, followed by a combined **191-test** Python,
+workbench and MCP gate. The MCP additions include 44 gateway, 20 process-boundary
+and nine actual stdio protocol tests. Strict plugin validation and LEIO Code
+package checks passed. See the [acceptance record](apps/alberflex-native/SPEC.md)
+for the exact sequence and limitations; this README update did not rerun code tests.
+
+Tests create actual temporary DuckDB/Parquet artifacts with synthetic contents.
+They exercise failed checks, changed files, tenant isolation, dependency failures,
+publication faults and retries. Source databases are removed before selected
+MCP calls to verify local-only execution. These results do not certify a live
+Alberflex dataset or a representative production dbt project. Native build/launch
+is verified; final visual acceptance of the latest recovery controls remains open
+because the computer-use service disconnected.
+
+To repeat the relevant checks from `apps/alberflex-native` after setup:
+
+```sh
+./script/verify_platform.sh
+# Requires the optional MCP SDK:
+.venv/bin/python -m pytest -c /dev/null -p no:cacheprovider worker ../../tests/workbench plugin/tests -q
+claude plugin validate --strict --json plugin
+```
+
+| Path | What it contains |
+| --- | --- |
+| [apps/alberflex-native](apps/alberflex-native/README.md) | Native app, Python worker and standalone Rust execution crate |
+| [apps/alberflex-native/plugin](apps/alberflex-native/plugin/README.md) | Local MCP server, launcher, workspace skill and protocol tests |
+| [src/protheus/workbench](docs/ALBERFLEX-WORKBENCH.md) | Normalized manufacturing contracts, calculations and pilot scenarios |
+| [apps/alberflex-mcp](apps/alberflex-mcp/README.md) | Separate synthetic-only interactive MCP demo |
+| [docs/PROTHEUS-CLIENT.md](docs/PROTHEUS-CLIENT.md) | Original REST client and Rust TTALK tooling guide |
+| [docs/observatory-platform.md](docs/observatory-platform.md) | Architecture, diagrams and workflow replacement gates |
+| [apps/alberflex-native/SPEC.md](apps/alberflex-native/SPEC.md) | Detailed native behavior, constraints and delivery evidence |

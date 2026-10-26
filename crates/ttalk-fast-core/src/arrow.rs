@@ -26,6 +26,9 @@ use regex::Regex;
 use serde::Serialize;
 use serde_json::{Map, Value};
 use std::borrow::Cow;
+use std::cell::Cell;
+use std::io::Write;
+use std::rc::Rc;
 use std::sync::{Arc, LazyLock, Mutex};
 use std::time::{Duration, Instant};
 
@@ -88,6 +91,7 @@ pub struct DecodeLimits {
     pub max_string_length: usize,
     pub max_array_length: usize,
     pub max_decode_time: Option<Duration>,
+    pub max_ipc_bytes: usize,
 }
 
 impl Default for DecodeLimits {
@@ -100,6 +104,7 @@ impl Default for DecodeLimits {
             max_string_length: 16 * 1024 * 1024,
             max_array_length: 1_000_000,
             max_decode_time: Some(Duration::from_secs(30)),
+            max_ipc_bytes: 64 * 1024 * 1024,
         }
     }
 }
@@ -681,6 +686,60 @@ fn validate_items(rules: &Rules, array: &ArrayRef, ctx: &Ctx, out: &mut Collecto
     }
 }
 
+struct CappedBuffer {
+    bytes: Vec<u8>,
+    limit: usize,
+    overflow: Rc<Cell<usize>>,
+}
+
+impl CappedBuffer {
+    fn new(limit: usize) -> (Self, Rc<Cell<usize>>) {
+        let overflow = Rc::new(Cell::new(0));
+        (
+            Self {
+                bytes: Vec::with_capacity(limit.min(64 * 1024)),
+                limit,
+                overflow: overflow.clone(),
+            },
+            overflow,
+        )
+    }
+}
+
+impl Write for CappedBuffer {
+    fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+        let observed = self.bytes.len().saturating_add(bytes.len());
+        if observed > self.limit {
+            self.overflow.set(self.overflow.get().max(observed));
+            return Err(std::io::Error::other("Arrow IPC byte limit exceeded"));
+        }
+        self.bytes.extend_from_slice(bytes);
+        Ok(bytes.len())
+    }
+
+    fn flush(&mut self) -> std::io::Result<()> {
+        Ok(())
+    }
+}
+
+fn ipc_error(
+    stage: &str,
+    error: impl std::fmt::Display,
+    overflow: &Cell<usize>,
+    limit: usize,
+) -> Error {
+    let observed = overflow.get();
+    if observed > limit {
+        Error::ResourceLimit {
+            limit: "ipc_bytes",
+            actual: observed,
+            maximum: limit,
+        }
+    } else {
+        Error::Decode(format!("Arrow IPC {stage}: {error}"))
+    }
+}
+
 // ---------------------------------------------------------------- decoder
 pub struct Decoder {
     rules: Rules,
@@ -903,17 +962,20 @@ impl Decoder {
     /// Decode and serialise as an Arrow IPC stream.
     pub fn decode_ipc(&self, body: &[u8]) -> Result<(Vec<u8>, DecodeReport), Error> {
         let (batch, report) = self.decode(body)?;
-        let mut buf = Vec::new();
+        let limit = self.limits.max_ipc_bytes;
+        let (mut buf, overflow) = CappedBuffer::new(limit);
         {
             let mut writer =
                 arrow_ipc::writer::StreamWriter::try_new(&mut buf, batch.schema().as_ref())
-                    .map_err(|e| Error::Decode(e.to_string()))?;
+                    .map_err(|e| ipc_error("writer", e, &overflow, limit))?;
             writer
                 .write(&batch)
-                .map_err(|e| Error::Decode(e.to_string()))?;
-            writer.finish().map_err(|e| Error::Decode(e.to_string()))?;
+                .map_err(|e| ipc_error("write", e, &overflow, limit))?;
+            writer
+                .finish()
+                .map_err(|e| ipc_error("finish", e, &overflow, limit))?;
         }
-        Ok((buf, report))
+        Ok((buf.bytes, report))
     }
 }
 
@@ -1149,6 +1211,27 @@ mod tests {
             },
             "decode_time_ms",
         );
+    }
+
+    #[test]
+    fn ipc_output_is_bounded_before_buffer_growth() {
+        let limits = DecodeLimits {
+            max_ipc_bytes: 16,
+            ..DecodeLimits::default()
+        };
+        let dec = Decoder::with_limits(&bundled(), "PagedRegions", "items", 100, limits).unwrap();
+        let error = dec
+            .decode_ipc(br#"{"items":[{"code":"001"}]}"#)
+            .unwrap_err();
+        assert_eq!(error.code(), "resource_limit_exceeded");
+        assert!(matches!(
+            error,
+            Error::ResourceLimit {
+                limit: "ipc_bytes",
+                actual,
+                maximum: 16,
+            } if actual > 16
+        ));
     }
 
     #[test]

@@ -47,6 +47,7 @@ fn decode_limits(dict: Option<Bound<'_, PyDict>>) -> PyResult<DecodeLimits> {
         "max_string_length",
         "max_array_length",
         "max_decode_time_ms",
+        "max_ipc_bytes",
     ];
     for key in dict.keys().iter() {
         let key = key.extract::<String>()?;
@@ -62,6 +63,7 @@ fn decode_limits(dict: Option<Bound<'_, PyDict>>) -> PyResult<DecodeLimits> {
     limits.max_nesting_depth = usize_limit(&dict, "max_nesting_depth", limits.max_nesting_depth)?;
     limits.max_string_length = usize_limit(&dict, "max_string_length", limits.max_string_length)?;
     limits.max_array_length = usize_limit(&dict, "max_array_length", limits.max_array_length)?;
+    limits.max_ipc_bytes = usize_limit(&dict, "max_ipc_bytes", limits.max_ipc_bytes)?;
     if let Some(milliseconds) = dict
         .get_item("max_decode_time_ms")?
         .map(|value| value.extract::<u64>())
