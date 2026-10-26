@@ -41,8 +41,12 @@ test('decode validates, demotes and keeps every row', () => {
   assert.equal(report.rows, 2);
   assert.equal(report.has_next, true);
   assert.equal(report.invalid_rows, 1);
+  assert.equal(report.violation_count, 1);
   assert.ok(report.violations.some((v) => v.row === 1 && v.path === '/ISSRate' && /number/.test(v.message)));
   assert.deepEqual(report.demoted_fields, ['ISSRate']);
+  assert.deepEqual(report.demotions, [
+    { name: 'ISSRate', from: 'Float64', to: 'Utf8', reason: 'invalid_number' },
+  ]);
   assert.equal(dec.fields().find((f) => f.name === 'ISSRate').type, 'Utf8');
   if (arrow) {
     const table = arrow.tableFromIPC(ipc);
@@ -73,6 +77,15 @@ test('empty page and violation cap', () => {
   assert.equal(empty.report.rows, 0);
   const capped = dec.decode(Buffer.from(JSON.stringify({ items: [{ Code: 'TOOLONGCODE1' }, { Code: 'TOOLONGCODE2' }] })));
   assert.equal(capped.report.invalid_rows, 2);
+  assert.equal(capped.report.violation_count, 2);
   assert.equal(capped.report.violations.length, 1);
   assert.equal(capped.report.violations_truncated, true);
+});
+
+test('resource limits have stable errors and malformed JSON remains a decode error', () => {
+  const limited = new Decoder(schemas, 'PagedRegionGroups', 'items', 100, { maxRows: 1 });
+  assert.throws(() => limited.decode(page(1)), /resource_limit_exceeded: rows limit exceeded/);
+  assert.throws(() => limited.decode(Buffer.from('{"items":[}')), /decode_failed: invalid JSON/);
+  const ipcLimited = new Decoder(schemas, 'PagedRegionGroups', 'items', 100, { maxIpcBytes: 16 });
+  assert.throws(() => ipcLimited.decode(page(1)), /resource_limit_exceeded: ipc_bytes limit exceeded/);
 });

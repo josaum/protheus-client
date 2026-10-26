@@ -13,7 +13,9 @@
 //! column types stay stable across pages once settled; rows whose values do
 //! not parse as the declared type are then reported as type violations.
 
-use crate::json_scan::{array_is_empty, array_to_record_stream, locate_rows};
+use crate::json_scan::{
+    array_is_empty, array_to_record_stream, inspect, locate_rows, ScanError, ScanLimits,
+};
 use crate::Error;
 use arrow_array::cast::AsArray;
 use arrow_array::types::{Float64Type, Int64Type};
@@ -24,7 +26,11 @@ use regex::Regex;
 use serde::Serialize;
 use serde_json::{Map, Value};
 use std::borrow::Cow;
+use std::cell::Cell;
+use std::io::Write;
+use std::rc::Rc;
 use std::sync::{Arc, LazyLock, Mutex};
+use std::time::{Duration, Instant};
 
 static FIELD_IN_ERROR: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"field '([^']+)'").unwrap());
 static DATE: LazyLock<Regex> =
@@ -50,15 +56,84 @@ pub struct FieldInfo {
     pub type_: String,
 }
 
+#[derive(Debug, Clone, Serialize, PartialEq, Eq)]
+pub struct DemotedField {
+    pub name: String,
+    pub from: String,
+    pub to: String,
+    pub reason: String,
+}
+
 #[derive(Debug, Clone, Serialize)]
 pub struct DecodeReport {
     pub rows: usize,
     pub invalid_rows: usize,
+    /// Total violations, including those omitted by `max_violations`.
+    pub violation_count: usize,
     pub violations: Vec<Violation>,
     pub violations_truncated: bool,
+    /// Cumulative dotted field names, retained for API compatibility.
     pub demoted_fields: Vec<String>,
+    /// Cumulative type-change provenance for each demoted field.
+    pub demotions: Vec<DemotedField>,
     pub has_next: Option<bool>,
     pub fields: Vec<FieldInfo>,
+}
+
+/// Per-decoder resource budgets. String lengths are measured as UTF-8 source
+/// bytes; column limits apply to each object, including nested objects.
+#[derive(Debug, Clone, Copy)]
+pub struct DecodeLimits {
+    pub max_input_bytes: usize,
+    pub max_rows: usize,
+    pub max_columns: usize,
+    pub max_nesting_depth: usize,
+    pub max_string_length: usize,
+    pub max_array_length: usize,
+    pub max_decode_time: Option<Duration>,
+    pub max_ipc_bytes: usize,
+}
+
+impl Default for DecodeLimits {
+    fn default() -> Self {
+        Self {
+            max_input_bytes: 64 * 1024 * 1024,
+            max_rows: 1_000_000,
+            max_columns: 1_024,
+            max_nesting_depth: 64,
+            max_string_length: 16 * 1024 * 1024,
+            max_array_length: 1_000_000,
+            max_decode_time: Some(Duration::from_secs(30)),
+            max_ipc_bytes: 64 * 1024 * 1024,
+        }
+    }
+}
+
+impl DecodeLimits {
+    fn scan(self) -> ScanLimits {
+        ScanLimits {
+            max_rows: self.max_rows,
+            max_columns: self.max_columns,
+            max_nesting_depth: self.max_nesting_depth,
+            max_string_length: self.max_string_length,
+            max_array_length: self.max_array_length,
+        }
+    }
+
+    fn check_deadline(self, started: Instant) -> Result<(), Error> {
+        let Some(maximum) = self.max_decode_time else {
+            return Ok(());
+        };
+        let elapsed = started.elapsed();
+        if elapsed > maximum {
+            return Err(Error::ResourceLimit {
+                limit: "decode_time_ms",
+                actual: elapsed.as_millis() as usize,
+                maximum: maximum.as_millis() as usize,
+            });
+        }
+        Ok(())
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -329,6 +404,33 @@ fn demote(fields: &Fields, path: &[String]) -> Option<Fields> {
     changed.then(|| Fields::from(out))
 }
 
+fn field_type_at(fields: &Fields, path: &[String]) -> Option<String> {
+    let (head, rest) = path.split_first()?;
+    let field = fields.iter().find(|f| f.name() == head)?;
+    if rest.is_empty() {
+        return Some(field.data_type().to_string());
+    }
+    match field.data_type() {
+        DataType::Struct(inner) => field_type_at(inner, rest),
+        DataType::List(item) => match item.data_type() {
+            DataType::Struct(inner) => field_type_at(inner, rest),
+            _ => None,
+        },
+        _ => None,
+    }
+}
+
+fn demotion_reason(data_type: &str) -> String {
+    if data_type.contains("Int64") {
+        "invalid_integer"
+    } else if data_type.contains("Float64") {
+        "invalid_number"
+    } else {
+        "invalid_boolean"
+    }
+    .to_string()
+}
+
 fn describe(fields: &Fields) -> Vec<FieldInfo> {
     fields
         .iter()
@@ -368,6 +470,7 @@ struct Collector<'a> {
 
 impl Collector<'_> {
     fn hit(&mut self, row: usize, path: String, message: String) {
+        self.report.violation_count += 1;
         if !self.invalid[row] {
             self.invalid[row] = true;
             self.report.invalid_rows += 1;
@@ -583,14 +686,69 @@ fn validate_items(rules: &Rules, array: &ArrayRef, ctx: &Ctx, out: &mut Collecto
     }
 }
 
+struct CappedBuffer {
+    bytes: Vec<u8>,
+    limit: usize,
+    overflow: Rc<Cell<usize>>,
+}
+
+impl CappedBuffer {
+    fn new(limit: usize) -> (Self, Rc<Cell<usize>>) {
+        let overflow = Rc::new(Cell::new(0));
+        (
+            Self {
+                bytes: Vec::with_capacity(limit.min(64 * 1024)),
+                limit,
+                overflow: overflow.clone(),
+            },
+            overflow,
+        )
+    }
+}
+
+impl Write for CappedBuffer {
+    fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+        let observed = self.bytes.len().saturating_add(bytes.len());
+        if observed > self.limit {
+            self.overflow.set(self.overflow.get().max(observed));
+            return Err(std::io::Error::other("Arrow IPC byte limit exceeded"));
+        }
+        self.bytes.extend_from_slice(bytes);
+        Ok(bytes.len())
+    }
+
+    fn flush(&mut self) -> std::io::Result<()> {
+        Ok(())
+    }
+}
+
+fn ipc_error(
+    stage: &str,
+    error: impl std::fmt::Display,
+    overflow: &Cell<usize>,
+    limit: usize,
+) -> Error {
+    let observed = overflow.get();
+    if observed > limit {
+        Error::ResourceLimit {
+            limit: "ipc_bytes",
+            actual: observed,
+            maximum: limit,
+        }
+    } else {
+        Error::Decode(format!("Arrow IPC {stage}: {error}"))
+    }
+}
+
 // ---------------------------------------------------------------- decoder
 pub struct Decoder {
     rules: Rules,
     schema: Mutex<SchemaRef>,
-    demoted: Mutex<Vec<String>>,
+    demoted: Mutex<Vec<DemotedField>>,
     items_key: String,
     paged: bool,
     max_violations: usize,
+    limits: DecodeLimits,
 }
 
 impl Decoder {
@@ -602,6 +760,22 @@ impl Decoder {
         schema_name: &str,
         items_key: &str,
         max_violations: usize,
+    ) -> Result<Self, Error> {
+        Self::with_limits(
+            bundled,
+            schema_name,
+            items_key,
+            max_violations,
+            DecodeLimits::default(),
+        )
+    }
+
+    pub fn with_limits(
+        bundled: &Value,
+        schema_name: &str,
+        items_key: &str,
+        max_violations: usize,
+        limits: DecodeLimits,
     ) -> Result<Self, Error> {
         let response = serde_json::json!({"$ref": format!("#/components/schemas/{schema_name}")});
         let resolved = resolve_object(bundled, &response, 0);
@@ -628,6 +802,7 @@ impl Decoder {
             items_key: items_key.to_string(),
             paged,
             max_violations,
+            limits,
         })
     }
 
@@ -636,6 +811,36 @@ impl Decoder {
     }
 
     pub fn decode(&self, body: &[u8]) -> Result<(RecordBatch, DecodeReport), Error> {
+        let started = Instant::now();
+        if body.len() > self.limits.max_input_bytes {
+            return Err(Error::ResourceLimit {
+                limit: "input_bytes",
+                actual: body.len(),
+                maximum: self.limits.max_input_bytes,
+            });
+        }
+        let scanned_rows =
+            inspect(body, &self.items_key, self.limits.scan()).map_err(|e| match e {
+                ScanError::Malformed(message) => Error::Decode(format!("invalid JSON: {message}")),
+                ScanError::Limit {
+                    limit,
+                    actual,
+                    maximum,
+                } => Error::ResourceLimit {
+                    limit,
+                    actual,
+                    maximum,
+                },
+            })?;
+        if !self.paged && self.limits.max_rows == 0 {
+            return Err(Error::ResourceLimit {
+                limit: "rows",
+                actual: 1,
+                maximum: 0,
+            });
+        }
+        debug_assert!(self.paged || scanned_rows == 0 || scanned_rows == 1);
+        self.limits.check_deadline(started)?;
         let (stream, has_next) = if self.paged {
             let shape = locate_rows(body, &self.items_key).ok_or_else(|| {
                 Error::Decode(format!("page has no array property {:?}", self.items_key))
@@ -652,14 +857,17 @@ impl Decoder {
         let mut report = DecodeReport {
             rows: 0,
             invalid_rows: 0,
+            violation_count: 0,
             violations: Vec::new(),
             violations_truncated: false,
             demoted_fields: Vec::new(),
+            demotions: Vec::new(),
             has_next,
             fields: Vec::new(),
         };
         let mut schema = self.schema();
         let batch = loop {
+            self.limits.check_deadline(started)?;
             match Self::to_batch(&schema, &stream) {
                 Ok(batch) => break batch,
                 Err(message) => {
@@ -667,7 +875,7 @@ impl Decoder {
                         .captures_iter(&message)
                         .map(|c| c[1].to_string())
                         .collect();
-                    let demoted = if report.demoted_fields.len() < MAX_DEMOTIONS_PER_PAGE {
+                    let demoted = if report.demotions.len() < MAX_DEMOTIONS_PER_PAGE {
                         demote(schema.fields(), &path)
                     } else {
                         None
@@ -677,17 +885,27 @@ impl Decoder {
                             "cannot decode page as declared schema: {message}"
                         )));
                     };
+                    let from = field_type_at(schema.fields(), &path)
+                        .ok_or_else(|| Error::Decode("cannot identify demoted field".into()))?;
+                    let to = field_type_at(&fields, &path)
+                        .ok_or_else(|| Error::Decode("cannot identify replacement field".into()))?;
                     schema = Arc::new(Schema::new(fields));
-                    report.demoted_fields.push(path.join("."));
+                    report.demotions.push(DemotedField {
+                        name: path.join("."),
+                        from: from.clone(),
+                        to,
+                        reason: demotion_reason(&from),
+                    });
                 }
             }
         };
-        if !report.demoted_fields.is_empty() {
+        self.limits.check_deadline(started)?;
+        if !report.demotions.is_empty() {
             *self.schema.lock().unwrap() = schema.clone();
             self.demoted
                 .lock()
                 .unwrap()
-                .extend(report.demoted_fields.iter().cloned());
+                .extend(report.demotions.iter().cloned());
         }
         report.rows = batch.num_rows();
         {
@@ -703,7 +921,9 @@ impl Decoder {
             let root: ArrayRef = Arc::new(arrow_array::StructArray::from(batch.clone()));
             validate_items(&self.rules, &root, &ctx, &mut out);
         }
-        report.demoted_fields = self.demoted.lock().unwrap().clone();
+        self.limits.check_deadline(started)?;
+        report.demotions = self.demoted.lock().unwrap().clone();
+        report.demoted_fields = report.demotions.iter().map(|d| d.name.clone()).collect();
         report.fields = describe(schema.fields());
         Ok((batch, report))
     }
@@ -742,17 +962,20 @@ impl Decoder {
     /// Decode and serialise as an Arrow IPC stream.
     pub fn decode_ipc(&self, body: &[u8]) -> Result<(Vec<u8>, DecodeReport), Error> {
         let (batch, report) = self.decode(body)?;
-        let mut buf = Vec::new();
+        let limit = self.limits.max_ipc_bytes;
+        let (mut buf, overflow) = CappedBuffer::new(limit);
         {
             let mut writer =
                 arrow_ipc::writer::StreamWriter::try_new(&mut buf, batch.schema().as_ref())
-                    .map_err(|e| Error::Decode(e.to_string()))?;
+                    .map_err(|e| ipc_error("writer", e, &overflow, limit))?;
             writer
                 .write(&batch)
-                .map_err(|e| Error::Decode(e.to_string()))?;
-            writer.finish().map_err(|e| Error::Decode(e.to_string()))?;
+                .map_err(|e| ipc_error("write", e, &overflow, limit))?;
+            writer
+                .finish()
+                .map_err(|e| ipc_error("finish", e, &overflow, limit))?;
         }
-        Ok((buf, report))
+        Ok((buf.bytes, report))
     }
 }
 
@@ -842,6 +1065,15 @@ mod tests {
             vec!["ISSRate".to_string(), "address.zip".to_string()]
         );
         assert_eq!(
+            report.demotions[0],
+            DemotedField {
+                name: "ISSRate".into(),
+                from: "Float64".into(),
+                to: "Utf8".into(),
+                reason: "invalid_number".into(),
+            }
+        );
+        assert_eq!(
             batch
                 .schema()
                 .field_with_name("ISSRate")
@@ -902,10 +1134,136 @@ mod tests {
         assert_eq!(
             (
                 report.invalid_rows,
+                report.violation_count,
                 report.violations.len(),
                 report.violations_truncated
             ),
-            (3, 2, true)
+            (3, 3, 2, true)
         );
+    }
+
+    fn assert_limit(body: &[u8], limits: DecodeLimits, expected: &str) {
+        let dec = Decoder::with_limits(&bundled(), "PagedRegions", "items", 100, limits).unwrap();
+        let error = dec.decode(body).unwrap_err();
+        assert_eq!(error.code(), "resource_limit_exceeded");
+        assert!(
+            error.to_string().contains(expected),
+            "unexpected error: {error}"
+        );
+    }
+
+    #[test]
+    fn enforces_structural_and_time_limits() {
+        let valid = br#"{"items":[{"code":"001","ISSRate":1,"tags":["a","b"]}]}"#;
+        assert_limit(
+            valid,
+            DecodeLimits {
+                max_input_bytes: 8,
+                ..DecodeLimits::default()
+            },
+            "input_bytes",
+        );
+        assert_limit(
+            br#"{"items":[{"code":"a"},{"code":"b"}]}"#,
+            DecodeLimits {
+                max_rows: 1,
+                ..DecodeLimits::default()
+            },
+            "rows",
+        );
+        assert_limit(
+            valid,
+            DecodeLimits {
+                max_columns: 1,
+                ..DecodeLimits::default()
+            },
+            "columns",
+        );
+        assert_limit(
+            valid,
+            DecodeLimits {
+                max_nesting_depth: 2,
+                ..DecodeLimits::default()
+            },
+            "nesting_depth",
+        );
+        assert_limit(
+            valid,
+            DecodeLimits {
+                max_string_length: 2,
+                ..DecodeLimits::default()
+            },
+            "string_length",
+        );
+        assert_limit(
+            valid,
+            DecodeLimits {
+                max_array_length: 1,
+                ..DecodeLimits::default()
+            },
+            "array_length",
+        );
+        assert_limit(
+            valid,
+            DecodeLimits {
+                max_decode_time: Some(Duration::ZERO),
+                ..DecodeLimits::default()
+            },
+            "decode_time_ms",
+        );
+    }
+
+    #[test]
+    fn ipc_output_is_bounded_before_buffer_growth() {
+        let limits = DecodeLimits {
+            max_ipc_bytes: 16,
+            ..DecodeLimits::default()
+        };
+        let dec = Decoder::with_limits(&bundled(), "PagedRegions", "items", 100, limits).unwrap();
+        let error = dec
+            .decode_ipc(br#"{"items":[{"code":"001"}]}"#)
+            .unwrap_err();
+        assert_eq!(error.code(), "resource_limit_exceeded");
+        assert!(matches!(
+            error,
+            Error::ResourceLimit {
+                limit: "ipc_bytes",
+                actual,
+                maximum: 16,
+            } if actual > 16
+        ));
+    }
+
+    #[test]
+    fn malformed_json_has_a_stable_decode_error() {
+        let dec = Decoder::new(&bundled(), "PagedRegions", "items", 100).unwrap();
+        let error = dec.decode(br#"{"items":[}"#).unwrap_err();
+        assert_eq!(error.code(), "decode_failed");
+        assert!(error.to_string().starts_with("decode_failed:"));
+    }
+
+    #[test]
+    fn unicode_nulls_and_integer_overflow_are_preserved() {
+        let dec = Decoder::new(&bundled(), "PagedRegions", "items", 100).unwrap();
+        let body = concat!(
+            r#"{"items":[{"code":"é🦀","active":null},"#,
+            r#"{"code":null,"address":{"zip":9223372036854775808}}]}"#
+        );
+        let (batch, report) = dec.decode(body.as_bytes()).unwrap();
+        assert_eq!(batch.num_rows(), 2);
+        assert_eq!(report.invalid_rows, 1);
+        assert_eq!(report.violation_count, 3);
+        assert!(report
+            .violations
+            .iter()
+            .any(|v| v.message.contains("required")));
+        assert!(report
+            .violations
+            .iter()
+            .any(|v| v.message.contains("integer")));
+        assert_eq!(report.demotions[0].name, "address.zip");
+        assert_eq!(report.demotions[0].from, "Int64");
+        assert_eq!(report.demotions[0].to, "Utf8");
+        assert_eq!(report.demotions[0].reason, "invalid_integer");
     }
 }

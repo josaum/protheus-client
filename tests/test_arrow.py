@@ -6,11 +6,10 @@ import json
 
 import httpx
 import pytest
+from conftest import BASE_URL, Recorder
 
 from protheus import AsyncProtheusClient, ProtheusClient, ProtheusError
 from protheus import arrow as parrow
-
-from conftest import BASE_URL, Recorder
 
 pytestmark = pytest.mark.skipif(not parrow.AVAILABLE, reason="ttalk_fast extension not installed")
 pyarrow = pytest.importorskip("pyarrow", reason="pyarrow needed to read IPC in tests")
@@ -46,6 +45,47 @@ def test_decoder_validates_and_demotes_but_keeps_every_row() -> None:
     assert clean.report["demoted_fields"] == ["ISSRate"]
 
 
+def test_typed_report_retains_mapping_compatibility() -> None:
+    decoder = parrow.ArrowDecoder(OP, max_violations=0)
+    body = json.dumps({"items": [{"Code": "TOOLONGCODE1"}, {"Code": "TOOLONGCODE2"}]}).encode()
+    report = decoder.decode(body).report
+    assert isinstance(report, parrow.DecodeReport)
+    assert report.invalid_rows == report["invalid_rows"] == 2
+    assert report.violation_count == 2
+    assert report.violations == [] and report["violations"] == []
+    assert report.violations_truncated
+    assert report.to_dict()["violation_count"] == 2
+
+
+def test_demotions_include_type_provenance() -> None:
+    decoder = parrow.ArrowDecoder(OP)
+    body = json.dumps({"items": [{"Code": "R1", "ISSRate": "5,2"}]}).encode()
+    report = decoder.decode(body).report
+    assert report.demoted_fields == ["ISSRate"]
+    assert report.demotions == [
+        parrow.DemotedField("ISSRate", "Float64", "Utf8", "invalid_number")
+    ]
+    # The native compatibility API still returns a JSON string.
+    _, native_report = decoder._inner.decode(body)
+    assert isinstance(native_report, str)
+    assert json.loads(native_report)["demoted_fields"] == ["ISSRate"]
+
+
+def test_resource_limits_and_decode_errors_are_distinct() -> None:
+    decoder = parrow.ArrowDecoder(OP, limits=parrow.DecodeLimits(max_rows=1))
+    body = json.dumps({"items": [{"Code": "R1"}, {"Code": "R2"}]}).encode()
+    with pytest.raises(parrow.ResourceLimitError, match="resource_limit_exceeded: rows"):
+        decoder.decode(body)
+    with pytest.raises(parrow.DecodeError, match="decode_failed: invalid JSON"):
+        decoder.decode(b'{"items":[}')
+    with pytest.raises(ValueError, match="unknown decoder limit"):
+        parrow.ArrowDecoder(OP, limits={"not_a_limit": 1})
+
+    ipc_limited = parrow.ArrowDecoder(OP, limits=parrow.DecodeLimits(max_ipc_bytes=16))
+    with pytest.raises(parrow.ResourceLimitError, match="resource_limit_exceeded: ipc_bytes"):
+        ipc_limited.decode(json.dumps({"items": [{"Code": "R1"}]}).encode())
+
+
 def test_raw_group_and_paged_extraction(recorder: Recorder) -> None:
     recorder.rule = _pages
     with ProtheusClient(BASE_URL, transport=httpx.MockTransport(recorder)) as client:
@@ -63,9 +103,8 @@ def test_raw_group_and_paged_extraction(recorder: Recorder) -> None:
 
 def test_raw_group_raises_protheus_error_on_http_error(recorder: Recorder) -> None:
     recorder.queue.append(httpx.Response(500, json={"code": "500", "message": "boom", "detailedMessage": "-"}))
-    with ProtheusClient(BASE_URL, transport=httpx.MockTransport(recorder)) as client:
-        with pytest.raises(ProtheusError):
-            parrow.raw(client.region_groups_v1).list_regiongroups()
+    with ProtheusClient(BASE_URL, transport=httpx.MockTransport(recorder)) as client, pytest.raises(ProtheusError):
+        parrow.raw(client.region_groups_v1).list_regiongroups()
 
 
 async def test_async_paged_extraction(recorder: Recorder) -> None:
