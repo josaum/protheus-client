@@ -14,6 +14,45 @@ use napi_derive::napi;
 use serde_json::Value;
 use std::path::Path;
 use std::sync::Arc;
+use std::time::Duration;
+use ttalk_fast_core::arrow::DecodeLimits;
+
+#[napi(object)]
+pub struct DecoderLimits {
+    pub max_input_bytes: Option<u32>,
+    pub max_rows: Option<u32>,
+    pub max_columns: Option<u32>,
+    pub max_nesting_depth: Option<u32>,
+    pub max_string_length: Option<u32>,
+    pub max_array_length: Option<u32>,
+    pub max_decode_time_ms: Option<u32>,
+}
+
+impl DecoderLimits {
+    fn apply(&self, limits: &mut DecodeLimits) {
+        if let Some(value) = self.max_input_bytes {
+            limits.max_input_bytes = value as usize;
+        }
+        if let Some(value) = self.max_rows {
+            limits.max_rows = value as usize;
+        }
+        if let Some(value) = self.max_columns {
+            limits.max_columns = value as usize;
+        }
+        if let Some(value) = self.max_nesting_depth {
+            limits.max_nesting_depth = value as usize;
+        }
+        if let Some(value) = self.max_string_length {
+            limits.max_string_length = value as usize;
+        }
+        if let Some(value) = self.max_array_length {
+            limits.max_array_length = value as usize;
+        }
+        if let Some(value) = self.max_decode_time_ms {
+            limits.max_decode_time = Some(Duration::from_millis(value as u64));
+        }
+    }
+}
 
 fn err(e: impl ToString) -> Error {
     Error::from_reason(e.to_string())
@@ -86,14 +125,20 @@ impl Decoder {
         schema_name: String,
         items_key: Option<String>,
         max_violations: Option<u32>,
+        configured_limits: Option<DecoderLimits>,
     ) -> Result<Self> {
         let bundled: Value =
             serde_json::from_str(&bundle_json).map_err(|e| err(format!("bundleJson: {e}")))?;
-        let inner = ttalk_fast_core::arrow::Decoder::new(
+        let mut limits = DecodeLimits::default();
+        if let Some(configured) = configured_limits {
+            configured.apply(&mut limits);
+        }
+        let inner = ttalk_fast_core::arrow::Decoder::with_limits(
             &bundled,
             &schema_name,
             items_key.as_deref().unwrap_or("items"),
             max_violations.unwrap_or(100) as usize,
+            limits,
         )
         .map_err(err)?;
         Ok(Self {

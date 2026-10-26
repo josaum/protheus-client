@@ -33,8 +33,28 @@ pub enum Error {
     Spec(String),
     #[error("provenance: {0}")]
     Provenance(String),
-    #[error("decode: {0}")]
+    #[error("decode_failed: {0}")]
     Decode(String),
+    #[error("resource_limit_exceeded: {limit} limit exceeded ({actual} > {maximum})")]
+    ResourceLimit {
+        limit: &'static str,
+        actual: usize,
+        maximum: usize,
+    },
+}
+
+impl Error {
+    /// Stable machine-readable category for bindings and CLI consumers.
+    pub fn code(&self) -> &'static str {
+        match self {
+            Self::Io(_, _) => "io_error",
+            Self::Json(_, _) => "invalid_json",
+            Self::Spec(_) => "spec_error",
+            Self::Provenance(_) => "provenance_error",
+            Self::Decode(_) => "decode_failed",
+            Self::ResourceLimit { .. } => "resource_limit_exceeded",
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize)]
