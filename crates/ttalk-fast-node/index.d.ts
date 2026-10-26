@@ -52,6 +52,7 @@ export interface DecoderLimits {
   maxStringLength?: number;
   maxArrayLength?: number;
   maxDecodeTimeMs?: number;
+  maxIpcBytes?: number;
 }
 
 export interface DecodedPage {

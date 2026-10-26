@@ -112,13 +112,30 @@ jobs:
     permissions:
       contents: write
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           pattern: '*'
           path: artifacts
           merge-multiple: true
-      - name: Generate and verify checksums
+      - name: Generate CycloneDX SBOMs
         run: |
+          cargo install cargo-cyclonedx --locked
+          cargo cyclonedx --manifest-path crates/ttalk-fast-core/Cargo.toml -f json --describe crate --no-build-deps
+          cargo cyclonedx --manifest-path crates/ttalk-fast-node/Cargo.toml -f json --describe crate --no-build-deps
+          cargo cyclonedx --manifest-path crates/ttalk-fast-cli/Cargo.toml -f json --describe crate --no-build-deps
+          mkdir -p sboms
+          cp crates/ttalk-fast-core/ttalk-fast-core.cdx.json sboms/
+          cp crates/ttalk-fast-node/ttalk-fast-node.cdx.json sboms/
+          cp crates/ttalk-fast-cli/ttalk-fast-cli.cdx.json sboms/
+          python scripts/package_sbom.py --output sboms/totvs-protheus.cdx.json --source-commit "$GITHUB_SHA"
+      - name: Embed native SBOMs and stamp release provenance
+        env:
+          SOURCE_REPOSITORY: ${{ github.repository }}
+        run: |
+          python scripts/inject_sbom.py --dist artifacts --sbom sboms/ttalk-fast-core.cdx.json
+          cp sboms/*.json artifacts/
+          python scripts/release_manifest.py --artifacts artifacts --sbom-dir sboms --source-commit "$GITHUB_SHA" --source-repository "$SOURCE_REPOSITORY"
           python - <<'PY'
           from hashlib import sha256
           from pathlib import Path
@@ -128,8 +145,7 @@ jobs:
           lines = [f"{sha256(path.read_bytes()).hexdigest()}  {path.relative_to(root)}" for path in files]
           (root / "SHA256SUMS").write_text("\n".join(lines) + "\n")
           PY
-          cd artifacts
-          sha256sum -c SHA256SUMS
+          python scripts/verify_release.py --artifacts artifacts --sbom-dir sboms
       - uses: actions/upload-artifact@v4
         with:
           name: release-artifacts

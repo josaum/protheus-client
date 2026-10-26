@@ -9,11 +9,12 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from types import TracebackType
-from typing import Any
+from typing import Any, Self
 
 import httpx
 
 from protheus._base import PreparedRequest
+from protheus._json import JsonLimits, decode_json
 from protheus.apis import AsyncApis, SyncApis
 from protheus.auth import OAuth2PasswordAuth
 from protheus.errors import ProtheusError, ProtheusTransportError
@@ -28,14 +29,14 @@ def _bind_auth(auth: httpx.Auth | None, base_url: str) -> httpx.Auth | None:
     return auth
 
 
-def _decode(response: httpx.Response) -> Any:
+def _decode(response: httpx.Response, limits: JsonLimits) -> Any:
     if response.status_code == 204 or not response.content:
         return None
     content_type = response.headers.get("content-type", "")
     if "json" in content_type:
-        return response.json()
+        return decode_json(response.content, limits)
     try:
-        return response.json()
+        return decode_json(response.content, limits)
     except ValueError:
         return response.text
 
@@ -50,6 +51,7 @@ class _ClientBase:
         headers: Mapping[str, str] | None = None,
         accept_language: str | None = None,
         verify: bool | str = True,
+        json_limits: JsonLimits | None = None,
     ) -> None:
         self.base_url = base_url.rstrip("/")
         self.auth = _bind_auth(auth, self.base_url)
@@ -61,6 +63,7 @@ class _ClientBase:
         self._default_headers = default_headers
         self._timeout = timeout
         self._verify = verify
+        self._json_limits = json_limits or JsonLimits()
 
     def _kwargs(self, prepared: PreparedRequest) -> dict[str, Any]:
         headers = dict(prepared.headers)
@@ -69,15 +72,13 @@ class _ClientBase:
             kwargs["json"] = prepared.json
         return kwargs
 
-    @staticmethod
-    def _check(response: httpx.Response, operation: str) -> httpx.Response:
+    def _check(self, response: httpx.Response, operation: str) -> httpx.Response:
         if response.status_code >= 400:
-            raise ProtheusError.from_response(response, operation)
+            raise ProtheusError.from_response(response, operation, json_limits=self._json_limits)
         return response
 
-    @classmethod
-    def _finish(cls, response: httpx.Response, operation: str) -> Any:
-        return _decode(cls._check(response, operation))
+    def _finish(self, response: httpx.Response, operation: str) -> Any:
+        return _decode(self._check(response, operation), self._json_limits)
 
 
 class ProtheusClient(_ClientBase, SyncApis):
@@ -94,9 +95,16 @@ class ProtheusClient(_ClientBase, SyncApis):
         accept_language: str | None = None,
         verify: bool | str = True,
         transport: httpx.BaseTransport | None = None,
+        json_limits: JsonLimits | None = None,
     ) -> None:
         super().__init__(
-            base_url, auth=auth, timeout=timeout, headers=headers, accept_language=accept_language, verify=verify
+            base_url,
+            auth=auth,
+            timeout=timeout,
+            headers=headers,
+            accept_language=accept_language,
+            verify=verify,
+            json_limits=json_limits,
         )
         self._http = httpx.Client(
             base_url=self.base_url,
@@ -123,7 +131,7 @@ class ProtheusClient(_ClientBase, SyncApis):
     def close(self) -> None:
         self._http.close()
 
-    def __enter__(self) -> ProtheusClient:
+    def __enter__(self) -> Self:
         return self
 
     def __exit__(
@@ -145,9 +153,16 @@ class AsyncProtheusClient(_ClientBase, AsyncApis):
         accept_language: str | None = None,
         verify: bool | str = True,
         transport: httpx.AsyncBaseTransport | None = None,
+        json_limits: JsonLimits | None = None,
     ) -> None:
         super().__init__(
-            base_url, auth=auth, timeout=timeout, headers=headers, accept_language=accept_language, verify=verify
+            base_url,
+            auth=auth,
+            timeout=timeout,
+            headers=headers,
+            accept_language=accept_language,
+            verify=verify,
+            json_limits=json_limits,
         )
         self._http = httpx.AsyncClient(
             base_url=self.base_url,
@@ -174,7 +189,7 @@ class AsyncProtheusClient(_ClientBase, AsyncApis):
     async def aclose(self) -> None:
         await self._http.aclose()
 
-    async def __aenter__(self) -> AsyncProtheusClient:
+    async def __aenter__(self) -> Self:
         return self
 
     async def __aexit__(

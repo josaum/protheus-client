@@ -26,6 +26,7 @@ pub struct DecoderLimits {
     pub max_string_length: Option<u32>,
     pub max_array_length: Option<u32>,
     pub max_decode_time_ms: Option<u32>,
+    pub max_ipc_bytes: Option<u32>,
 }
 
 impl DecoderLimits {
@@ -50,6 +51,9 @@ impl DecoderLimits {
         }
         if let Some(value) = self.max_decode_time_ms {
             limits.max_decode_time = Some(Duration::from_millis(value as u64));
+        }
+        if let Some(value) = self.max_ipc_bytes {
+            limits.max_ipc_bytes = value as usize;
         }
     }
 }

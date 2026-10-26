@@ -81,6 +81,10 @@ def test_resource_limits_and_decode_errors_are_distinct() -> None:
     with pytest.raises(ValueError, match="unknown decoder limit"):
         parrow.ArrowDecoder(OP, limits={"not_a_limit": 1})
 
+    ipc_limited = parrow.ArrowDecoder(OP, limits=parrow.DecodeLimits(max_ipc_bytes=16))
+    with pytest.raises(parrow.ResourceLimitError, match="resource_limit_exceeded: ipc_bytes"):
+        ipc_limited.decode(json.dumps({"items": [{"Code": "R1"}]}).encode())
+
 
 def test_raw_group_and_paged_extraction(recorder: Recorder) -> None:
     recorder.rule = _pages

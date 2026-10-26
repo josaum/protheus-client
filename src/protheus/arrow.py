@@ -68,6 +68,7 @@ class DecodeLimits:
     max_string_length: int = 16 * 1024 * 1024
     max_array_length: int = 1_000_000
     max_decode_time_ms: int = 30_000
+    max_ipc_bytes: int = 64 * 1024 * 1024
 
     def to_dict(self) -> dict[str, int]:
         return {name: getattr(self, name) for name in self.__slots__}

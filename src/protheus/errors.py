@@ -6,6 +6,8 @@ from typing import Any
 
 import httpx
 
+from protheus._json import JsonLimits, JsonResourceError, decode_json
+
 
 class ProtheusError(Exception):
     """An HTTP error response from Protheus (status >= 400).
@@ -42,10 +44,18 @@ class ProtheusError(Exception):
         super().__init__(f"HTTP {status_code}{where} {code}: {message}")
 
     @classmethod
-    def from_response(cls, response: httpx.Response, operation: str | None = None) -> ProtheusError:
+    def from_response(
+        cls,
+        response: httpx.Response,
+        operation: str | None = None,
+        *,
+        json_limits: JsonLimits | None = None,
+    ) -> ProtheusError:
         body: Any
         try:
-            body = response.json()
+            body = decode_json(response.content, json_limits or JsonLimits())
+        except JsonResourceError:
+            raise
         except ValueError:
             body = response.text
         if isinstance(body, dict) and ("message" in body or "code" in body):
