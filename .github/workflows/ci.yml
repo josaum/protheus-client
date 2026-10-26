@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rust:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --workspace --locked -- -D warnings
+      - run: cargo test --workspace --locked
+
+  python:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.8', '3.12', '3.13', '3.14']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m venv .venv
+      - run: |
+          .venv/bin/python -m pip install --upgrade pip maturin
+          .venv/bin/maturin develop --locked -m crates/ttalk-fast-py/Cargo.toml
+      - name: Test ABI3 extension on Python 3.8
+        if: matrix.python-version == '3.8'
+        run: |
+          .venv/bin/python - <<'PY'
+          import json
+          import ttalk_fast
+
+          bundle = json.dumps({"components": {"schemas": {
+              "Row": {"type": "object", "properties": {"rate": {"type": "number"}}},
+              "Page": {"type": "object", "properties": {"items": {
+                  "type": "array", "items": {"$ref": "#/components/schemas/Row"}
+              }}},
+          }}})
+          decoder = ttalk_fast.Decoder(bundle, "Page")
+          ipc, report = decoder.decode(b'{"items":[{"rate":"5,2"}]}')
+          parsed = json.loads(report)
+          assert ipc and parsed["rows"] == 1
+          assert parsed["violation_count"] == 1
+          assert parsed["demoted_fields"] == ["rate"]
+          PY
+      - name: Test full client on supported Python versions
+        if: matrix.python-version != '3.8'
+        run: |
+          .venv/bin/python -m pip install -e '.[dev,arrow]'
+          .venv/bin/python -m pytest tests -q
+
+  node:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: ./build-node.sh
+      - run: npm test
+        working-directory: crates/ttalk-fast-node
