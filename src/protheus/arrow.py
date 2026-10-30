@@ -21,6 +21,7 @@ Requires the ``ttalk_fast`` extension (``pip install ttalk-fast`` or
 
 from __future__ import annotations
 
+import asyncio
 import json
 from collections.abc import AsyncIterator, Awaitable, Callable, Iterator, Mapping
 from dataclasses import dataclass, field
@@ -191,6 +192,10 @@ class ArrowDecoder:
         ipc, report = self._inner.decode(body)
         return ArrowPage(number, ipc, DecodeReport.from_dict(json.loads(report)))
 
+    async def adecode(self, body: bytes, number: int = 1) -> ArrowPage:
+        """Decode without blocking the event loop on large pages."""
+        return await asyncio.to_thread(self.decode, body, number)
+
     @property
     def fields(self) -> list[dict[str, str]]:
         return json.loads(self._inner.fields())
@@ -261,7 +266,7 @@ async def aiter_arrow_pages(
     )
     number, fetched = page, 0
     while True:
-        current = decoder.decode(await raw_method(page=number, page_size=page_size, **kwargs), number)
+        current = await decoder.adecode(await raw_method(page=number, page_size=page_size, **kwargs), number)
         yield current
         fetched += 1
         if not current.has_next or (max_pages is not None and fetched >= max_pages):
