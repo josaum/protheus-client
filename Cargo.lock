@@ -1215,7 +1215,7 @@ dependencies = [
 
 [[package]]
 name = "ttalk-fast-cli"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "serde_json",
  "ttalk-fast-core",
@@ -1223,7 +1223,7 @@ dependencies = [
 
 [[package]]
 name = "ttalk-fast-core"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "arrow-array",
  "arrow-ipc",
@@ -1240,7 +1240,7 @@ dependencies = [
 
 [[package]]
 name = "ttalk-fast-node"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "napi",
  "napi-build",
@@ -1251,7 +1251,7 @@ dependencies = [
 
 [[package]]
 name = "ttalk-fast-py"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "pyo3",
  "serde_json",

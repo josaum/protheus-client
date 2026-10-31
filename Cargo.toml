@@ -3,7 +3,7 @@ resolver = "2"
 members = ["crates/ttalk-fast-core", "crates/ttalk-fast-cli", "crates/ttalk-fast-py", "crates/ttalk-fast-node"]
 
 [workspace.package]
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 license = "MIT"
 authors = ["Dionisio Chiuratto Agourakis <dionisio@getjai.com>"]

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "totvs-protheus"
-version = "0.1.0"
+version = "0.1.1"
 description = "Typed Python client for the TOTVS Protheus REST APIs, generated from the official TTALK OpenAPI specs."
 readme = "docs/PROTHEUS-CLIENT.md"
 requires-python = ">=3.12"
