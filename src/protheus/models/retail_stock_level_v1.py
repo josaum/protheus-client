@@ -1,4 +1,4 @@
-"""Saldo em Estoque — generated from RetailStockLevel_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Saldo em Estoque — generated from RetailStockLevel_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -17,9 +17,9 @@ class ItemInfo(BaseModel):
     warehouse_internal_id: str | None = Field(None, alias="WarehouseInternalID", description="Armazém")
     booked_stock_amount: float | None = Field(None, alias="BookedStockAmount", description="Qtde. Reserva")
     future_stock_amount: float | None = Field(None, alias="FutureStockAmount", description="Qtde. Prevista")
-    valueof_current_stock_amount: (
-        float | None
-    ) = Field(None, alias="ValueofCurrentStockAmount", description="Saldo Atual Valor")
+    valueof_current_stock_amount: float | None = Field(
+        None, alias="ValueofCurrentStockAmount", description="Saldo Atual Valor"
+    )
 
 
 class ErrorModelBase(BaseModel):

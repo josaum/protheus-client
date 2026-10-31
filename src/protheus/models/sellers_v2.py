@@ -1,4 +1,4 @@
-"""Vendedor — generated from Sellers_v2_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Vendedor — generated from Sellers_v2_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -58,10 +58,10 @@ class SalesChargeInterface(StrEnum):
 
 
 class SalesChargeInformation(BaseModel):
-    customer_vendor_internal_id: (
-        str | None
-    ) = (
-        Field(None, alias="customerVendorInternalId", description="Código de fornecedor do vendedor para processamento de comissões")
+    customer_vendor_internal_id: str | None = Field(
+        None,
+        alias="customerVendorInternalId",
+        description="Código de fornecedor do vendedor para processamento de comissões",
     )
     sales_charge_interface: SalesChargeInterface | None = Field(
         None,
@@ -71,9 +71,9 @@ class SalesChargeInformation(BaseModel):
     indirect_seller: str | None = Field(
         None, alias="indirectSeller", description="Código do vendedor indireto", max_length=16
     )
-    indirect_seller_internal_id: (
-        str | None
-    ) = Field(None, alias="indirectSellerInternalId", description="InternalId do Vendedor Indireto")
+    indirect_seller_internal_id: str | None = Field(
+        None, alias="indirectSellerInternalId", description="InternalId do Vendedor Indireto"
+    )
 
 
 class RepresentativeType(StrEnum):

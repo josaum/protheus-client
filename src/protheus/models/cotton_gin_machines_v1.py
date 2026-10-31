@@ -1,4 +1,4 @@
-"""CottonGinMachines — generated from CottonGinMachines_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""CottonGinMachines — generated from CottonGinMachines_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -34,10 +34,10 @@ class AdditionalItemsType(BaseModel):
         None, alias="ProductDescription", description="Descrição do produto.", examples=["Caroço de algodão"]
     )
     product_amount_: str | None = Field(
-        None, alias="ProductAmount ", description="Quantidade do produto.", examples=["30"], ge=0, le=99999999999.99
+        None, alias="ProductAmount ", description="Quantidade do produto.", examples=["30"]
     )
     unit_weight_: str | None = Field(
-        None, alias="UnitWeight ", description="Peso unitário do produto.", examples=["0.44"], ge=0, le=9999.99
+        None, alias="UnitWeight ", description="Peso unitário do produto.", examples=["0.44"]
     )
     warehouse_code: str | None = Field(
         None, alias="WarehouseCode", description="Código do local de estoque.", examples=["01"]
@@ -105,10 +105,10 @@ class ItemsPercentualSeparationType(BaseModel):
         None, alias="SeparationType", description="Tipo de separação", examples=["1"]
     )
     separation_percentual: str | None = Field(
-        None, alias="SeparationPercentual", description="Percentual de separação", examples=["50.00"], ge=0, le=100
+        None, alias="SeparationPercentual", description="Percentual de separação", examples=["50.00"]
     )
     cost_sharing: str | None = Field(
-        None, alias="CostSharing", description="Percentual de rateio de custo", examples=["85.0000"], ge=0, le=99.9999
+        None, alias="CostSharing", description="Percentual de rateio de custo", examples=["85.0000"]
     )
     generate_production: GenerateProduction | None = Field(
         None, alias="GenerateProduction", description="Gera produção?", examples=["1"]
@@ -119,10 +119,11 @@ class ItemsPercentualSeparationType(BaseModel):
         description="Código do produto acabado que será produzido após a desmontagem",
         examples=["1006310"],
     )
-    production_product_description: (
-        str | None
-    ) = (
-        Field(None, alias="ProductionProductDescription", description="Descrição do produto acabado que será produzido após a desmontagem", examples=["Algodao em pluma"])
+    production_product_description: str | None = Field(
+        None,
+        alias="ProductionProductDescription",
+        description="Descrição do produto acabado que será produzido após a desmontagem",
+        examples=["Algodao em pluma"],
     )
     production_warehouse: str | None = Field(
         None, alias="ProductionWarehouse", description="Local de estoque da produção", examples=["09"]
@@ -143,15 +144,17 @@ class ItemsPercentualSeparationType(BaseModel):
         description="Lote do produto acabado que será produzido após a desmontagem",
         examples=["LT20180517"],
     )
-    production_product_sub_lot: (
-        str | None
-    ) = (
-        Field(None, alias="ProductionProductSubLot", description="Sub-Lote do produto acabado que será produzido após a desmontagem", examples=["002"])
+    production_product_sub_lot: str | None = Field(
+        None,
+        alias="ProductionProductSubLot",
+        description="Sub-Lote do produto acabado que será produzido após a desmontagem",
+        examples=["002"],
     )
-    production_product_adress: (
-        str | None
-    ) = (
-        Field(None, alias="ProductionProductAdress", description="Endereço do produto acabado que será produzido após a desmontagem", examples=["0000000001"])
+    production_product_adress: str | None = Field(
+        None,
+        alias="ProductionProductAdress",
+        description="Endereço do produto acabado que será produzido após a desmontagem",
+        examples=["0000000001"],
     )
     product_type: ProductType | None = Field(None, alias="ProductType", description="Tipo do produto", examples=["1"])
 
@@ -200,35 +203,23 @@ class CottonGinMachinesType(BaseModel):
         description="Nome da unidade de beneficiamento.",
         examples=["Beneficiamento Belo Horizonte"],
     )
-    additional_balance_weight: (
-        str | None
-    ) = (
-        Field(None, alias="AdditionalBalanceWeight", description="Peso adicional da balança.", examples=["120.50"], ge=0, le=999.99)
+    additional_balance_weight: str | None = Field(
+        None, alias="AdditionalBalanceWeight", description="Peso adicional da balança.", examples=["120.50"]
     )
     minimum_weight: str | None = Field(
-        None,
-        alias="MinimumWeight",
-        description="Peso mínimo permitido para este conjunto.",
-        examples=["150.00"],
-        ge=0,
-        le=999.99,
+        None, alias="MinimumWeight", description="Peso mínimo permitido para este conjunto.", examples=["150.00"]
     )
     maximum_weight: str | None = Field(
-        None,
-        alias="MaximumWeight",
-        description="Peso máximo permitido para este conjunto.",
-        examples=["250,00"],
-        ge=0,
-        le=999.99,
+        None, alias="MaximumWeight", description="Peso máximo permitido para este conjunto.", examples=["250,00"]
     )
     minimum_yield: str | None = Field(
-        None, alias="MinimumYield", description="Porcentagem de rendimento mínimo.", examples=["38.50"], ge=0, le=99.99
+        None, alias="MinimumYield", description="Porcentagem de rendimento mínimo.", examples=["38.50"]
     )
     maximum_yield: str | None = Field(
-        None, alias="MaximumYield", description="Porcentagem de rendimento máximo.", examples=["48,00"], ge=0, le=99.99
+        None, alias="MaximumYield", description="Porcentagem de rendimento máximo.", examples=["48,00"]
     )
     average_yield: str | None = Field(
-        None, alias="AverageYield", description="Porcentagem de rendimento médio.", examples=["42,00"], ge=0, le=99.99
+        None, alias="AverageYield", description="Porcentagem de rendimento médio.", examples=["42,00"]
     )
     expected_start_date: str | None = Field(
         None, alias="ExpectedStartDate", description="Data prevista do início do beneficiamento.", examples=[20180301]
@@ -236,22 +227,13 @@ class CottonGinMachinesType(BaseModel):
     expected_end_date: str | None = Field(
         None, alias="ExpectedEndDate", description="Data prevista do término do beneficiamento.", examples=[20190201]
     )
-    number_saws: str | None = Field(
-        None, alias="NumberSaws", description="Número de serras.", examples=["2,000"], ge=0, le=9.999
-    )
-    kilos_per_hour: str | None = Field(
-        None, alias="KilosPerHour", description="Kilos por hora.", examples=["530.00"], ge=0, le=999.99
-    )
+    number_saws: str | None = Field(None, alias="NumberSaws", description="Número de serras.", examples=["2,000"])
+    kilos_per_hour: str | None = Field(None, alias="KilosPerHour", description="Kilos por hora.", examples=["530.00"])
     productive_hours: str | None = Field(
-        None,
-        alias="ProductiveHours",
-        description="Quantidade de horas produtivas do conjunto.",
-        examples=["20"],
-        ge=0,
-        le=24,
+        None, alias="ProductiveHours", description="Quantidade de horas produtivas do conjunto.", examples=["20"]
     )
     cotton_bales_per_day: str | None = Field(
-        None, alias="CottonBalesPerDay", description="Quantidade de fardos por dia.", examples=["9,000"], ge=0, le=9.999
+        None, alias="CottonBalesPerDay", description="Quantidade de fardos por dia.", examples=["9,000"]
     )
     exceed_income: ExceedIncome | None = Field(
         None, alias="ExceedIncome", description="Ultrapassa rendimento?", examples=["1"]
@@ -259,9 +241,9 @@ class CottonGinMachinesType(BaseModel):
     additional_items: AdditionalItems | None = Field(
         None, alias="AdditionalItems", description="Itens adicionais do conjunto."
     )
-    items_percentual_separation: (
-        ItemsPercentualSeparation | None
-    ) = Field(None, alias="ItemsPercentualSeparation", description="Percentual de separação do itens.")
+    items_percentual_separation: ItemsPercentualSeparation | None = Field(
+        None, alias="ItemsPercentualSeparation", description="Percentual de separação do itens."
+    )
 
 
 class ErrorModel(ErrorModelBase, ErrorDetail):

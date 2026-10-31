@@ -1,4 +1,4 @@
-"""Tabela de Preços Varejo — generated from RetailPriceList_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Tabela de Preços Varejo — generated from RetailPriceList_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ class PriceListHeaderInfo(BaseModel):
     company_id: str | None = Field(None, alias="companyId", description="Código da Empresa")
     name: str | None = Field(None, description="Descrição da Tabela", max_length=40)
     initial_date: date | None = Field(
-        None, alias="initialDate", description="Data Inicial da Vigência", examples=["20180719"], max_length=10
+        None, alias="initialDate", description="Data Inicial da Vigência", examples=["20180719"]
     )
     final_date: date | None = Field(
         None, alias="finalDate", description="Data Final da Vigência", examples=["20180719"]
@@ -75,14 +75,12 @@ class PriceListItemInfo(BaseModel):
         None, alias="itemInternalId", description="Chave completa do Item da Tabela de Preço"
     )
     minimum_sales_price: float | None = Field(
-        None, alias="minimumSalesPrice", description="Preco mínimo de venda do produto - Valor Sem Frete", max_length=12
+        None, alias="minimumSalesPrice", description="Preco mínimo de venda do produto - Valor Sem Frete"
     )
-    discount_value: float | None = Field(None, alias="discountValue", description="Valor de Desconto", max_length=12)
-    discount_factor: float | None = Field(
-        None, alias="discountFactor", description="Percentual Acrescimo/Desconto", max_length=11
-    )
+    discount_value: float | None = Field(None, alias="discountValue", description="Valor de Desconto")
+    discount_factor: float | None = Field(None, alias="discountFactor", description="Percentual Acrescimo/Desconto")
     item_validity: date | None = Field(
-        None, alias="itemValidity", description="Data Vigência do item", examples=["20180719"], max_length=10
+        None, alias="itemValidity", description="Data Vigência do item", examples=["20180719"]
     )
     type_price: TypePrice | None = Field(None, alias="typePrice", description="Tipo do Preço")
     active_item_price: ActiveItemPrice | None = Field(None, alias="activeItemPrice", description="Status do Item")

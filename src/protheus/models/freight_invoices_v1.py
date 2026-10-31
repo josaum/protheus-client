@@ -1,4 +1,4 @@
-"""FreightInvoices — generated from FreightInvoices_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""FreightInvoices — generated from FreightInvoices_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -39,18 +39,13 @@ class FreightInvoicesType(BaseModel):
     invoice_number: str | None = Field(None, alias="InvoiceNumber", description="Numero da fatura.", examples=["001"])
     issue_date: str | None = Field(None, alias="IssueDate", description="Data de Emissão.", examples=["20191010"])
     invoice_gross_value: str | None = Field(
-        None, alias="InvoiceGrossValue", description="Valor da Fatura.", examples=["48,00"], ge=0, le=999999999.99
+        None, alias="InvoiceGrossValue", description="Valor da Fatura.", examples=["48,00"]
     )
     discount_value: str | None = Field(
-        None, alias="DiscountValue", description="Valor do Desconto.", examples=["48,00"], ge=0, le=999999999.99
+        None, alias="DiscountValue", description="Valor do Desconto.", examples=["48,00"]
     )
     compensatory_discount: str | None = Field(
-        None,
-        alias="CompensatoryDiscount",
-        description="Desconto Indenizatório.",
-        examples=["48,00"],
-        ge=0,
-        le=999999999.99,
+        None, alias="CompensatoryDiscount", description="Desconto Indenizatório.", examples=["48,00"]
     )
     document_serie: str | None = Field(None, alias="DocumentSerie", description="Série do Documento.", examples=["001"])
     document_number: str | None = Field(
@@ -62,21 +57,15 @@ class FreightInvoicesType(BaseModel):
         description="Chave do CT-e.",
         examples=["421405354489484514654546545645615615616589400011"],
     )
-    icms_value: str | None = Field(
-        None, alias="ICMSValue", description="Valor de ICMS.", examples=["42,00"], ge=0, le=999999999.99
-    )
+    icms_value: str | None = Field(None, alias="ICMSValue", description="Valor de ICMS.", examples=["42,00"])
     withheld_icms_value: str | None = Field(
-        None, alias="WithheldICMSValue", description="Valor de ICMS Retido.", examples=["42,00"], ge=0, le=999999999.99
+        None, alias="WithheldICMSValue", description="Valor de ICMS Retido.", examples=["42,00"]
     )
-    iss_value: str | None = Field(
-        None, alias="ISSValue", description="Valor de ISS.", examples=["42,00"], ge=0, le=999999999.99
-    )
+    iss_value: str | None = Field(None, alias="ISSValue", description="Valor de ISS.", examples=["42,00"])
     withheld_iss_value: str | None = Field(
-        None, alias="WithheldISSValue", description="Valor de ISS Retido.", examples=["42,00"], ge=0, le=999999999.99
+        None, alias="WithheldISSValue", description="Valor de ISS Retido.", examples=["42,00"]
     )
-    interest_value: str | None = Field(
-        None, alias="InterestValue", description="Valor de Juros.", examples=["42,00"], ge=0, le=999999999.99
-    )
+    interest_value: str | None = Field(None, alias="InterestValue", description="Valor de Juros.", examples=["42,00"])
     input_date: str | None = Field(None, alias="InputDate", description="Data de Criação.", examples=["20191010"])
     expiration_date: str | None = Field(
         None, alias="ExpirationDate", description="Data de Vencimento.", examples=["20191010"]
@@ -111,15 +100,15 @@ class FreightInvoicesType(BaseModel):
     withheld_icms_tax_code: str | None = Field(
         None, alias="WithheldICMSTaxCode", description="Código Imposto ICMS Ret.", examples=["1005"]
     )
-    withheld_icms_tax_category: (
-        str | None
-    ) = Field(None, alias="WithheldICMSTaxCategory", description="Class Imposto ICMS Ret.", examples=["1005"])
+    withheld_icms_tax_category: str | None = Field(
+        None, alias="WithheldICMSTaxCategory", description="Class Imposto ICMS Ret.", examples=["1005"]
+    )
     withheld_iss_tax_code: str | None = Field(
         None, alias="WithheldISSTaxCode", description="Código Imposto ISS Ret.", examples=["1005"]
     )
-    withheld_iss_tax_category: (
-        str | None
-    ) = Field(None, alias="WithheldISSTaxCategory", description="Classificação Imposto ISS Retido.", examples=["A"])
+    withheld_iss_tax_category: str | None = Field(
+        None, alias="WithheldISSTaxCategory", description="Classificação Imposto ISS Retido.", examples=["A"]
+    )
     withheld_iss_tax_catgory: str | None = Field(
         None, alias="WithheldISSTaxCatgory", description="Class Imposto ISS Ret.", examples=["1005"]
     )
@@ -135,10 +124,11 @@ class FreightInvoicesType(BaseModel):
     financial_user: str | None = Field(
         None, alias="FinancialUser", description="Usuário Envio ao Financeiro.", examples=["admin"]
     )
-    financial_rejection_reason: (
-        str | None
-    ) = (
-        Field(None, alias="FinancialRejectionReason", description="Motivo Rejeição Financeiro.", examples=["Fornecedor não cadastrado no Protheus."])
+    financial_rejection_reason: str | None = Field(
+        None,
+        alias="FinancialRejectionReason",
+        description="Motivo Rejeição Financeiro.",
+        examples=["Fornecedor não cadastrado no Protheus."],
     )
 
 

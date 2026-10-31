@@ -1,4 +1,4 @@
-"""Apontamentos de Parada — generated from StopReport_v1_003.json (ttalk ca5e26a). Do not edit by hand."""
+"""Apontamentos de Parada — generated from StopReport_v1_003.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -52,9 +52,9 @@ class StopReport(BaseModel):
     production_shift_code: str | None = Field(
         None, alias="ProductionShiftCode", description="Código Modelo Turno", max_length=8
     )
-    production_shift_description: (
-        str | None
-    ) = Field(None, alias="ProductionShiftDescription", description="Descrição Turno", max_length=40)
+    production_shift_description: str | None = Field(
+        None, alias="ProductionShiftDescription", description="Descrição Turno", max_length=40
+    )
     production_shift_number: int | None = Field(
         None, alias="ProductionShiftNumber", description="Número Turno", ge=-99999, le=99999
     )

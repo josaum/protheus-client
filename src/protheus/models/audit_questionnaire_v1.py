@@ -1,4 +1,4 @@
-"""Questionário de Auditoria — generated from AuditQuestionnaire_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Questionário de Auditoria — generated from AuditQuestionnaire_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ class UseOption(StrEnum):
 class AuditQuestType(BaseModel):
     company_id: str | None = Field(None, alias="companyId", description="Empresa", max_length=3)
     branch_id: str | None = Field(None, alias="branchId", description="Filial", examples=["D MG 01"])
-    checklist: str | None = Field(None, description="Número do Checklist", le=6)
+    checklist: str | None = Field(None, description="Número do Checklist")
     revision: str | None = Field(None, description="Revisão do Checklist", max_length=2)
     topic: str | None = Field(None, description="Topico do Checklist", max_length=10)
     question_number: str | None = Field(None, alias="questionNumber", description="Número da Questão", max_length=3)

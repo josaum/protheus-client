@@ -1,8 +1,8 @@
 {
  "provenance": {
   "repository": "https://github.com/totvs/ttalk-standard-message",
-  "commit": "ca5e26a1285e317115a7d89c959eb66fdaaaf20a",
-  "commit_date": "2026-09-02T10:16:34-03:00",
+  "commit": "12404354656f3ed6aecde6bc68967b9a16230450",
+  "commit_date": "2026-09-08T09:50:03-03:00",
   "product": "Protheus",
   "generator": "crates/ttalk-fast-core + tools/build.py"
  },
@@ -11,7 +11,7 @@
   "operations": 550,
   "apis_without_protheus_operations": 3,
   "response_examples_violating_json_schema": 168,
-  "response_examples_violating_pydantic_model": 165
+  "response_examples_violating_pydantic_model": 152
  },
  "apis": [
   {
@@ -1219,7 +1219,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 0.0"
+       "error": "string_too_long at items.0.code: String should have at most 4 characters"
       }
      }
     },
@@ -1266,7 +1266,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 0.0"
+       "error": "string_too_long at items.0.code: String should have at most 4 characters"
       }
      }
     },
@@ -1318,7 +1318,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 0.0"
+       "error": "string_too_long at code: String should have at most 4 characters"
       }
      }
     },
@@ -1377,7 +1377,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 0.0"
+       "error": "string_too_long at code: String should have at most 4 characters"
       }
      }
     },
@@ -1430,7 +1430,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 0.0"
+       "error": "string_too_long at code: String should have at most 4 characters"
       }
      }
     }
@@ -1555,7 +1555,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 0.0"
+       "error": "enum at items.0.typeProfile: Input should be 'D', 'S' or 'M'"
       }
      }
     },
@@ -1602,7 +1602,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 0.0"
+       "error": "enum at items.0.typeProfile: Input should be 'D', 'S' or 'M'"
       }
      }
     },
@@ -1654,7 +1654,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 0.0"
+       "error": "enum at typeProfile: Input should be 'D', 'S' or 'M'"
       }
      }
     },
@@ -1713,7 +1713,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 0.0"
+       "error": "enum at items.0.typeProfile: Input should be 'D', 'S' or 'M'"
       }
      }
     },
@@ -1817,7 +1817,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 0.0"
+       "error": "string_too_long at items.0.code: String should have at most 6 characters"
       }
      }
     },
@@ -1862,7 +1862,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 0.0"
+       "error": "string_too_long at code: String should have at most 6 characters"
       }
      }
     },
@@ -1911,7 +1911,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 0.0"
+       "error": "string_too_long at code: String should have at most 6 characters"
       }
      }
     },
@@ -1968,7 +1968,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 0.0"
+       "error": "string_too_long at code: String should have at most 6 characters"
       }
      }
     },
@@ -2021,7 +2021,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 0.0"
+       "error": "string_too_long at code: String should have at most 6 characters"
       }
      }
     }
@@ -2091,7 +2091,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'le' to supplied value string"
+       "error": "date_from_datetime_parsing at lastRevision: Input should be a valid date or datetime, invalid character in year"
       }
      }
     },
@@ -2148,7 +2148,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'le' to supplied value string"
+       "error": "date_from_datetime_parsing at items.0.lastRevision: Input should be a valid date or datetime, invalid character in year"
       }
      }
     },
@@ -2204,7 +2204,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'le' to supplied value string"
+       "error": "date_from_datetime_parsing at lastRevision: Input should be a valid date or datetime, invalid character in year"
       }
      }
     },
@@ -2250,7 +2250,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'le' to supplied value string"
+       "error": "date_from_datetime_parsing at items.0.lastRevision: Input should be a valid date or datetime, invalid character in year"
       }
      }
     },
@@ -2296,7 +2296,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'le' to supplied value string"
+       "error": "date_from_datetime_parsing at items.0.lastRevision: Input should be a valid date or datetime, invalid character in year"
       }
      }
     }
@@ -3171,8 +3171,8 @@
        "error": null
       },
       "model": {
-       "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'le' to supplied value string"
+       "ok": true,
+       "error": null
       }
      }
     },
@@ -3217,8 +3217,8 @@
        "error": null
       },
       "model": {
-       "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'le' to supplied value string"
+       "ok": true,
+       "error": null
       }
      }
     },
@@ -3269,8 +3269,8 @@
        "error": null
       },
       "model": {
-       "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'le' to supplied value string"
+       "ok": true,
+       "error": null
       }
      }
     },
@@ -3326,8 +3326,8 @@
        "error": null
       },
       "model": {
-       "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'le' to supplied value string"
+       "ok": true,
+       "error": null
       }
      }
     },
@@ -3382,8 +3382,8 @@
        "error": null
       },
       "model": {
-       "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'le' to supplied value string"
+       "ok": true,
+       "error": null
       }
      }
     }
@@ -3455,7 +3455,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'le' to supplied value string"
+       "error": "date_from_datetime_parsing at items.0.lastRevision: Input should be a valid date or datetime, invalid character in year"
       }
      }
     },
@@ -3519,7 +3519,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'le' to supplied value string"
+       "error": "date_from_datetime_parsing at items.0.lastRevision: Input should be a valid date or datetime, invalid character in year"
       }
      }
     },
@@ -3572,7 +3572,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'le' to supplied value string"
+       "error": "date_from_datetime_parsing at items.0.lastRevision: Input should be a valid date or datetime, invalid character in year"
       }
      }
     },
@@ -3626,7 +3626,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'le' to supplied value string"
+       "error": "date_from_datetime_parsing at items.0.lastRevision: Input should be a valid date or datetime, invalid character in year"
       }
      }
     },
@@ -3672,7 +3672,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'le' to supplied value string"
+       "error": "date_from_datetime_parsing at items.0.lastRevision: Input should be a valid date or datetime, invalid character in year"
       }
      }
     },
@@ -5672,8 +5672,8 @@
        "error": "\"true\" is not of type \"boolean\" at /items/0/finished"
       },
       "model": {
-       "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value True"
+       "ok": true,
+       "error": null
       }
      }
     },
@@ -7573,7 +7573,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 14"
+       "error": "enum at items.0.Status: Input should be '1 - Ativo' or '2 - Inativo'"
       }
      }
     },
@@ -7618,7 +7618,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 14"
+       "error": "enum at Status: Input should be '1 - Ativo' or '2 - Inativo'"
       }
      }
     },
@@ -7667,7 +7667,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 14"
+       "error": "enum at Status: Input should be '1 - Ativo' or '2 - Inativo'"
       }
      }
     },
@@ -7724,7 +7724,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 14"
+       "error": "enum at Status: Input should be '1 - Ativo' or '2 - Inativo'"
       }
      }
     },
@@ -7777,7 +7777,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 14"
+       "error": "enum at Status: Input should be '1 - Ativo' or '2 - Inativo'"
       }
      }
     }
@@ -8167,7 +8167,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 05"
+       "error": "float_parsing at items.0.NetWeight: Input should be a valid number, unable to parse string as a number"
       }
      }
     },
@@ -8216,7 +8216,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 05"
+       "error": "float_parsing at NetWeight: Input should be a valid number, unable to parse string as a number"
       }
      }
     },
@@ -8273,7 +8273,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 05"
+       "error": "float_parsing at NetWeight: Input should be a valid number, unable to parse string as a number"
       }
      }
     },
@@ -8326,7 +8326,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 05"
+       "error": "float_parsing at NetWeight: Input should be a valid number, unable to parse string as a number"
       }
      }
     }
@@ -9456,7 +9456,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 120.50"
+       "error": "string_type at items.0.ExpectedStartDate: Input should be a valid string"
       }
      }
     },
@@ -9497,7 +9497,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 120.50"
+       "error": "string_type at ExpectedStartDate: Input should be a valid string"
       }
      }
     },
@@ -9546,7 +9546,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 120.50"
+       "error": "string_type at ExpectedStartDate: Input should be a valid string"
       }
      }
     },
@@ -9603,7 +9603,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 120.50"
+       "error": "string_type at ExpectedStartDate: Input should be a valid string"
       }
      }
     },
@@ -9656,7 +9656,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 120.50"
+       "error": "string_type at ExpectedStartDate: Input should be a valid string"
       }
      }
     }
@@ -12713,8 +12713,8 @@
        "error": "\"true\" is not of type \"boolean\" at /items/0/finished"
       },
       "model": {
-       "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value True"
+       "ok": true,
+       "error": null
       }
      }
     },
@@ -12835,8 +12835,8 @@
        "error": null
       },
       "model": {
-       "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 1.0"
+       "ok": true,
+       "error": null
       }
      }
     }
@@ -13119,7 +13119,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 200.0"
+       "error": "string_too_long at items.0.InitDate: String should have at most 8 characters"
       }
      }
     },
@@ -13166,7 +13166,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 200.0"
+       "error": "string_too_long at InitDate: String should have at most 8 characters"
       }
      }
     },
@@ -13217,7 +13217,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 200.0"
+       "error": "string_too_long at InitDate: String should have at most 8 characters"
       }
      }
     },
@@ -13276,7 +13276,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 200.0"
+       "error": "string_too_long at InitDate: String should have at most 8 characters"
       }
      }
     },
@@ -13521,7 +13521,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 27000.15"
+       "error": "string_too_long at items.0.companyId: String should have at most 8 characters"
       }
      }
     },
@@ -13565,8 +13565,8 @@
        "error": "\"71\" is not of type \"number\" at /items/0/typeOfLaborProcessValue"
       },
       "model": {
-       "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 71.0"
+       "ok": true,
+       "error": null
       }
      }
     }
@@ -13636,7 +13636,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 30,00"
+       "error": "enum at items.0.FinancialStatus: Input should be '1 - Não Enviado', '2 - Pendente', '3 - Rejeitado', '4 - Atualizado', '5 - Pendente Estorno', '6 - Estornado', '7 - Pendente Estorno Parcial' or '8 - Estornado Parcial'"
       }
      }
     },
@@ -13685,7 +13685,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 30,00"
+       "error": "enum at FinancialStatus: Input should be '1 - Não Enviado', '2 - Pendente', '3 - Rejeitado', '4 - Atualizado', '5 - Pendente Estorno', '6 - Estornado', '7 - Pendente Estorno Parcial' or '8 - Estornado Parcial'"
       }
      }
     },
@@ -13742,7 +13742,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 30,00"
+       "error": "enum at FinancialStatus: Input should be '1 - Não Enviado', '2 - Pendente', '3 - Rejeitado', '4 - Atualizado', '5 - Pendente Estorno', '6 - Estornado', '7 - Pendente Estorno Parcial' or '8 - Estornado Parcial'"
       }
      }
     }
@@ -14094,7 +14094,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 48,00"
+       "error": "enum at items.0.TypeofDocument: Input should be '1 - Normal', '2 - Complementar Valor', '3 - Complementar Imposto', '4 - Reentrega', '5 - Devolução', '6 - Redespacho' or '7 - Serviço'"
       }
      }
     },
@@ -14143,7 +14143,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 48,00"
+       "error": "enum at TypeofDocument: Input should be '1 - Normal', '2 - Complementar Valor', '3 - Complementar Imposto', '4 - Reentrega', '5 - Devolução', '6 - Redespacho' or '7 - Serviço'"
       }
      }
     },
@@ -14200,7 +14200,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 48,00"
+       "error": "enum at TypeofDocument: Input should be '1 - Normal', '2 - Complementar Valor', '3 - Complementar Imposto', '4 - Reentrega', '5 - Devolução', '6 - Redespacho' or '7 - Serviço'"
       }
      }
     }
@@ -14280,7 +14280,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 48,00"
+       "error": "enum at items.0.ApprovalStatus: Input should be '1 - Recebida', '2 - Bloqueada', '3 - Aprovada Sistema' or '4 - Aprovada Usuário'"
       }
      }
     },
@@ -14329,7 +14329,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 48,00"
+       "error": "enum at ApprovalStatus: Input should be '1 - Recebida', '2 - Bloqueada', '3 - Aprovada Sistema' or '4 - Aprovada Usuário'"
       }
      }
     },
@@ -14386,7 +14386,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 48,00"
+       "error": "enum at ApprovalStatus: Input should be '1 - Recebida', '2 - Bloqueada', '3 - Aprovada Sistema' or '4 - Aprovada Usuário'"
       }
      }
     }
@@ -15860,7 +15860,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 48,00"
+       "error": "enum at items.0.Situation: Input should be '1 - Digitado', '2 - Emitido', '3 - Liberado' or '4 - Encerrado'"
       }
      }
     },
@@ -15909,7 +15909,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 48,00"
+       "error": "enum at Situation: Input should be '1 - Digitado', '2 - Emitido', '3 - Liberado' or '4 - Encerrado'"
       }
      }
     },
@@ -15966,7 +15966,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 48,00"
+       "error": "enum at Situation: Input should be '1 - Digitado', '2 - Emitido', '3 - Liberado' or '4 - Encerrado'"
       }
      }
     },
@@ -16023,7 +16023,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'ge' to supplied value 48,00"
+       "error": "enum at Situation: Input should be '1 - Digitado', '2 - Emitido', '3 - Liberado' or '4 - Encerrado'"
       }
      }
     }
@@ -23703,7 +23703,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 2018-07-19"
+       "error": "date_from_datetime_inexact at items.0.finalDate: Datetimes provided to dates should have zero time - e.g. be exact dates"
       }
      }
     },
@@ -23748,7 +23748,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 2018-07-19"
+       "error": "date_from_datetime_inexact at items.0.finalDate: Datetimes provided to dates should have zero time - e.g. be exact dates"
       }
      }
     },
@@ -23800,7 +23800,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 2018-07-19"
+       "error": "date_from_datetime_inexact at items.0.finalDate: Datetimes provided to dates should have zero time - e.g. be exact dates"
       }
      }
     },
@@ -23857,7 +23857,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 2018-07-19"
+       "error": "date_from_datetime_inexact at items.0.finalDate: Datetimes provided to dates should have zero time - e.g. be exact dates"
       }
      }
     },
@@ -23910,7 +23910,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 2018-07-19"
+       "error": "date_from_datetime_inexact at items.0.finalDate: Datetimes provided to dates should have zero time - e.g. be exact dates"
       }
      }
     },
@@ -23963,8 +23963,8 @@
        "error": null
       },
       "model": {
-       "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 1.0"
+       "ok": true,
+       "error": null
       }
      }
     },
@@ -24016,8 +24016,8 @@
        "error": null
       },
       "model": {
-       "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 1.0"
+       "ok": true,
+       "error": null
       }
      }
     },
@@ -24077,8 +24077,8 @@
        "error": null
       },
       "model": {
-       "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 1.0"
+       "ok": true,
+       "error": null
       }
      }
     },
@@ -24143,8 +24143,8 @@
        "error": null
       },
       "model": {
-       "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 1.0"
+       "ok": true,
+       "error": null
       }
      }
     },
@@ -24204,7 +24204,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 2018-07-19"
+       "error": "date_from_datetime_inexact at items.0.finalDate: Datetimes provided to dates should have zero time - e.g. be exact dates"
       }
      }
     }
@@ -24268,7 +24268,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 1.0"
+       "error": "enum at Prospects.0.EntityType: Input should be '1', '2', '3' or '4'"
       }
      }
     },
@@ -24315,7 +24315,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 1.0"
+       "error": "enum at EntityType: Input should be '1', '2', '3' or '4'"
       }
      }
     },
@@ -24369,7 +24369,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 1.0"
+       "error": "enum at EntityType: Input should be '1', '2', '3' or '4'"
       }
      }
     },
@@ -24428,7 +24428,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 1.0"
+       "error": "enum at EntityType: Input should be '1', '2', '3' or '4'"
       }
      }
     },
@@ -24481,7 +24481,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 1.0"
+       "error": "enum at Prospects.0.EntityType: Input should be '1', '2', '3' or '4'"
       }
      }
     }
@@ -26079,7 +26079,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 1.0"
+       "error": "date_from_datetime_inexact at items.0.itemValidity: Datetimes provided to dates should have zero time - e.g. be exact dates"
       }
      }
     }
@@ -29323,7 +29323,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 1.0"
+       "error": "enum at Suspects.0.EntityType: Input should be '1', '2', '3' or '4'"
       }
      }
     },
@@ -29370,7 +29370,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 1.0"
+       "error": "enum at EntityType: Input should be '1', '2', '3' or '4'"
       }
      }
     },
@@ -29424,7 +29424,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 1.0"
+       "error": "enum at EntityType: Input should be '1', '2', '3' or '4'"
       }
      }
     },
@@ -29483,7 +29483,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 1.0"
+       "error": "enum at EntityType: Input should be '1', '2', '3' or '4'"
       }
      }
     },
@@ -29536,7 +29536,7 @@
       },
       "model": {
        "ok": false,
-       "error": "invalid_constraint: Unable to apply constraint 'max_length' to supplied value 1.0"
+       "error": "enum at Suspects.0.EntityType: Input should be '1', '2', '3' or '4'"
       }
      }
     }

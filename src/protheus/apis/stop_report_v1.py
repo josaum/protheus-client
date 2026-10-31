@@ -1,4 +1,4 @@
-"""Apontamentos de Parada — generated from StopReport_v1_003.json (ttalk ca5e26a). Do not edit by hand."""
+"""Apontamentos de Parada — generated from StopReport_v1_003.json (ttalk 1240435). Do not edit by hand."""
 from __future__ import annotations
 
 from collections.abc import Mapping

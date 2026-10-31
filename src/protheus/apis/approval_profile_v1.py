@@ -1,4 +1,4 @@
-"""Perfil de Aprovação — generated from ApprovalProfile_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Perfil de Aprovação — generated from ApprovalProfile_v1_000.json (ttalk 1240435). Do not edit by hand."""
 from __future__ import annotations
 
 from collections.abc import Mapping

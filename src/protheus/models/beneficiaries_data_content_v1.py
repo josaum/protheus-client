@@ -1,4 +1,4 @@
-"""Relação de Benficiários - Global — generated from BeneficiariesDataContent_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Relação de Benficiários - Global — generated from BeneficiariesDataContent_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -56,13 +56,13 @@ class BeneficiariesDataContentItem(BaseModel):
     benefits_vendor_code: str | None = Field(
         None, alias="benefitsVendorCode", description="Identificador do Fornecedor de Benefícios"
     )
-    benefit_vendor_internal_id: (
-        str | None
-    ) = Field(None, alias="benefitVendorInternalId", description="Identificador Interno do Fornecedor de Benefícios")
-    benefit_vendor_segment_code: (
-        BenefitVendorSegmentCode | None
-    ) = (
-        Field(None, alias="benefitVendorSegmentCode", description="Código do tipo de segmento do fornecedor do Benefício: 1 - Assistência Médica | 2 - Assistência Odontológica ")
+    benefit_vendor_internal_id: str | None = Field(
+        None, alias="benefitVendorInternalId", description="Identificador Interno do Fornecedor de Benefícios"
+    )
+    benefit_vendor_segment_code: BenefitVendorSegmentCode | None = Field(
+        None,
+        alias="benefitVendorSegmentCode",
+        description="Código do tipo de segmento do fornecedor do Benefício: 1 - Assistência Médica | 2 - Assistência Odontológica ",
     )
     benefit_code: str | None = Field(None, alias="benefitCode", description="Código do Benefício")
     benefit_internal_id: str | None = Field(
@@ -75,9 +75,9 @@ class BeneficiariesDataContentItem(BaseModel):
         None, alias="finalDate", description="Fim da vigência do Benefício ao beneficiário"
     )
     contract_number_code: str | None = Field(None, alias="contractNumberCode", description="Código do Contrato")
-    contract_number_internal_id: (
-        str | None
-    ) = Field(None, alias="contractNumberInternalId", description="Identificador interno do Contrato")
+    contract_number_internal_id: str | None = Field(
+        None, alias="contractNumberInternalId", description="Identificador interno do Contrato"
+    )
     employee_code: str | None = Field(None, alias="employeeCode", description="Identificado do Funcionário")
     employee_internal_id: str | None = Field(
         None, alias="employeeInternalId", description="Identificado interno do Funcionário"
@@ -99,15 +99,15 @@ class BeneficiariesDataContentItem(BaseModel):
     )
     birth: str | None = Field(None, description="Data de aniversário do beneficiário")
     identity_number: str | None = Field(None, alias="identityNumber", description="Identidade da pessoa (RG)")
-    identity_number_emitter_agency: (
-        str | None
-    ) = Field(None, alias="identityNumberEmitterAgency", description="Orgão emissor da identidade da pessoa (RG)")
+    identity_number_emitter_agency: str | None = Field(
+        None, alias="identityNumberEmitterAgency", description="Orgão emissor da identidade da pessoa (RG)"
+    )
     medical_assistance_card: str | None = Field(
         None, alias="medicalAssistanceCard", description="Numero do Cartão de Assistência Médica"
     )
-    dental_assistance_card_code: (
-        str | None
-    ) = Field(None, alias="dentalAssistanceCardCode", description="Numero do Cartão de Assistência Odontológica")
+    dental_assistance_card_code: str | None = Field(
+        None, alias="dentalAssistanceCardCode", description="Numero do Cartão de Assistência Odontológica"
+    )
     food_cards_code: str | None = Field(None, alias="foodCardsCode", description="Numero do Cartão para Alimentação")
     meal_cards_code: str | None = Field(None, alias="mealCardsCode", description="Numero do Cartão para Refeição")
     sus_card_code: str | None = Field(None, alias="SUSCardCode", description="Numero do Cartão do SUS")

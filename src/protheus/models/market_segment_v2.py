@@ -1,4 +1,4 @@
-"""Segmentos de Mercado — generated from MarketSegment_v2_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Segmentos de Mercado — generated from MarketSegment_v2_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -15,9 +15,9 @@ class MarketSegments1(BaseModel):
 
 class Childs(BaseModel):
     child_market_segment_id: str | None = Field(None, alias="childMarketSegmentId", description="ID do segmento filho")
-    child_market_segmant_description: (
-        str | None
-    ) = Field(None, alias="childMarketSegmantDescription", description="Descrição do segmento filho")
+    child_market_segmant_description: str | None = Field(
+        None, alias="childMarketSegmantDescription", description="Descrição do segmento filho"
+    )
 
 
 class MarketSegmentsInfo(BaseModel):
@@ -26,19 +26,20 @@ class MarketSegmentsInfo(BaseModel):
     )
     branch_id: str | None = Field(None, alias="branchId", description="Filial", examples=["D MG 01"])
     company_id: str | None = Field(None, alias="companyId", description="Empresa")
-    market_segment_description: (
-        str | None
-    ) = Field(None, alias="marketSegmentDescription", description="Descrição do Segmento", examples=["Services"])
+    market_segment_description: str | None = Field(
+        None, alias="marketSegmentDescription", description="Descrição do Segmento", examples=["Services"]
+    )
     main_market_segment: bool | None = Field(
         None, alias="mainMarketSegment", description="Indica se é um segmento principal", examples=[True]
     )
     parent_market_segment: str | None = Field(
         None, alias="parentMarketSegment", description="Segmento pai/superior", examples=["000002"]
     )
-    parent_market_segment_description: (
-        str | None
-    ) = (
-        Field(None, alias="parentMarketSegmentDescription", description="Descrição do Segmento pai/superior", examples=["AGROPECUARIA"])
+    parent_market_segment_description: str | None = Field(
+        None,
+        alias="parentMarketSegmentDescription",
+        description="Descrição do Segmento pai/superior",
+        examples=["AGROPECUARIA"],
     )
     childs: Childs | None = Field(None, description="Lista de Segmentos filhos")
     is_active: bool | None = Field(

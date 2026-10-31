@@ -1,4 +1,4 @@
-"""Líder Direto dos Empregados — generated from EmployeesManagerDataContent_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Líder Direto dos Empregados — generated from EmployeesManagerDataContent_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -18,15 +18,15 @@ class EmployeesManagerDataContentItem(BaseModel):
     manager_department_code: str | None = Field(
         None, alias="managerDepartmentCode", description="Código do departamento do líder"
     )
-    manager_department_description: (
-        str | None
-    ) = Field(None, alias="managerDepartmentDescription", description="Descrição do departamento do líder")
+    manager_department_description: str | None = Field(
+        None, alias="managerDepartmentDescription", description="Descrição do departamento do líder"
+    )
     manager_cost_center_code: str | None = Field(
         None, alias="managerCostCenterCode", description="Código do centro de custo do líder"
     )
-    manager_cost_center_description: (
-        str | None
-    ) = Field(None, alias="managerCostCenterDescription", description="Descrição do centro de custo do líder")
+    manager_cost_center_description: str | None = Field(
+        None, alias="managerCostCenterDescription", description="Descrição do centro de custo do líder"
+    )
     employee_branch: str | None = Field(None, alias="employeeBranch", description="Filial do empregado")
     employee_code: str | None = Field(None, alias="employeeCode", description="Matrícula do empregado")
     employee_name: str | None = Field(None, alias="employeeName", description="Nome do empregado")

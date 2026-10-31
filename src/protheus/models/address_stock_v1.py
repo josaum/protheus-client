@@ -1,4 +1,4 @@
-"""Endereços — generated from AddressStock_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Endereços — generated from AddressStock_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -18,9 +18,9 @@ class AddressStockInfo(BaseModel):
     internal_id: str | None = Field(None, alias="InternalId", description="InternalId da localização")
     warehouse_code: str | None = Field(None, alias="WarehouseCode", description="Código do Armazém/Depósito")
     location_code: str | None = Field(None, alias="LocationCode", description="Endereço/Localização")
-    address_stock_description: (
-        str | None
-    ) = Field(None, alias="AddressStockDescription", description="Descrição do endereço")
+    address_stock_description: str | None = Field(
+        None, alias="AddressStockDescription", description="Descrição do endereço"
+    )
 
 
 class ErrorModelBase(BaseModel):

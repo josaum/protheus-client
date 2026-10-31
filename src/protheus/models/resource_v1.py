@@ -1,4 +1,4 @@
-"""Recursos — generated from Resource_v1_001.json (ttalk ca5e26a). Do not edit by hand."""
+"""Recursos — generated from Resource_v1_001.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -25,9 +25,9 @@ class Resource(BaseModel):
     production_area_code: str | None = Field(
         None, alias="ProductionAreaCode", description="Codigo Área Produção", max_length=10
     )
-    production_area_description: (
-        str | None
-    ) = Field(None, alias="ProductionAreaDescription", description="Descrição Área Produção", max_length=40)
+    production_area_description: str | None = Field(
+        None, alias="ProductionAreaDescription", description="Descrição Área Produção", max_length=40
+    )
     production_shift_number: str | None = Field(
         None, alias="ProductionShiftNumber", description="Número Turno", max_length=5
     )

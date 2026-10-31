@@ -1,4 +1,4 @@
-"""Cliente/Fornecedor — generated from CustomerVendor_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Cliente/Fornecedor — generated from CustomerVendor_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -31,12 +31,12 @@ class EntityType(StrEnum):
 
 class Marketsegment(BaseModel):
     market_segment_code: str | None = Field(None, alias="marketSegmentCode", description="Código do segmento")
-    market_segment_internal_id: (
-        str | None
-    ) = Field(None, alias="marketSegmentInternalId", description="InternalId do MarketSegmentCode")
-    market_segment_description: (
-        str | None
-    ) = Field(None, alias="marketSegmentDescription", description="Descrição do segmento")
+    market_segment_internal_id: str | None = Field(
+        None, alias="marketSegmentInternalId", description="InternalId do MarketSegmentCode"
+    )
+    market_segment_description: str | None = Field(
+        None, alias="marketSegmentDescription", description="Descrição do segmento"
+    )
 
 
 class RegisterSituation(StrEnum):
@@ -144,9 +144,9 @@ class ListOfCommunicationInformation(BaseModel):
     home_page: str | None = Field(None, alias="HomePage", description="Página da WEB")
     email: str | None = Field(None, alias="Email", description="Correio Eletrônico")
     dialling_code: str | None = Field(None, alias="DiallingCode", description="DDD - Discagem Direta a Distancia")
-    international_dialling_code: (
-        str | None
-    ) = Field(None, alias="InternationalDiallingCode", description="DDI - Discagem Direta Internal")
+    international_dialling_code: str | None = Field(
+        None, alias="InternationalDiallingCode", description="DDI - Discagem Direta Internal"
+    )
 
 
 class CommunicationInformation(BaseModel):
@@ -173,22 +173,22 @@ class ContactInformationAddress(BaseModel):
 
 class ListOfContact(BaseModel):
     contact_information_code: str | None = Field(None, alias="ContactInformationCode", description="Código do Contato")
-    contact_information_internal_id: (
-        str | None
-    ) = Field(None, alias="ContactInformationInternalId", description="InternalId do ContactInformationCode")
-    contact_information_title: (
-        str | None
-    ) = Field(None, alias="ContactInformationTitle", description="Título do Contato")
+    contact_information_internal_id: str | None = Field(
+        None, alias="ContactInformationInternalId", description="InternalId do ContactInformationCode"
+    )
+    contact_information_title: str | None = Field(
+        None, alias="ContactInformationTitle", description="Título do Contato"
+    )
     contact_information_name: str | None = Field(None, alias="ContactInformationName", description="Nome do Contato")
-    contact_information_department: (
-        str | None
-    ) = Field(None, alias="ContactInformationDepartment", description="Departamento do Contato")
-    communication_information: (
-        CommunicationInformation | None
-    ) = Field(None, alias="CommunicationInformation", description="Informações para Contato")
-    contact_information_address: (
-        ContactInformationAddress | None
-    ) = Field(None, alias="ContactInformationAddress", description="Endereço do Contato")
+    contact_information_department: str | None = Field(
+        None, alias="ContactInformationDepartment", description="Departamento do Contato"
+    )
+    communication_information: CommunicationInformation | None = Field(
+        None, alias="CommunicationInformation", description="Informações para Contato"
+    )
+    contact_information_address: ContactInformationAddress | None = Field(
+        None, alias="ContactInformationAddress", description="Endereço do Contato"
+    )
 
 
 class CheckingAccountType(StrEnum):
@@ -214,10 +214,8 @@ class ListOfBankingInformation(BaseModel):
     checking_account_number: str | None = Field(
         None, alias="checkingAccountNumber", description="Conta Bancária do Cliente/Fornecedor", max_length=20
     )
-    checking_account_number_key: (
-        str | None
-    ) = (
-        Field(None, alias="checkingAccountNumberKey", description="Digito Conta Bancária do Cliente/Fornecedor", max_length=2)
+    checking_account_number_key: str | None = Field(
+        None, alias="checkingAccountNumberKey", description="Digito Conta Bancária do Cliente/Fornecedor", max_length=2
     )
     checking_account_type: CheckingAccountType | None = Field(
         None, alias="checkingAccountType", description="Tipo da Conta Bancária do Cliente/Fornecedor"
@@ -228,36 +226,14 @@ class ListOfBankingInformation(BaseModel):
     )
 
 
-class Address1(BaseModel):
-    address: str | None = Field(
-        None, description="endereço", examples=["Rua, Avenida, Rodovia, etc. Ex.: Avenida Braz Leme"]
-    )
-    number: str | None = Field(None, description="Número do endereço")
-    complement: str | None = Field(None, description="Informações complementares do endereço")
-    city: City | None = None
-    district: str | None = Field(None, description="Bairro", examples=["Casa Verde"])
-    state: State | None = None
-    country: Country | None = None
-    zip_code: str | None = Field(None, alias="zipCode", description="CEP", examples=["02022010"])
-    region: str | None = Field(None, description="Região", examples=["Zona Norte"])
-    po_box: str | None = Field(None, alias="poBox", description="Caixa postal")
-    main_address: bool | None = Field(None, alias="mainAddress", description="Endereço principal?", examples=[True])
-    shipping_address: bool | None = Field(
-        None, alias="shippingAddress", description="Endereço de entregas?", examples=[False]
-    )
-    billing_address: bool | None = Field(
-        None, alias="billingAddress", description="Endereço de cobrança?", examples=[True]
-    )
-
-
 class BillingInformation(BaseModel):
     billing_customer_code: int | None = Field(
         None, alias="billingCustomerCode", description="Código do usuário de cobrança"
     )
-    billing_customer_internal_id: (
-        str | None
-    ) = Field(None, alias="billingCustomerInternalId", description="Billing Customer InternalId")
-    address: Address1 | None = None
+    billing_customer_internal_id: str | None = Field(
+        None, alias="billingCustomerInternalId", description="Billing Customer InternalId"
+    )
+    address: Address | None = None
 
 
 class VendorClassification(StrEnum):
@@ -293,9 +269,9 @@ class FiscalInformation(BaseModel):
 class CreditInformation(BaseModel):
     credit_indicator: int | None = Field(None, alias="creditIndicator", description="Indicador de Crédito")
     credit_evaluation: int | None = Field(None, alias="creditEvaluation", description="Avaliação de Crédito")
-    shipment_credit_evaluation: (
-        int | None
-    ) = Field(None, alias="shipmentCreditEvaluation", description="Avaliação de Crédito para venda")
+    shipment_credit_evaluation: int | None = Field(
+        None, alias="shipmentCreditEvaluation", description="Avaliação de Crédito para venda"
+    )
     credit_limit: float | None = Field(None, alias="creditLimit", description="Limite de Crédito")
     credit_limit_currency: int | None = Field(
         None, alias="creditLimitCurrency", description="Moeda do Limite de Crédito"
@@ -309,13 +285,14 @@ class CreditInformation(BaseModel):
     additional_credit_limit: float | None = Field(
         None, alias="additionalCreditLimit", description="Limite de Crédito adicional"
     )
-    additional_credit_limit_currency: (
-        str | None
-    ) = Field(None, alias="additionalCreditLimitCurrency", description="Moeda do Limite de Crédito adicional")
-    additional_credit_limit_date: (
-        AwareDatetime | None
-    ) = (
-        Field(None, alias="additionalCreditLimitDate", description="Data de vencimento do Limite de Crédito adicional", examples=["2018-06-29T09:34:30Z"])
+    additional_credit_limit_currency: str | None = Field(
+        None, alias="additionalCreditLimitCurrency", description="Moeda do Limite de Crédito adicional"
+    )
+    additional_credit_limit_date: AwareDatetime | None = Field(
+        None,
+        alias="additionalCreditLimitDate",
+        description="Data de vencimento do Limite de Crédito adicional",
+        examples=["2018-06-29T09:34:30Z"],
     )
     late_periods: int | None = Field(None, alias="latePeriods")
     balance_of_credit: float | None = Field(
@@ -399,15 +376,15 @@ class CustomerVendorInfo(BaseModel):
     payment_condition_code: str | None = Field(
         None, alias="paymentConditionCode", description="Código do Prazo de Pagamento", max_length=3
     )
-    payment_condition_internal_id: (
-        str | None
-    ) = Field(None, alias="paymentConditionInternalId", description="InternalId do PaymentConditionCode")
-    price_list_header_item_code: (
-        str | None
-    ) = Field(None, alias="priceListHeaderItemCode", description="Código da Tabela de Preço", max_length=3)
-    price_list_header_item_internal_id: (
-        str | None
-    ) = Field(None, alias="priceListHeaderItemInternalId", description="InternalId do PriceListHeaderItemCode")
+    payment_condition_internal_id: str | None = Field(
+        None, alias="paymentConditionInternalId", description="InternalId do PaymentConditionCode"
+    )
+    price_list_header_item_code: str | None = Field(
+        None, alias="priceListHeaderItemCode", description="Código da Tabela de Preço", max_length=3
+    )
+    price_list_header_item_internal_id: str | None = Field(
+        None, alias="priceListHeaderItemInternalId", description="InternalId do PriceListHeaderItemCode"
+    )
     carrier_code: int | None = Field(
         None, alias="carrierCode", description="Código da Transportadora default do Cliente"
     )
@@ -435,9 +412,9 @@ class CustomerVendorInfo(BaseModel):
     optional_value3: float | None = Field(None, alias="optionalValue3", description="Valor Opcional 3")
     patrimony: float | None = Field(None, description="Valor Patrimonial")
     employees_number: int | None = Field(None, alias="employeesNumber", description="Número de Funcionários")
-    classification_company_id: (
-        int | None
-    ) = Field(None, alias="classificationCompanyId", description="Coligada do Tipo de Cliente Fornecedor")
+    classification_company_id: int | None = Field(
+        None, alias="classificationCompanyId", description="Coligada do Tipo de Cliente Fornecedor"
+    )
     contributor: int | None = Field(None, description="Contribuinte")
     blocked: int | None = Field(None, description="Bloqueado")
     provider_shipping_price: float | None = Field(None, alias="providerShippingPrice", description="Valor do Frete")
@@ -446,15 +423,11 @@ class CustomerVendorInfo(BaseModel):
     dependents_number: int | None = Field(None, alias="dependentsNumber", description="Número de Dependentes")
     public_body: int | None = Field(None, alias="publicBody", description="Orgão Público")
     self_employed_category: int | None = Field(None, alias="selfEmployedCategory", description="Categoria do Autonômo")
-    customer_vendor_identity_id: (
-        int | None
-    ) = (
-        Field(None, alias="customerVendorIdentityId", description="ID do Cliente/Fornecedor com auto incremento na base")
+    customer_vendor_identity_id: int | None = Field(
+        None, alias="customerVendorIdentityId", description="ID do Cliente/Fornecedor com auto incremento na base"
     )
-    other_deductions_irrf_calculations: (
-        float | None
-    ) = (
-        Field(None, alias="otherDeductionsIRRFCalculations", description="Valor de outras deduções para cálculo de IRRF")
+    other_deductions_irrf_calculations: float | None = Field(
+        None, alias="otherDeductionsIRRFCalculations", description="Valor de outras deduções para cálculo de IRRF"
     )
     iss_regime: str | None = Field(None, alias="issRegime", description="Regime de ISS")
     iss_retention_responsible: str | None = Field(None, alias="issRetentionResponsible", description="Retenção de ISS")
@@ -479,10 +452,8 @@ class CustomerVendorInfo(BaseModel):
     formula_application: str | None = Field(
         None, alias="formulaApplication", description="Código da Aplicação da Fórmula"
     )
-    automatic_debit_checker_type: (
-        str | None
-    ) = (
-        Field(None, alias="automaticDebitCheckerType", description="Dígito verificador do identificador de débito automático")
+    automatic_debit_checker_type: str | None = Field(
+        None, alias="automaticDebitCheckerType", description="Dígito verificador do identificador de débito automático"
     )
     executing_entity_paa: str | None = Field(
         None,
@@ -561,42 +532,29 @@ class CommunicationInformationType(BaseModel):
     home_page: str | None = Field(None, alias="HomePage", description="Página da WEB")
     email: str | None = Field(None, alias="Email", description="Correio Eletrônico")
     dialling_code: str | None = Field(None, alias="DiallingCode", description="DDD - Discagem Direta a Distancia")
-    international_dialling_code: (
-        str | None
-    ) = Field(None, alias="InternationalDiallingCode", description="DDI - Discagem Direta Internal")
-
-
-class ContactInformationAddress1(BaseModel):
-    address: str | None = Field(None, alias="Address", description="Rua, Avenida, Rodovia, etc. Ex.: Rua Nações Unidas")
-    number: str | None = Field(None, alias="Number", description="Número do Endereço.")
-    complement: str | None = Field(None, alias="Complement", description="Informações complementares do endereço.")
-    city: City | None = Field(None, alias="City", description="Informações do Município")
-    district: str | None = Field(None, alias="District", description="Bairro")
-    state: State | None = Field(None, alias="State", description="Distrito")
-    country: Country | None = Field(None, alias="Country", description="País")
-    zip_code: str | None = Field(None, alias="ZIPCode", description="CEP")
-    region: str | None = Field(None, alias="Region", description="Região")
-    po_box: str | None = Field(None, alias="POBox", description="Caixa Postal")
+    international_dialling_code: str | None = Field(
+        None, alias="InternationalDiallingCode", description="DDI - Discagem Direta Internal"
+    )
 
 
 class ContactInformationType(BaseModel):
     contact_information_code: str | None = Field(None, alias="ContactInformationCode", description="Código do Contato")
-    contact_information_internal_id: (
-        str | None
-    ) = Field(None, alias="ContactInformationInternalId", description="InternalId do ContactInformationCode")
-    contact_information_title: (
-        str | None
-    ) = Field(None, alias="ContactInformationTitle", description="Título do Contato")
+    contact_information_internal_id: str | None = Field(
+        None, alias="ContactInformationInternalId", description="InternalId do ContactInformationCode"
+    )
+    contact_information_title: str | None = Field(
+        None, alias="ContactInformationTitle", description="Título do Contato"
+    )
     contact_information_name: str | None = Field(None, alias="ContactInformationName", description="Nome do Contato")
-    contact_information_department: (
-        str | None
-    ) = Field(None, alias="ContactInformationDepartment", description="Departamento do Contato")
-    communication_information: (
-        CommunicationInformation | None
-    ) = Field(None, alias="CommunicationInformation", description="Informações para Contato")
-    contact_information_address: (
-        ContactInformationAddress1 | None
-    ) = Field(None, alias="ContactInformationAddress", description="Endereço do Contato")
+    contact_information_department: str | None = Field(
+        None, alias="ContactInformationDepartment", description="Departamento do Contato"
+    )
+    communication_information: CommunicationInformation | None = Field(
+        None, alias="CommunicationInformation", description="Informações para Contato"
+    )
+    contact_information_address: ContactInformationAddress | None = Field(
+        None, alias="ContactInformationAddress", description="Endereço do Contato"
+    )
 
 
 class CommunicationInformationCommunicationInformationType(BaseModel):
@@ -634,10 +592,8 @@ class BankingInformation(BaseModel):
     checking_account_number: str | None = Field(
         None, alias="checkingAccountNumber", description="Conta Bancária do Cliente/Fornecedor", max_length=20
     )
-    checking_account_number_key: (
-        str | None
-    ) = (
-        Field(None, alias="checkingAccountNumberKey", description="Digito Conta Bancária do Cliente/Fornecedor", max_length=2)
+    checking_account_number_key: str | None = Field(
+        None, alias="checkingAccountNumberKey", description="Digito Conta Bancária do Cliente/Fornecedor", max_length=2
     )
     checking_account_type: CheckingAccountType | None = Field(
         None, alias="checkingAccountType", description="Tipo da Conta Bancária do Cliente/Fornecedor"

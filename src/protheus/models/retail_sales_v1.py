@@ -1,4 +1,4 @@
-"""Vendas do Varejo — generated from RetailSales_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Vendas do Varejo — generated from RetailSales_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -131,15 +131,15 @@ class ListOfTax(BaseModel):
     deferral_value: float | None = Field(
         None, alias="DeferralValue", description="Valor do Diferimento - Somente para ICMS"
     )
-    presumed_credit_percentage: (
-        float | None
-    ) = Field(None, alias="PresumedCreditPercentage", description="Percentual do Crédito Presumido")
+    presumed_credit_percentage: float | None = Field(
+        None, alias="PresumedCreditPercentage", description="Percentual do Crédito Presumido"
+    )
     presumed_credit_value: float | None = Field(
         None, alias="PresumedCreditValue", description="Valor do Crédito Presumido"
     )
-    especific_calculation_basis: (
-        float | None
-    ) = Field(None, alias="EspecificCalculationBasis", description="Base de Cálculo para Alíquota Específica")
+    especific_calculation_basis: float | None = Field(
+        None, alias="EspecificCalculationBasis", description="Base de Cálculo para Alíquota Específica"
+    )
     especific_aliquot: float | None = Field(None, alias="EspecificAliquot", description="Alíquota Específica")
     increase_percentage: float | None = Field(
         None, alias="IncreasePercentage", description="Percentual de Majoração do Imposto"
@@ -273,16 +273,16 @@ class ListOfSaleItemItem(BaseModel):
     lodging: str | None = Field(None, alias="Lodging", description="Produto é Diaria", max_length=1)
     is_canceled: bool | None = Field(None, alias="IsCanceled", description="Informa se o item esta cancelado")
     unit_of_measure_code: str | None = Field(None, alias="UnitOfMeasureCode", description="Unidade de Medida")
-    unit_of_measure_internal_id: (
-        str | None
-    ) = Field(None, alias="UnitOfMeasureInternalId", description="Id de integração da Unidade de Medida")
+    unit_of_measure_internal_id: str | None = Field(
+        None, alias="UnitOfMeasureInternalId", description="Id de integração da Unidade de Medida"
+    )
     warehouse_code: str | None = Field(None, alias="WarehouseCode", description="Codigo do Local de Estoque(Armazem)")
     warehouse_internal_id: str | None = Field(
         None, alias="WarehouseInternalId", description="Id de integração do Local de Estoque(Armazem)"
     )
-    store_identification_code: (
-        str | None
-    ) = Field(None, alias="StoreIdentificationCode", description="Código da Identificação da Loja de Reserva")
+    store_identification_code: str | None = Field(
+        None, alias="StoreIdentificationCode", description="Código da Identificação da Loja de Reserva"
+    )
     ecf_taxing_code: str | None = Field(
         None, alias="ECFTaxingCode", description="Código da Tributação ECF", max_length=10
     )
@@ -333,9 +333,9 @@ class ListOfSaleItem(BaseModel):
 
 
 class ListOfSaleConditionItem(BaseModel):
-    account_receivable_document_internal_id: (
-        str | None
-    ) = Field(None, alias="AccountReceivableDocumentInternalId", description="InternalId do RA do cliente")
+    account_receivable_document_internal_id: str | None = Field(
+        None, alias="AccountReceivableDocumentInternalId", description="InternalId do RA do cliente"
+    )
     date_of_payment: str | None = Field(None, alias="DateOfPayment", description="Data de Vencimento da Parcela")
     payment_value: float | None = Field(
         None,
@@ -348,9 +348,9 @@ class ListOfSaleConditionItem(BaseModel):
     payment_method_code: str | None = Field(
         None, alias="PaymentMethodCode", description="Forma de Pagamento", max_length=15
     )
-    payment_method_internal_id: (
-        str | None
-    ) = Field(None, alias="PaymentMethodInternalId", description="Chave de Integração de Forma de Pagamento")
+    payment_method_internal_id: str | None = Field(
+        None, alias="PaymentMethodInternalId", description="Chave de Integração de Forma de Pagamento"
+    )
     financial_manager_code: str | None = Field(
         None, alias="FinancialManagerCode", description="Código da Administradora Financeira", max_length=1
     )
@@ -361,10 +361,8 @@ class ListOfSaleConditionItem(BaseModel):
     account_check: str | None = Field(
         None, alias="AccountCheck", description="Número da Conta do Cheque", max_length=20
     )
-    document_of_identification: (
-        str | None
-    ) = (
-        Field(None, alias="DocumentOfIdentification", description="Documento de Identidade do Cliente - Cheque", max_length=20)
+    document_of_identification: str | None = Field(
+        None, alias="DocumentOfIdentification", description="Documento de Identidade do Cliente - Cheque", max_length=20
     )
     phone_number: str | None = Field(
         None, alias="PhoneNumber", description="Telefone do Cliente - Cheque", max_length=15
@@ -379,9 +377,9 @@ class ListOfSaleConditionItem(BaseModel):
     eft_cancellation_date: AwareDatetime | None = Field(
         None, alias="EftCancellationDate", description="Data de Cancelamento TEF"
     )
-    eft_cancellation_document: (
-        str | None
-    ) = Field(None, alias="EftCancellationDocument", description="Número do Cancelamento TEF", max_length=9)
+    eft_cancellation_document: str | None = Field(
+        None, alias="EftCancellationDocument", description="Número do Cancelamento TEF", max_length=9
+    )
     eft_institute: str | None = Field(None, alias="EftInstitute", description="Código do Instituto TEF", max_length=16)
     unique_serial_number: str | None = Field(
         None, alias="UniqueSerialNumber", description="Código NSU - TEF", max_length=12
@@ -390,9 +388,9 @@ class ListOfSaleConditionItem(BaseModel):
     financial_document_code: str | None = Field(
         None, alias="FinancialDocumentCode", description="Número do documento Financeiro", max_length=20
     )
-    payment_term_code_internal_id: (
-        str | None
-    ) = Field(None, alias="PaymentTermCodeInternalID", description="InternalId da condição de pagamento", max_length=50)
+    payment_term_code_internal_id: str | None = Field(
+        None, alias="PaymentTermCodeInternalID", description="InternalId da condição de pagamento", max_length=50
+    )
     payment_term_code: str | None = Field(
         None, alias="PaymentTermCode", description="Condição de pagamento", max_length=3
     )
@@ -401,67 +399,6 @@ class ListOfSaleConditionItem(BaseModel):
 
 class ListOfSaleCondition(BaseModel):
     pass
-
-
-class ListOfTax1(BaseModel):
-    taxe: Taxe | None = Field(
-        None,
-        alias="Taxe",
-        description="Nome do Imposto (ITF, COFINS, CSLL, FABOV, FACS, INSS-PF, INSS-PJ, INSS-RUR, IOF, IR-CARRETEIRO, IR-PF, IR-PJ, IRRF–PF, IRRF–PJ, ISS, ISS-ARQ-ELET, PIS, PIS/COFINS/CSLL, PIS/COFINS-CRED, PIS/COFINS-PROD, SEST/SENAT,ICM, IPI, II, IMP_CANA, ICMS_ST, RECOLH_INSS, RETEN_ISS, RETEN_INSS, RETEN_INSS_RUR, RETEN_SEST_SENAT) / ITF - -Imposto sobre movimentação financeira / COFINS - COFINS / CSLL - CSLL / FABOV - FABOV / FACS - FACS / INSS-PF - INSS-PF / INSS-PJ - INSS-PJ / INSS-RUR - INSS-RUR / IOF - IOF / IR-CARRETEIRO - IR-CARRETEIRO / IRRF–PF - IRRF–PF / IRRF–PJ - IRRF–PJ / ISS - ISS / ISS-ARQ-ELET - ISS-ARQ-ELET / PIS - PIS / PIS/COFINS/CSLL - PIS/COFINS/CSLL / PIS/COFINS-CRED - PIS/COFINS-CRED / PIS/COFINS-PROD - PIS/COFINS-PROD / SEST/SENAT - SEST/SENAT / ICM - ICM / IPI - IPI / II - II - Imposto de Importação / IMP_CANA - IMP_CANA - Imposto da Cana / ICMS_ST - ICMS_ST - ICMS Substituicao Tributaria / RECOLH_INSS - RECOLH_INSS - Recolhimento INSS / RETEN_ISS - RETEN_ISS - Retenção ISS / RETEN_INSS - RETEN_INSS - Retenção INSS / RETEN_INSS_RUR - RETEN_INSS_RUR - Retenção INSS Rural / RETEN_SEST_SENAT - RETEN_SEST_SENAT - Retenção SEST SENAT",
-    )
-    country_code: str | None = Field(None, alias="CountryCode", description="Código do País")
-    country_internal_id: str | None = Field(None, alias="CountryInternalId", description="InternalId do CountryCode")
-    state_code: str | None = Field(None, alias="StateCode", description="Código da Unidade Federativa")
-    state_internal_id: str | None = Field(None, alias="StateInternalId", description="InternalId do StateCode")
-    city_code: str | None = Field(None, alias="CityCode", description="Código da Cidade")
-    city_internal_id: str | None = Field(None, alias="CityInternalId", description="InternalId do CityCode")
-    calculation_basis: float | None = Field(
-        None, alias="CalculationBasis", description="Base de Cálculo para o Imposto"
-    )
-    percentage: float | None = Field(None, alias="Percentage", description="Percentual do Imposto")
-    reduction_based_percent: float | None = Field(
-        None, alias="ReductionBasedPercent", description="Percentual de Redução de Base"
-    )
-    value: float | None = Field(None, alias="Value", description="Valor do Imposto")
-    reason: Reason | None = Field(
-        None,
-        alias="Reason",
-        description="Motivo da Retenção 1-Autopeças, 2-Órgãos Públicos, 3–Serviço / 001 - Autopeças / 002 - Órgãos Públicos / 003 - Serviço",
-    )
-    deferral_percentage: float | None = Field(
-        None, alias="DeferralPercentage", description="Percentual do Diferimento - Somente para ICMS"
-    )
-    deferral_value: float | None = Field(
-        None, alias="DeferralValue", description="Valor do Diferimento - Somente para ICMS"
-    )
-    presumed_credit_percentage: (
-        float | None
-    ) = Field(None, alias="PresumedCreditPercentage", description="Percentual do Crédito Presumido")
-    presumed_credit_value: float | None = Field(
-        None, alias="PresumedCreditValue", description="Valor do Crédito Presumido"
-    )
-    especific_calculation_basis: (
-        float | None
-    ) = Field(None, alias="EspecificCalculationBasis", description="Base de Cálculo para Alíquota Específica")
-    especific_aliquot: float | None = Field(None, alias="EspecificAliquot", description="Alíquota Específica")
-    increase_percentage: float | None = Field(
-        None, alias="IncreasePercentage", description="Percentual de Majoração do Imposto"
-    )
-    increase_value: float | None = Field(None, alias="IncreaseValue", description="Valor de Majoração do Imposto")
-    recalculate: bool | None = Field(None, alias="Recalculate", description="Recalcular?")
-    code_tax_situation: str | None = Field(None, alias="CodeTaxSituation", description="CST do imposto")
-    with_holding_tax: bool | None = Field(None, alias="WithHoldingTax", description="É retenção?")
-    has_tax: bool | None = Field(None, alias="HasTax", description="Indicador se possui o imposto")
-    incidence_type: IncidenceType | None = Field(
-        None,
-        alias="IncidenceType",
-        description="Tipo da incidência C-crédito I-isento O-outros E=espec N-não tribut U-suspenso D-diferida S-sem aproveitamento crédito / C - Com crédito / I - Isento / O - Outros / E - Específico / N - Não tributado / U - Suspenso / D - Diferido / S - Sem aproveitamento de crédito",
-    )
-    value_type: float | None = Field(None, alias="ValueType", description="Tipo de valor")
-    date: date_aliased | None = Field(None, alias="Date", description="Data de referência")
-    kind: Kind | None = Field(None, alias="Kind", description="Tipo do imposto / D - Devido / R - Retido")
-    value_due_with_held: float | None = Field(None, alias="ValueDueWithHeld", description="Valor devido/retido")
-    aggregated_percentage: float | None = Field(None, alias="AggregatedPercentage", description="Percentual agregado")
 
 
 class SaleType(StrEnum):
@@ -501,9 +438,9 @@ class RetailSalesType(BaseModel):
     comission_percent: float | None = Field(
         None, alias="ComissionPercent", description="Percentual da Comissão", ge=-999.99, le=999.99, multiple_of=0.01
     )
-    customer_vendor_internal_id: (
-        str | None
-    ) = Field(None, alias="CustomerVendorInternalId", description="InternalId do Código do Cliente")
+    customer_vendor_internal_id: str | None = Field(
+        None, alias="CustomerVendorInternalId", description="InternalId do Código do Cliente"
+    )
     total_price: float | None = Field(
         None,
         alias="TotalPrice",
@@ -684,9 +621,9 @@ class RetailSalesType(BaseModel):
     movement_number: str | None = Field(
         None, alias="MovementNumber", description="Numero do movimento do Dia", max_length=5
     )
-    electronic_invoice_complement: (
-        str | None
-    ) = Field(None, alias="ElectronicInvoiceComplement", description="Informações Complementares NFCe", max_length=60)
+    electronic_invoice_complement: str | None = Field(
+        None, alias="ElectronicInvoiceComplement", description="Informações Complementares NFCe", max_length=60
+    )
     personal_identification: str | None = Field(
         None, alias="PersonalIdentification", description="CPF/CGC do Cliente", max_length=20
     )
@@ -702,18 +639,18 @@ class RetailSalesType(BaseModel):
     list_of_sale_condition: list[list[ListOfSaleConditionItem] | ListOfSaleCondition] | None = Field(
         None, alias="ListOfSaleCondition", description="Condições de Pagamento da Venda"
     )
-    list_of_taxes: list[list[ListOfTax1] | ListOfTaxes] | None = Field(
+    list_of_taxes: list[list[ListOfTax] | ListOfTaxes] | None = Field(
         None, alias="ListOfTaxes", description="Lista de Impostos da Venda"
     )
     station_sale_point_code: str | None = Field(
         None, alias="StationSalePointCode", description="Código Ponto de Venda", max_length=30
     )
-    station_sale_point_internal_id: (
-        str | None
-    ) = Field(None, alias="StationSalePointInternalId", description="InternalId do Ponto de Venda")
-    serial_number_sat_equipament: (
-        str | None
-    ) = Field(None, alias="SerialNumberSATEquipament", description="Número de Série do equipamento SAT")
+    station_sale_point_internal_id: str | None = Field(
+        None, alias="StationSalePointInternalId", description="InternalId do Ponto de Venda"
+    )
+    serial_number_sat_equipament: str | None = Field(
+        None, alias="SerialNumberSATEquipament", description="Número de Série do equipamento SAT"
+    )
     sale_type: SaleType | None = Field(
         None,
         alias="SaleType",
@@ -731,67 +668,6 @@ class RetailSalesType(BaseModel):
     )
     presencial_indicator: str | None = Field(None, alias="PresencialIndicator", description="Presença Comprador")
     intermediary_code: str | None = Field(None, alias="IntermediaryCode", description="Codigo Intermediador")
-
-
-class ListOfTax2(BaseModel):
-    taxe: Taxe | None = Field(
-        None,
-        alias="Taxe",
-        description="Nome do Imposto (ITF, COFINS, CSLL, FABOV, FACS, INSS-PF, INSS-PJ, INSS-RUR, IOF, IR-CARRETEIRO, IR-PF, IR-PJ, IRRF–PF, IRRF–PJ, ISS, ISS-ARQ-ELET, PIS, PIS/COFINS/CSLL, PIS/COFINS-CRED, PIS/COFINS-PROD, SEST/SENAT,ICM, IPI, II, IMP_CANA, ICMS_ST, RECOLH_INSS, RETEN_ISS, RETEN_INSS, RETEN_INSS_RUR, RETEN_SEST_SENAT) / ITF - -Imposto sobre movimentação financeira / COFINS - COFINS / CSLL - CSLL / FABOV - FABOV / FACS - FACS / INSS-PF - INSS-PF / INSS-PJ - INSS-PJ / INSS-RUR - INSS-RUR / IOF - IOF / IR-CARRETEIRO - IR-CARRETEIRO / IRRF–PF - IRRF–PF / IRRF–PJ - IRRF–PJ / ISS - ISS / ISS-ARQ-ELET - ISS-ARQ-ELET / PIS - PIS / PIS/COFINS/CSLL - PIS/COFINS/CSLL / PIS/COFINS-CRED - PIS/COFINS-CRED / PIS/COFINS-PROD - PIS/COFINS-PROD / SEST/SENAT - SEST/SENAT / ICM - ICM / IPI - IPI / II - II - Imposto de Importação / IMP_CANA - IMP_CANA - Imposto da Cana / ICMS_ST - ICMS_ST - ICMS Substituicao Tributaria / RECOLH_INSS - RECOLH_INSS - Recolhimento INSS / RETEN_ISS - RETEN_ISS - Retenção ISS / RETEN_INSS - RETEN_INSS - Retenção INSS / RETEN_INSS_RUR - RETEN_INSS_RUR - Retenção INSS Rural / RETEN_SEST_SENAT - RETEN_SEST_SENAT - Retenção SEST SENAT",
-    )
-    country_code: str | None = Field(None, alias="CountryCode", description="Código do País")
-    country_internal_id: str | None = Field(None, alias="CountryInternalId", description="InternalId do CountryCode")
-    state_code: str | None = Field(None, alias="StateCode", description="Código da Unidade Federativa")
-    state_internal_id: str | None = Field(None, alias="StateInternalId", description="InternalId do StateCode")
-    city_code: str | None = Field(None, alias="CityCode", description="Código da Cidade")
-    city_internal_id: str | None = Field(None, alias="CityInternalId", description="InternalId do CityCode")
-    calculation_basis: float | None = Field(
-        None, alias="CalculationBasis", description="Base de Cálculo para o Imposto"
-    )
-    percentage: float | None = Field(None, alias="Percentage", description="Percentual do Imposto")
-    reduction_based_percent: float | None = Field(
-        None, alias="ReductionBasedPercent", description="Percentual de Redução de Base"
-    )
-    value: float | None = Field(None, alias="Value", description="Valor do Imposto")
-    reason: Reason | None = Field(
-        None,
-        alias="Reason",
-        description="Motivo da Retenção 1-Autopeças, 2-Órgãos Públicos, 3–Serviço / 001 - Autopeças / 002 - Órgãos Públicos / 003 - Serviço",
-    )
-    deferral_percentage: float | None = Field(
-        None, alias="DeferralPercentage", description="Percentual do Diferimento - Somente para ICMS"
-    )
-    deferral_value: float | None = Field(
-        None, alias="DeferralValue", description="Valor do Diferimento - Somente para ICMS"
-    )
-    presumed_credit_percentage: (
-        float | None
-    ) = Field(None, alias="PresumedCreditPercentage", description="Percentual do Crédito Presumido")
-    presumed_credit_value: float | None = Field(
-        None, alias="PresumedCreditValue", description="Valor do Crédito Presumido"
-    )
-    especific_calculation_basis: (
-        float | None
-    ) = Field(None, alias="EspecificCalculationBasis", description="Base de Cálculo para Alíquota Específica")
-    especific_aliquot: float | None = Field(None, alias="EspecificAliquot", description="Alíquota Específica")
-    increase_percentage: float | None = Field(
-        None, alias="IncreasePercentage", description="Percentual de Majoração do Imposto"
-    )
-    increase_value: float | None = Field(None, alias="IncreaseValue", description="Valor de Majoração do Imposto")
-    recalculate: bool | None = Field(None, alias="Recalculate", description="Recalcular?")
-    code_tax_situation: str | None = Field(None, alias="CodeTaxSituation", description="CST do imposto")
-    with_holding_tax: bool | None = Field(None, alias="WithHoldingTax", description="É retenção?")
-    has_tax: bool | None = Field(None, alias="HasTax", description="Indicador se possui o imposto")
-    incidence_type: IncidenceType | None = Field(
-        None,
-        alias="IncidenceType",
-        description="Tipo da incidência C-crédito I-isento O-outros E=espec N-não tribut U-suspenso D-diferida S-sem aproveitamento crédito / C - Com crédito / I - Isento / O - Outros / E - Específico / N - Não tributado / U - Suspenso / D - Diferido / S - Sem aproveitamento de crédito",
-    )
-    value_type: float | None = Field(None, alias="ValueType", description="Tipo de valor")
-    date: date_aliased | None = Field(None, alias="Date", description="Data de referência")
-    kind: Kind | None = Field(None, alias="Kind", description="Tipo do imposto / D - Devido / R - Retido")
-    value_due_with_held: float | None = Field(None, alias="ValueDueWithHeld", description="Valor devido/retido")
-    aggregated_percentage: float | None = Field(None, alias="AggregatedPercentage", description="Percentual agregado")
 
 
 class ListOfSaleItemTypeItem(BaseModel):
@@ -858,7 +734,7 @@ class ListOfSaleItemTypeItem(BaseModel):
         None, alias="OperationCode", description="Código Fiscal de Operações e Prestações"
     )
     item_sold: str | None = Field(None, alias="ItemSold", description="Status de Vendido")
-    list_of_taxes: list[list[ListOfTax2] | ListOfTaxes] | None = Field(
+    list_of_taxes: list[list[ListOfTax] | ListOfTaxes] | None = Field(
         None, alias="ListOfTaxes", description="Lista de Impostos do Item"
     )
     increase: float | None = Field(
@@ -872,16 +748,16 @@ class ListOfSaleItemTypeItem(BaseModel):
     lodging: str | None = Field(None, alias="Lodging", description="Produto é Diaria", max_length=1)
     is_canceled: bool | None = Field(None, alias="IsCanceled", description="Informa se o item esta cancelado")
     unit_of_measure_code: str | None = Field(None, alias="UnitOfMeasureCode", description="Unidade de Medida")
-    unit_of_measure_internal_id: (
-        str | None
-    ) = Field(None, alias="UnitOfMeasureInternalId", description="Id de integração da Unidade de Medida")
+    unit_of_measure_internal_id: str | None = Field(
+        None, alias="UnitOfMeasureInternalId", description="Id de integração da Unidade de Medida"
+    )
     warehouse_code: str | None = Field(None, alias="WarehouseCode", description="Codigo do Local de Estoque(Armazem)")
     warehouse_internal_id: str | None = Field(
         None, alias="WarehouseInternalId", description="Id de integração do Local de Estoque(Armazem)"
     )
-    store_identification_code: (
-        str | None
-    ) = Field(None, alias="StoreIdentificationCode", description="Código da Identificação da Loja de Reserva")
+    store_identification_code: str | None = Field(
+        None, alias="StoreIdentificationCode", description="Código da Identificação da Loja de Reserva"
+    )
     ecf_taxing_code: str | None = Field(
         None, alias="ECFTaxingCode", description="Código da Tributação ECF", max_length=10
     )
@@ -929,67 +805,6 @@ class ListOfSaleItemTypeItem(BaseModel):
 
 class ListOfSaleItemType(RootModel[list[ListOfSaleItemTypeItem]]):
     root: list[ListOfSaleItemTypeItem]
-
-
-class ListOfTax3(BaseModel):
-    taxe: Taxe | None = Field(
-        None,
-        alias="Taxe",
-        description="Nome do Imposto (ITF, COFINS, CSLL, FABOV, FACS, INSS-PF, INSS-PJ, INSS-RUR, IOF, IR-CARRETEIRO, IR-PF, IR-PJ, IRRF–PF, IRRF–PJ, ISS, ISS-ARQ-ELET, PIS, PIS/COFINS/CSLL, PIS/COFINS-CRED, PIS/COFINS-PROD, SEST/SENAT,ICM, IPI, II, IMP_CANA, ICMS_ST, RECOLH_INSS, RETEN_ISS, RETEN_INSS, RETEN_INSS_RUR, RETEN_SEST_SENAT) / ITF - -Imposto sobre movimentação financeira / COFINS - COFINS / CSLL - CSLL / FABOV - FABOV / FACS - FACS / INSS-PF - INSS-PF / INSS-PJ - INSS-PJ / INSS-RUR - INSS-RUR / IOF - IOF / IR-CARRETEIRO - IR-CARRETEIRO / IRRF–PF - IRRF–PF / IRRF–PJ - IRRF–PJ / ISS - ISS / ISS-ARQ-ELET - ISS-ARQ-ELET / PIS - PIS / PIS/COFINS/CSLL - PIS/COFINS/CSLL / PIS/COFINS-CRED - PIS/COFINS-CRED / PIS/COFINS-PROD - PIS/COFINS-PROD / SEST/SENAT - SEST/SENAT / ICM - ICM / IPI - IPI / II - II - Imposto de Importação / IMP_CANA - IMP_CANA - Imposto da Cana / ICMS_ST - ICMS_ST - ICMS Substituicao Tributaria / RECOLH_INSS - RECOLH_INSS - Recolhimento INSS / RETEN_ISS - RETEN_ISS - Retenção ISS / RETEN_INSS - RETEN_INSS - Retenção INSS / RETEN_INSS_RUR - RETEN_INSS_RUR - Retenção INSS Rural / RETEN_SEST_SENAT - RETEN_SEST_SENAT - Retenção SEST SENAT",
-    )
-    country_code: str | None = Field(None, alias="CountryCode", description="Código do País")
-    country_internal_id: str | None = Field(None, alias="CountryInternalId", description="InternalId do CountryCode")
-    state_code: str | None = Field(None, alias="StateCode", description="Código da Unidade Federativa")
-    state_internal_id: str | None = Field(None, alias="StateInternalId", description="InternalId do StateCode")
-    city_code: str | None = Field(None, alias="CityCode", description="Código da Cidade")
-    city_internal_id: str | None = Field(None, alias="CityInternalId", description="InternalId do CityCode")
-    calculation_basis: float | None = Field(
-        None, alias="CalculationBasis", description="Base de Cálculo para o Imposto"
-    )
-    percentage: float | None = Field(None, alias="Percentage", description="Percentual do Imposto")
-    reduction_based_percent: float | None = Field(
-        None, alias="ReductionBasedPercent", description="Percentual de Redução de Base"
-    )
-    value: float | None = Field(None, alias="Value", description="Valor do Imposto")
-    reason: Reason | None = Field(
-        None,
-        alias="Reason",
-        description="Motivo da Retenção 1-Autopeças, 2-Órgãos Públicos, 3–Serviço / 001 - Autopeças / 002 - Órgãos Públicos / 003 - Serviço",
-    )
-    deferral_percentage: float | None = Field(
-        None, alias="DeferralPercentage", description="Percentual do Diferimento - Somente para ICMS"
-    )
-    deferral_value: float | None = Field(
-        None, alias="DeferralValue", description="Valor do Diferimento - Somente para ICMS"
-    )
-    presumed_credit_percentage: (
-        float | None
-    ) = Field(None, alias="PresumedCreditPercentage", description="Percentual do Crédito Presumido")
-    presumed_credit_value: float | None = Field(
-        None, alias="PresumedCreditValue", description="Valor do Crédito Presumido"
-    )
-    especific_calculation_basis: (
-        float | None
-    ) = Field(None, alias="EspecificCalculationBasis", description="Base de Cálculo para Alíquota Específica")
-    especific_aliquot: float | None = Field(None, alias="EspecificAliquot", description="Alíquota Específica")
-    increase_percentage: float | None = Field(
-        None, alias="IncreasePercentage", description="Percentual de Majoração do Imposto"
-    )
-    increase_value: float | None = Field(None, alias="IncreaseValue", description="Valor de Majoração do Imposto")
-    recalculate: bool | None = Field(None, alias="Recalculate", description="Recalcular?")
-    code_tax_situation: str | None = Field(None, alias="CodeTaxSituation", description="CST do imposto")
-    with_holding_tax: bool | None = Field(None, alias="WithHoldingTax", description="É retenção?")
-    has_tax: bool | None = Field(None, alias="HasTax", description="Indicador se possui o imposto")
-    incidence_type: IncidenceType | None = Field(
-        None,
-        alias="IncidenceType",
-        description="Tipo da incidência C-crédito I-isento O-outros E=espec N-não tribut U-suspenso D-diferida S-sem aproveitamento crédito / C - Com crédito / I - Isento / O - Outros / E - Específico / N - Não tributado / U - Suspenso / D - Diferido / S - Sem aproveitamento de crédito",
-    )
-    value_type: float | None = Field(None, alias="ValueType", description="Tipo de valor")
-    date: date_aliased | None = Field(None, alias="Date", description="Data de referência")
-    kind: Kind | None = Field(None, alias="Kind", description="Tipo do imposto / D - Devido / R - Retido")
-    value_due_with_held: float | None = Field(None, alias="ValueDueWithHeld", description="Valor devido/retido")
-    aggregated_percentage: float | None = Field(None, alias="AggregatedPercentage", description="Percentual agregado")
 
 
 class SaleItemType(BaseModel):
@@ -1056,7 +871,7 @@ class SaleItemType(BaseModel):
         None, alias="OperationCode", description="Código Fiscal de Operações e Prestações"
     )
     item_sold: str | None = Field(None, alias="ItemSold", description="Status de Vendido")
-    list_of_taxes: list[list[ListOfTax3] | ListOfTaxes] | None = Field(
+    list_of_taxes: list[list[ListOfTax] | ListOfTaxes] | None = Field(
         None, alias="ListOfTaxes", description="Lista de Impostos do Item"
     )
     increase: float | None = Field(
@@ -1070,16 +885,16 @@ class SaleItemType(BaseModel):
     lodging: str | None = Field(None, alias="Lodging", description="Produto é Diaria", max_length=1)
     is_canceled: bool | None = Field(None, alias="IsCanceled", description="Informa se o item esta cancelado")
     unit_of_measure_code: str | None = Field(None, alias="UnitOfMeasureCode", description="Unidade de Medida")
-    unit_of_measure_internal_id: (
-        str | None
-    ) = Field(None, alias="UnitOfMeasureInternalId", description="Id de integração da Unidade de Medida")
+    unit_of_measure_internal_id: str | None = Field(
+        None, alias="UnitOfMeasureInternalId", description="Id de integração da Unidade de Medida"
+    )
     warehouse_code: str | None = Field(None, alias="WarehouseCode", description="Codigo do Local de Estoque(Armazem)")
     warehouse_internal_id: str | None = Field(
         None, alias="WarehouseInternalId", description="Id de integração do Local de Estoque(Armazem)"
     )
-    store_identification_code: (
-        str | None
-    ) = Field(None, alias="StoreIdentificationCode", description="Código da Identificação da Loja de Reserva")
+    store_identification_code: str | None = Field(
+        None, alias="StoreIdentificationCode", description="Código da Identificação da Loja de Reserva"
+    )
     ecf_taxing_code: str | None = Field(
         None, alias="ECFTaxingCode", description="Código da Tributação ECF", max_length=10
     )
@@ -1156,15 +971,15 @@ class ListOfTaxesTypeItem(BaseModel):
     deferral_value: float | None = Field(
         None, alias="DeferralValue", description="Valor do Diferimento - Somente para ICMS"
     )
-    presumed_credit_percentage: (
-        float | None
-    ) = Field(None, alias="PresumedCreditPercentage", description="Percentual do Crédito Presumido")
+    presumed_credit_percentage: float | None = Field(
+        None, alias="PresumedCreditPercentage", description="Percentual do Crédito Presumido"
+    )
     presumed_credit_value: float | None = Field(
         None, alias="PresumedCreditValue", description="Valor do Crédito Presumido"
     )
-    especific_calculation_basis: (
-        float | None
-    ) = Field(None, alias="EspecificCalculationBasis", description="Base de Cálculo para Alíquota Específica")
+    especific_calculation_basis: float | None = Field(
+        None, alias="EspecificCalculationBasis", description="Base de Cálculo para Alíquota Específica"
+    )
     especific_aliquot: float | None = Field(None, alias="EspecificAliquot", description="Alíquota Específica")
     increase_percentage: float | None = Field(
         None, alias="IncreasePercentage", description="Percentual de Majoração do Imposto"
@@ -1221,15 +1036,15 @@ class TaxesType(BaseModel):
     deferral_value: float | None = Field(
         None, alias="DeferralValue", description="Valor do Diferimento - Somente para ICMS"
     )
-    presumed_credit_percentage: (
-        float | None
-    ) = Field(None, alias="PresumedCreditPercentage", description="Percentual do Crédito Presumido")
+    presumed_credit_percentage: float | None = Field(
+        None, alias="PresumedCreditPercentage", description="Percentual do Crédito Presumido"
+    )
     presumed_credit_value: float | None = Field(
         None, alias="PresumedCreditValue", description="Valor do Crédito Presumido"
     )
-    especific_calculation_basis: (
-        float | None
-    ) = Field(None, alias="EspecificCalculationBasis", description="Base de Cálculo para Alíquota Específica")
+    especific_calculation_basis: float | None = Field(
+        None, alias="EspecificCalculationBasis", description="Base de Cálculo para Alíquota Específica"
+    )
     especific_aliquot: float | None = Field(None, alias="EspecificAliquot", description="Alíquota Específica")
     increase_percentage: float | None = Field(
         None, alias="IncreasePercentage", description="Percentual de Majoração do Imposto"
@@ -1275,9 +1090,9 @@ class BoardBasisInformationType(BaseModel):
 
 
 class ListOfSaleConditionTypeItem(BaseModel):
-    account_receivable_document_internal_id: (
-        str | None
-    ) = Field(None, alias="AccountReceivableDocumentInternalId", description="InternalId do RA do cliente")
+    account_receivable_document_internal_id: str | None = Field(
+        None, alias="AccountReceivableDocumentInternalId", description="InternalId do RA do cliente"
+    )
     date_of_payment: str | None = Field(None, alias="DateOfPayment", description="Data de Vencimento da Parcela")
     payment_value: float | None = Field(
         None,
@@ -1290,9 +1105,9 @@ class ListOfSaleConditionTypeItem(BaseModel):
     payment_method_code: str | None = Field(
         None, alias="PaymentMethodCode", description="Forma de Pagamento", max_length=15
     )
-    payment_method_internal_id: (
-        str | None
-    ) = Field(None, alias="PaymentMethodInternalId", description="Chave de Integração de Forma de Pagamento")
+    payment_method_internal_id: str | None = Field(
+        None, alias="PaymentMethodInternalId", description="Chave de Integração de Forma de Pagamento"
+    )
     financial_manager_code: str | None = Field(
         None, alias="FinancialManagerCode", description="Código da Administradora Financeira", max_length=1
     )
@@ -1303,10 +1118,8 @@ class ListOfSaleConditionTypeItem(BaseModel):
     account_check: str | None = Field(
         None, alias="AccountCheck", description="Número da Conta do Cheque", max_length=20
     )
-    document_of_identification: (
-        str | None
-    ) = (
-        Field(None, alias="DocumentOfIdentification", description="Documento de Identidade do Cliente - Cheque", max_length=20)
+    document_of_identification: str | None = Field(
+        None, alias="DocumentOfIdentification", description="Documento de Identidade do Cliente - Cheque", max_length=20
     )
     phone_number: str | None = Field(
         None, alias="PhoneNumber", description="Telefone do Cliente - Cheque", max_length=15
@@ -1321,9 +1134,9 @@ class ListOfSaleConditionTypeItem(BaseModel):
     eft_cancellation_date: AwareDatetime | None = Field(
         None, alias="EftCancellationDate", description="Data de Cancelamento TEF"
     )
-    eft_cancellation_document: (
-        str | None
-    ) = Field(None, alias="EftCancellationDocument", description="Número do Cancelamento TEF", max_length=9)
+    eft_cancellation_document: str | None = Field(
+        None, alias="EftCancellationDocument", description="Número do Cancelamento TEF", max_length=9
+    )
     eft_institute: str | None = Field(None, alias="EftInstitute", description="Código do Instituto TEF", max_length=16)
     unique_serial_number: str | None = Field(
         None, alias="UniqueSerialNumber", description="Código NSU - TEF", max_length=12
@@ -1332,9 +1145,9 @@ class ListOfSaleConditionTypeItem(BaseModel):
     financial_document_code: str | None = Field(
         None, alias="FinancialDocumentCode", description="Número do documento Financeiro", max_length=20
     )
-    payment_term_code_internal_id: (
-        str | None
-    ) = Field(None, alias="PaymentTermCodeInternalID", description="InternalId da condição de pagamento", max_length=50)
+    payment_term_code_internal_id: str | None = Field(
+        None, alias="PaymentTermCodeInternalID", description="InternalId da condição de pagamento", max_length=50
+    )
     payment_term_code: str | None = Field(
         None, alias="PaymentTermCode", description="Condição de pagamento", max_length=3
     )
@@ -1346,9 +1159,9 @@ class ListOfSaleConditionType(RootModel[list[ListOfSaleConditionTypeItem]]):
 
 
 class SaleConditionType(BaseModel):
-    account_receivable_document_internal_id: (
-        str | None
-    ) = Field(None, alias="AccountReceivableDocumentInternalId", description="InternalId do RA do cliente")
+    account_receivable_document_internal_id: str | None = Field(
+        None, alias="AccountReceivableDocumentInternalId", description="InternalId do RA do cliente"
+    )
     date_of_payment: str | None = Field(None, alias="DateOfPayment", description="Data de Vencimento da Parcela")
     payment_value: float | None = Field(
         None,
@@ -1361,9 +1174,9 @@ class SaleConditionType(BaseModel):
     payment_method_code: str | None = Field(
         None, alias="PaymentMethodCode", description="Forma de Pagamento", max_length=15
     )
-    payment_method_internal_id: (
-        str | None
-    ) = Field(None, alias="PaymentMethodInternalId", description="Chave de Integração de Forma de Pagamento")
+    payment_method_internal_id: str | None = Field(
+        None, alias="PaymentMethodInternalId", description="Chave de Integração de Forma de Pagamento"
+    )
     financial_manager_code: str | None = Field(
         None, alias="FinancialManagerCode", description="Código da Administradora Financeira", max_length=1
     )
@@ -1374,10 +1187,8 @@ class SaleConditionType(BaseModel):
     account_check: str | None = Field(
         None, alias="AccountCheck", description="Número da Conta do Cheque", max_length=20
     )
-    document_of_identification: (
-        str | None
-    ) = (
-        Field(None, alias="DocumentOfIdentification", description="Documento de Identidade do Cliente - Cheque", max_length=20)
+    document_of_identification: str | None = Field(
+        None, alias="DocumentOfIdentification", description="Documento de Identidade do Cliente - Cheque", max_length=20
     )
     phone_number: str | None = Field(
         None, alias="PhoneNumber", description="Telefone do Cliente - Cheque", max_length=15
@@ -1392,9 +1203,9 @@ class SaleConditionType(BaseModel):
     eft_cancellation_date: AwareDatetime | None = Field(
         None, alias="EftCancellationDate", description="Data de Cancelamento TEF"
     )
-    eft_cancellation_document: (
-        str | None
-    ) = Field(None, alias="EftCancellationDocument", description="Número do Cancelamento TEF", max_length=9)
+    eft_cancellation_document: str | None = Field(
+        None, alias="EftCancellationDocument", description="Número do Cancelamento TEF", max_length=9
+    )
     eft_institute: str | None = Field(None, alias="EftInstitute", description="Código do Instituto TEF", max_length=16)
     unique_serial_number: str | None = Field(
         None, alias="UniqueSerialNumber", description="Código NSU - TEF", max_length=12
@@ -1403,9 +1214,9 @@ class SaleConditionType(BaseModel):
     financial_document_code: str | None = Field(
         None, alias="FinancialDocumentCode", description="Número do documento Financeiro", max_length=20
     )
-    payment_term_code_internal_id: (
-        str | None
-    ) = Field(None, alias="PaymentTermCodeInternalID", description="InternalId da condição de pagamento", max_length=50)
+    payment_term_code_internal_id: str | None = Field(
+        None, alias="PaymentTermCodeInternalID", description="InternalId da condição de pagamento", max_length=50
+    )
     payment_term_code: str | None = Field(
         None, alias="PaymentTermCode", description="Condição de pagamento", max_length=3
     )

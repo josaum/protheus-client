@@ -1,4 +1,4 @@
-"""Indicadores do Produto do MRP — generated from MRPProductIndicator_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Indicadores do Produto do MRP — generated from MRPProductIndicator_v1_000.json (ttalk 1240435). Do not edit by hand."""
 from __future__ import annotations
 
 from collections.abc import Mapping

@@ -1,4 +1,4 @@
-"""Relação de Funcionários - Global — generated from EmployeeDataContent_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Relação de Funcionários - Global — generated from EmployeeDataContent_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -68,12 +68,12 @@ class EmployeeDataContentItem(BaseModel):
     employee_position_code: str | None = Field(
         None, alias="employeePositionCode", description="Código do Cargo do Funcionário"
     )
-    employee_position_code_internal_id: (
-        str | None
-    ) = Field(None, alias="employeePositionCodeInternalId", description="InternalId do Cargo do Funcionário")
-    employee_position_description: (
-        str | None
-    ) = Field(None, alias="employeePositionDescription", description="Descrição do Cargo do Funcionário")
+    employee_position_code_internal_id: str | None = Field(
+        None, alias="employeePositionCodeInternalId", description="InternalId do Cargo do Funcionário"
+    )
+    employee_position_description: str | None = Field(
+        None, alias="employeePositionDescription", description="Descrição do Cargo do Funcionário"
+    )
     salary_category: str | None = Field(
         None,
         alias="salaryCategory",
@@ -89,9 +89,9 @@ class EmployeeDataContentItem(BaseModel):
     work_shift_sequence: str | None = Field(
         None, alias="workShiftSequence", description="Sequência de Turno do funcionário"
     )
-    initial_shift_sequence_date: (
-        AwareDatetime | None
-    ) = Field(None, alias="initialShiftSequenceDate", description="Data Inicial da Sequencia do Turno")
+    initial_shift_sequence_date: AwareDatetime | None = Field(
+        None, alias="initialShiftSequenceDate", description="Data Inicial da Sequencia do Turno"
+    )
     role_code: str | None = Field(None, alias="roleCode", description="Código da Função do Funcionário")
     role_internal_id: str | None = Field(
         None, alias="roleInternalId", description="InternalId do Código da Função do Funcionário"
@@ -126,17 +126,17 @@ class EmployeeDataContentItem(BaseModel):
     esocial_category_code: str | None = Field(
         None, alias="esocialCategoryCode", description="Código da Categoria eSocial"
     )
-    esocial_category_description: (
-        str | None
-    ) = Field(None, alias="esocialCategoryDescription", description="Descrição da Categoria eSocial")
+    esocial_category_description: str | None = Field(
+        None, alias="esocialCategoryDescription", description="Descrição da Categoria eSocial"
+    )
     employee_type: str | None = Field(None, alias="employeeType", description="Tipo de Funcionário")
     private_citizen: str | None = Field(None, alias="privateCitizen", description="Número da Pessoa Física")
     registration_digit: str | None = Field(
         None, alias="registrationDigit", description="Dígito Verificador do Funcionário"
     )
-    transference_admission_date: (
-        AwareDatetime | None
-    ) = Field(None, alias="transferenceAdmissionDate", description="Data de Transferência")
+    transference_admission_date: AwareDatetime | None = Field(
+        None, alias="transferenceAdmissionDate", description="Data de Transferência"
+    )
     date_of_salary_change: AwareDatetime | None = Field(
         None, alias="dateOfSalaryChange", description="Data de alteração salarial"
     )

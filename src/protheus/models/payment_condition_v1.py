@@ -1,4 +1,4 @@
-"""Condição de Pagamento — generated from PaymentCondition_v1_00.json (ttalk ca5e26a). Do not edit by hand."""
+"""Condição de Pagamento — generated from PaymentCondition_v1_00.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -161,8 +161,6 @@ class PaymentConditionInfo(BaseModel):
         alias="PercentageIncrease",
         description="Percentual do acréscimo financeiro para a Condição.",
         examples=[1],
-        ge=-999.99,
-        le=999.99,
     )
     days_count_way: int | None = Field(
         None, alias="DaysCountWay", description="Forma de contagem dos dias de vencimento.", examples=[1]

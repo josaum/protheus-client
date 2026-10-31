@@ -1,4 +1,4 @@
-"""Produto do MRP — generated from MRPProduct_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Produto do MRP — generated from MRPProduct_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -28,18 +28,16 @@ class MRPProduct(BaseModel):
     decimal_type: str | None = Field(None, alias="decimalType", description="Tipo de decimal", max_length=1)
     traceability: str | None = Field(None, description="Rastreabilidade", max_length=1)
     enter_mrp: str | None = Field(None, alias="enterMRP", description="Considera no MRP", max_length=1)
-    current_bill_of_material_revision: (
-        str | None
-    ) = Field(None, alias="currentBillOfMaterialRevision", description="Revisão atual do produto", max_length=3)
+    current_bill_of_material_revision: str | None = Field(
+        None, alias="currentBillOfMaterialRevision", description="Revisão atual do produto", max_length=3
+    )
     maximum_stock: float | None = Field(None, alias="maximumStock", description="Estoque máximo")
     process_by_product: str | None = Field(
         None, alias="processByProduct", description="Processamento do subproduto", max_length=1
     )
     by_product_lot: float | None = Field(None, alias="byProductLot", description="Lote do subproduto")
-    by_product_bill_of_materials: (
-        str | None
-    ) = (
-        Field(None, alias="byProductBillOfMaterials", description="Estrutura a ser utilizada pelo subproduto", max_length=90)
+    by_product_bill_of_materials: str | None = Field(
+        None, alias="byProductBillOfMaterials", description="Estrutura a ser utilizada pelo subproduto", max_length=90
     )
     appropriation: str | None = Field(None, description="Indicador de apropriação do produto", max_length=1)
     fixed_horizon: float | None = Field(None, alias="fixedHorizon", description="Horizonte fixo")

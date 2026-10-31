@@ -1,4 +1,4 @@
-"""Painel de Impressão da CAT — generated from CatReport_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Painel de Impressão da CAT — generated from CatReport_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -33,7 +33,7 @@ class ErrorDetail(BaseModel):
 
 
 class ListStatus(BaseModel):
-    finished: bool | None = Field(None, description="Finalizado", examples=["true"], max_length=10)
+    finished: bool | None = Field(None, description="Finalizado", examples=["true"])
     percent: str | None = Field(None, description="Percentual", examples=["100%"], max_length=20)
 
 

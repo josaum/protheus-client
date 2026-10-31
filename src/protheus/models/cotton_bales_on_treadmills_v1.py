@@ -1,4 +1,4 @@
-"""CottonBalesOnTreadmills — generated from CottonBalesOnTreadmills_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""CottonBalesOnTreadmills — generated from CottonBalesOnTreadmills_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -22,13 +22,11 @@ class CottonBalesOnTreadmillsType(BaseModel):
     agricultural_owner_code: str | None = Field(
         None, alias="AgriculturalOwnerCode", description="Código do produtor do fardão.", examples=["000001"]
     )
-    agricultural_owner_store_code: (
-        str | None
-    ) = Field(None, alias="AgriculturalOwnerStoreCode", description="Código da loja do produtor.", examples=["01"])
-    farm_code: str | None = Field(None, alias="FarmCode", description="Código da fazenda do fardão.", examples=["01"])
-    order: str | None = Field(
-        None, alias="Order", description="Ordem do fardão na esteira.", examples=["05"], ge=0, le=999
+    agricultural_owner_store_code: str | None = Field(
+        None, alias="AgriculturalOwnerStoreCode", description="Código da loja do produtor.", examples=["01"]
     )
+    farm_code: str | None = Field(None, alias="FarmCode", description="Código da fazenda do fardão.", examples=["01"])
+    order: str | None = Field(None, alias="Order", description="Ordem do fardão na esteira.", examples=["05"])
     cotton_bale_code: str | None = Field(
         None, alias="CottonBaleCode", description="Código do fardão.", examples=["000120"]
     )

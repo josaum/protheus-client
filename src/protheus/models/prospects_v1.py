@@ -1,4 +1,4 @@
-"""Prospects — generated from Prospects_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Prospects — generated from Prospects_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -65,9 +65,9 @@ class ContactInformation(BaseModel):
     home_page: str | None = Field(None, alias="HomePage", description="Página da WEB")
     email: str | None = Field(None, alias="Email", description="Correio Eletrônico")
     dialling_code: str | None = Field(None, alias="DiallingCode", description="DDD - Discagem Direta a Distancia")
-    international_dialling_code: (
-        str | None
-    ) = Field(None, alias="InternationalDiallingCode", description="DDI - Discagem Direta Internal")
+    international_dialling_code: str | None = Field(
+        None, alias="InternationalDiallingCode", description="DDI - Discagem Direta Internal"
+    )
 
 
 class City(BaseModel):
@@ -121,7 +121,7 @@ class Employees(StrEnum):
 
 class CompanyInfo(BaseModel):
     cnae: str | None = Field(None, alias="CNAE", description="Código CNAE", examples=["0111-3/01"], max_length=9)
-    annualbilling: float | None = Field(None, alias="Annualbilling", description="Faturamento Anual", max_length=14)
+    annualbilling: float | None = Field(None, alias="Annualbilling", description="Faturamento Anual")
     employees: Employees | None = Field(None, alias="Employees", description="Quantidade de funcionários")
     credit_limit: float | None = Field(None, alias="CreditLimit", description="Limite de Crédito")
     credit_limit_currency: int | None = Field(
@@ -149,12 +149,12 @@ class PublicSector(StrEnum):
 
 class MarketSegment(BaseModel):
     market_segment_code: str | None = Field(None, alias="marketSegmentCode", description="Código do segmento")
-    market_segment_internal_id: (
-        str | None
-    ) = Field(None, alias="marketSegmentInternalId", description="InternalId do MarketSegmentCode")
-    market_segment_description: (
-        str | None
-    ) = Field(None, alias="marketSegmentDescription", description="Descrição do segmento")
+    market_segment_internal_id: str | None = Field(
+        None, alias="marketSegmentInternalId", description="InternalId do MarketSegmentCode"
+    )
+    market_segment_description: str | None = Field(
+        None, alias="marketSegmentDescription", description="Descrição do segmento"
+    )
     public_sector: PublicSector | None = Field(
         None, alias="PublicSector", description="Informa se a empresa é do setor Público"
     )
@@ -233,9 +233,9 @@ class CommunicationInformationType(BaseModel):
     home_page: str | None = Field(None, alias="HomePage", description="Página da WEB")
     email: str | None = Field(None, alias="Email", description="Correio Eletrônico")
     dialling_code: str | None = Field(None, alias="DiallingCode", description="DDD - Discagem Direta a Distancia")
-    international_dialling_code: (
-        str | None
-    ) = Field(None, alias="InternationalDiallingCode", description="DDI - Discagem Direta Internal")
+    international_dialling_code: str | None = Field(
+        None, alias="InternationalDiallingCode", description="DDI - Discagem Direta Internal"
+    )
 
 
 class AddressType(BaseModel):

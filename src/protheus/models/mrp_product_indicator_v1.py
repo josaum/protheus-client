@@ -1,4 +1,4 @@
-"""Indicadores do Produto do MRP — generated from MRPProductIndicator_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Indicadores do Produto do MRP — generated from MRPProductIndicator_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -24,9 +24,9 @@ class MRPProductIndicator(BaseModel):
     minimum_lot_size: float | None = Field(None, alias="minimumLotSize", description="Lote mínimo")
     tolerance: float | None = Field(None, description="Tolerância")
     enter_mrp: str | None = Field(None, alias="enterMRP", description="Considera no MRP", max_length=1)
-    current_bill_of_material_revision: (
-        str | None
-    ) = Field(None, alias="currentBillOfMaterialRevision", description="Revisão atual do produto", max_length=3)
+    current_bill_of_material_revision: str | None = Field(
+        None, alias="currentBillOfMaterialRevision", description="Revisão atual do produto", max_length=3
+    )
     maximum_stock: float | None = Field(None, alias="maximumStock", description="Estoque máximo")
     fixed_horizon: float | None = Field(None, alias="fixedHorizon", description="Horizonte fixo")
     fixed_horizon_type: str | None = Field(

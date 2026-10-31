@@ -1,4 +1,4 @@
-"""Generated API accessors (ttalk ca5e26a). Do not edit by hand."""
+"""Generated API accessors (ttalk 1240435). Do not edit by hand."""
 from __future__ import annotations
 
 from functools import cached_property

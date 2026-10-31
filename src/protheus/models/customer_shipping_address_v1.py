@@ -1,4 +1,4 @@
-"""Endereços de Entrega do Cliente — generated from CustomerShippingAddress_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Endereços de Entrega do Cliente — generated from CustomerShippingAddress_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -56,7 +56,7 @@ class Country(BaseModel):
     country_description: str | None = Field(None, alias="countryDescription", description="Nome do país")
 
 
-class ShippingAddres(BaseModel):
+class ShippingAddressItem(BaseModel):
     address: str | None = Field(None, alias="Address", description="Rua, Avenida, Rodovia, etc. Ex.: Rua Nações Unidas")
     number: str | None = Field(None, alias="Number", description="Número do Endereço.")
     complement: str | None = Field(None, alias="Complement", description="Informações complementares do endereço.")
@@ -79,12 +79,12 @@ class CustomerShippingAddressInfo(BaseModel):
     internal_id: str | None = Field(None, alias="InternalId", description="InternalId da entidade")
     code: str | None = Field(None, alias="Code", description="Código do Local de Entrega")
     external_id: str | None = Field(None, alias="ExternalId", description="Id Externo do local de entrega")
-    shipping_address_information: (
-        ShippingAddressInformation | None
-    ) = (
-        Field(None, alias="ShippingAddressInformation", description="Informações do endereço de entrega - CNPJ - Inscrição Estadual")
+    shipping_address_information: ShippingAddressInformation | None = Field(
+        None,
+        alias="ShippingAddressInformation",
+        description="Informações do endereço de entrega - CNPJ - Inscrição Estadual",
     )
-    shipping_address: list[ShippingAddres] | None = Field(
+    shipping_address: list[ShippingAddressItem] | None = Field(
         None,
         alias="ShippingAddress",
         description="Datasul: Address = loc-entr.endereco(40), Number = ???, Complement = loc-entr.endereco_text, CityCode = ???, CityName = loc-entr.cidade(25), District = loc-entr.bairro(30), State = loc-entr.estado(4), CountryCode = loc-entr.pais, ZIPCode = loc-entr.cep(12), Region=???, POBox=loc-entr.caixa-postal",

@@ -1,4 +1,4 @@
-"""Painel de Auditoria do eSocial — generated from EsocialAudit_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Painel de Auditoria do eSocial — generated from EsocialAudit_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -58,33 +58,25 @@ class ErrorDetail(BaseModel):
 
 
 class ListStatus(BaseModel):
-    finished: bool | None = Field(None, description="Finalizado", examples=["true"], max_length=10)
+    finished: bool | None = Field(None, description="Finalizado", examples=["true"])
     percent: str | None = Field(None, description="Percentual", examples=["100%"], max_length=20)
 
 
 class ListAuditValue(BaseModel):
     items: list[Any] | None = Field(None, description="Array com os itens a ser retornado", max_length=20)
     has_next: bool | None = Field(
-        None,
-        alias="hasNext",
-        description="Indica se tem uma página para mostrar",
-        examples=["'hasNext': false"],
-        max_length=20,
+        None, alias="hasNext", description="Indica se tem uma página para mostrar", examples=["'hasNext': false"]
     )
 
 
 class ListAuditChart(BaseModel):
-    transm_in_deadline: float | None = Field(
-        None, alias="transmInDeadline", description="Prazo de transmissão", max_length=20
-    )
-    transm_out_deadline: float | None = Field(
-        None, alias="transmOutDeadline", description="Transmissão fora do prazo", max_length=20
-    )
+    transm_in_deadline: float | None = Field(None, alias="transmInDeadline", description="Prazo de transmissão")
+    transm_out_deadline: float | None = Field(None, alias="transmOutDeadline", description="Transmissão fora do prazo")
     not_transm_in_deadline: float | None = Field(
-        None, alias="notTransmInDeadline", description="Não transmitido dentro do prazo", max_length=20
+        None, alias="notTransmInDeadline", description="Não transmitido dentro do prazo"
     )
     not_transm_out_deadline: float | None = Field(
-        None, alias="notTransmOutDeadline", description="Não transmitido fora do prazo", max_length=20
+        None, alias="notTransmOutDeadline", description="Não transmitido fora do prazo"
     )
 
 
