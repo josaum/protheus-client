@@ -113,6 +113,9 @@ async def test_async_paged_extraction(recorder: Recorder) -> None:
         group = parrow.raw(client.region_groups_v1)
         pages = [p async for p in parrow.aiter_arrow_pages(group.list_regiongroups, OP, max_pages=1)]
     assert len(pages) == 1 and pages[0].rows == 2
+    decoder = parrow.ArrowDecoder(OP)
+    direct = await decoder.adecode(json.dumps({"items": [{"Code": "R1", "ISSRate": 5.2}]}).encode())
+    assert direct.rows == 1 and direct.report.violation_count == 0
 
 
 def test_unknown_operation_and_missing_schema() -> None:
