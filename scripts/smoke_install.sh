@@ -19,8 +19,8 @@ fi
 case "$PLATFORM" in
   darwin-arm64) WHEEL_PLATFORM="macosx_11_0_arm64" ;;
   darwin-x64) WHEEL_PLATFORM="macosx_10_12_x86_64" ;;
-  linux-x64-gnu) WHEEL_PLATFORM="manylinux_2_17_x86_64.manylinux2014_x86_64" ;;
-  linux-arm64-gnu) WHEEL_PLATFORM="manylinux_2_17_aarch64.manylinux2014_aarch64" ;;
+  linux-x64-gnu) WHEEL_PLATFORM="manylinux2014_x86_64.manylinux_2_17_x86_64" ;;
+  linux-arm64-gnu) WHEEL_PLATFORM="manylinux2014_aarch64.manylinux_2_17_aarch64" ;;
   *) echo "unsupported platform: $PLATFORM" >&2; exit 2 ;;
 esac
 
