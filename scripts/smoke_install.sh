@@ -2,7 +2,7 @@
 # Download a published release, verify every artifact, and smoke-test installation.
 set -euo pipefail
 
-VERSION="${1:-0.1.0}"
+VERSION="${1:-0.1.1}"
 PLATFORM="${2:-auto}"
 REPOSITORY="${REPOSITORY:-josaum/protheus-client}"
 

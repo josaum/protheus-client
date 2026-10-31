@@ -1,6 +1,6 @@
 {
   "name": "ttalk-fast-node",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TOTVS TTALK spec engine and DOM-free Arrow page decoder (Rust, N-API); parity with the ttalk_fast Python wheel.",
   "main": "index.js",
   "types": "index.d.ts",
