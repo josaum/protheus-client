@@ -123,7 +123,9 @@ flight through `decodeAsync` complete in ~66 ms on two cores.
 - **Auth.** `BasicAuth`, `BearerAuth`, or `OAuth2PasswordAuth` — password grant
   on `POST <base_url>/api/oauth2/v1/token` with credentials in the query
   string, cached token, refresh grant on expiry, one password re-grant on 401.
-  The auth object is not synchronised: concurrent first requests may fetch the token twice.
+  The spec enum says `PASSWORD`/`REFRESH_TOKEN`; TOTVS documentation and
+  servers use lowercase, which is what is sent. The auth object is not
+  synchronised: concurrent first requests may fetch the token twice.
 - **Errors.** Status >= 400 raises `ProtheusError` with the TTALK `ErrorModel`
   fields (`code`, `message`, `detailed_message`, `help_url`, `details`) or the
   raw body when the response is not an envelope. Network failures raise
