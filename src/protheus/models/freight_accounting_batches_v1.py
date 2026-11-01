@@ -1,4 +1,4 @@
-"""FreightAccountingBatches — generated from FreightAccountingBatches_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""FreightAccountingBatches — generated from FreightAccountingBatches_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -31,9 +31,7 @@ class AccountingProvisionEntry(BaseModel):
     cost_center: str | None = Field(None, alias="CostCenter", description="Centro Custo Debito", examples=["9999999"])
     ledger_account: str | None = Field(None, alias="LedgerAccount", description="Conta Contabil", examples=["4132301"])
     business_unit: str | None = Field(None, alias="BusinessUnit", description="Unidade de Negocio.", examples=["001"])
-    value_: str | None = Field(
-        None, alias="Value ", description="Valor do Lancamento", examples=["30,00"], ge=0, le=999999999.99
-    )
+    value_: str | None = Field(None, alias="Value ", description="Valor do Lancamento", examples=["30,00"])
     entry_type: EntryType | None = Field(None, alias="EntryType", description="Tipo de Lancamento", examples=["1"])
 
 
@@ -63,9 +61,7 @@ class ReversalEntry(BaseModel):
     cost_center: str | None = Field(None, alias="CostCenter", description="Centro Custo Debito", examples=["9999999"])
     ledger_account: str | None = Field(None, alias="LedgerAccount", description="Conta Contabil", examples=["4132301"])
     business_unit: str | None = Field(None, alias="BusinessUnit", description="Unidade de Negocio.", examples=["001"])
-    value: str | None = Field(
-        None, alias="Value", description="Valor do Lancamento", examples=["30,00"], ge=0, le=999999999.99
-    )
+    value: str | None = Field(None, alias="Value", description="Valor do Lancamento", examples=["30,00"])
     entry_type: EntryType | None = Field(None, alias="EntryType", description="Tipo de Lancamento", examples=["1"])
 
 
@@ -110,15 +106,15 @@ class FreightAccountingBatchesType(BaseModel):
     financial_date: str | None = Field(
         None, alias="FinancialDate", description="Data Envio Financeiro", examples=["20191010"]
     )
-    financial_rejection_reason: (
-        str | None
-    ) = Field(None, alias="FinancialRejectionReason", description="Motivo Rejeição Financeiro", examples=["Teste"])
-    accounting_provision_entry: (
-        AccountingProvisionEntryModel | None
-    ) = Field(None, alias="AccountingProvisionEntry", description="Lançamento Provisão Contábil")
-    reversal_provision_sub_batch: (
-        ReversalProvisionSubBatchModel | None
-    ) = Field(None, alias="ReversalProvisionSubBatch", description="Sublote Estorno de Provisão")
+    financial_rejection_reason: str | None = Field(
+        None, alias="FinancialRejectionReason", description="Motivo Rejeição Financeiro", examples=["Teste"]
+    )
+    accounting_provision_entry: AccountingProvisionEntryModel | None = Field(
+        None, alias="AccountingProvisionEntry", description="Lançamento Provisão Contábil"
+    )
+    reversal_provision_sub_batch: ReversalProvisionSubBatchModel | None = Field(
+        None, alias="ReversalProvisionSubBatch", description="Sublote Estorno de Provisão"
+    )
     reversal_entry: ReversalEntryModel | None = Field(None, alias="ReversalEntry", description="Lançamento de estornos")
 
 

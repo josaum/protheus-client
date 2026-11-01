@@ -1,4 +1,4 @@
-"""Atividade do Vendedor — generated from SellerActivity_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Atividade do Vendedor — generated from SellerActivity_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -99,7 +99,7 @@ class SellerActivityInfo(BaseModel):
         None, alias="EndDate", description="Data Fim", examples=["1900-01-01T12:00:00Z"]
     )
     end_time: str | None = Field(None, alias="EndTime", description="Hora Fim", examples=["13:00"])
-    duration: str | None = Field(None, alias="Duration", examples=[999.99], ge=-999.99, le=999.99)
+    duration: str | None = Field(None, alias="Duration", examples=[999.99])
     entity_id: str | None = Field(None, alias="EntityId", description="Alias da Entidade", examples=["SA1"])
     entity_key: str | None = Field(None, alias="EntityKey", description="Codigo da Entidade", examples=["00000101"])
     remind_date: AwareDatetime | None = Field(

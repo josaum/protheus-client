@@ -1,4 +1,4 @@
-"""FreightDocuments — generated from FreightDocuments_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""FreightDocuments — generated from FreightDocuments_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -104,9 +104,7 @@ class AccountingMovements(BaseModel):
     debit_account: str | None = Field(None, alias="DebitAccount", description="Conta débito.", examples=["9999999"])
     cost_center: str | None = Field(None, alias="CostCenter", description="Centro Custo débito.", examples=["9999999"])
     business_unit: str | None = Field(None, alias="BusinessUnit", description="Unidade de negócio.", examples=["001"])
-    value: str | None = Field(
-        None, alias="Value", description="Valor de movimento.", examples=["30,00"], ge=0, le=999999999.99
-    )
+    value: str | None = Field(None, alias="Value", description="Valor de movimento.", examples=["30,00"])
 
 
 class ErrorModelBase(BaseModel):
@@ -150,11 +148,9 @@ class FreightDocumentsType(BaseModel):
     tax_op_code: str | None = Field(None, alias="TaxOpCode", description="CFOP.", examples=["1232"])
     input_user: str | None = Field(None, alias="InputUser", description="Usuário de Entrada.", examples=["admin"])
     document_value: str | None = Field(
-        None, alias="DocumentValue", description="Valor do Documento.", examples=["48,00"], ge=0, le=999999999.99
+        None, alias="DocumentValue", description="Valor do Documento.", examples=["48,00"]
     )
-    toll_value: str | None = Field(
-        None, alias="TollValue", description="Valor do Pedágio.", examples=["42,00"], ge=0, le=999999.99
-    )
+    toll_value: str | None = Field(None, alias="TollValue", description="Valor do Pedágio.", examples=["42,00"])
     freight_toll: FreightToll | None = Field(
         None, alias="FreightToll", description="Pedágio no Valor do Frete.", examples=[1]
     )
@@ -169,24 +165,15 @@ class FreightDocumentsType(BaseModel):
         None, alias="TaxationType", description="Tipo de Tributação.", examples=[1]
     )
     tax_calculation_base: str | None = Field(
-        None,
-        alias="TaxCalculationBase",
-        description="Base de Cálculo Imposto.",
-        examples=["48,00"],
-        ge=0,
-        le=999999999.99,
+        None, alias="TaxCalculationBase", description="Base de Cálculo Imposto.", examples=["48,00"]
     )
-    tax_rate: str | None = Field(
-        None, alias="TaxRate", description="Alíquota Imposto.", examples=["12,00"], ge=0, le=100
-    )
-    tax_value: str | None = Field(
-        None, alias="TaxValue", description="Valor do imposto.", examples=["20,00"], ge=0, le=999999.99
-    )
+    tax_rate: str | None = Field(None, alias="TaxRate", description="Alíquota Imposto.", examples=["12,00"])
+    tax_value: str | None = Field(None, alias="TaxValue", description="Valor do imposto.", examples=["20,00"])
     withheld_tax_value: str | None = Field(
-        None, alias="WithheldTaxValue", description="Valor Imposto Retido.", examples=["20,00"], ge=0, le=999999.99
+        None, alias="WithheldTaxValue", description="Valor Imposto Retido.", examples=["20,00"]
     )
     withheld_tax_rate: str | None = Field(
-        None, alias="WithheldTaxRate", description="Percentual Imposto Retido.", examples=["20,00"], ge=0, le=100
+        None, alias="WithheldTaxRate", description="Percentual Imposto Retido.", examples=["20,00"]
     )
     note: str | None = Field(None, alias="Note", description="Observacoes", examples=["Teste"])
     tax_credit: TaxCredit | None = Field(None, alias="TaxCredit", description="Permite Crédito de ICMS", examples=["1"])
@@ -195,24 +182,16 @@ class FreightDocumentsType(BaseModel):
         alias="ElectronicAccessKey",
         description="Chave do Ct-e",
         examples=["35170705248891000181570010000011831339972127"],
-        ge=1,
-        le=44,
     )
     integration_date: str | None = Field(
         None, alias="IntegrationDate", description="Data Integração Fiscal", examples=["20191010"]
     )
     cofins_base_value: str | None = Field(
-        None, alias="CofinsBaseValue", description="Valor Base Cofins", examples=["20,00"], ge=1, le=999999999.99
+        None, alias="CofinsBaseValue", description="Valor Base Cofins", examples=["20,00"]
     )
-    cofins_value: str | None = Field(
-        None, alias="CofinsValue", description="Valor Cofins", examples=["20,00"], ge=1, le=999999999.99
-    )
-    pis_base_value: str | None = Field(
-        None, alias="PisBaseValue", description="Valor Base PIS", examples=["20,00"], ge=1, le=999999999.99
-    )
-    pis_value: str | None = Field(
-        None, alias="PisValue", description="Valor PIS", examples=["20,00"], ge=1, le=999999999.99
-    )
+    cofins_value: str | None = Field(None, alias="CofinsValue", description="Valor Cofins", examples=["20,00"])
+    pis_base_value: str | None = Field(None, alias="PisBaseValue", description="Valor Base PIS", examples=["20,00"])
+    pis_value: str | None = Field(None, alias="PisValue", description="Valor PIS", examples=["20,00"])
     generate_credit: GenerateCredit | None = Field(
         None, alias="GenerateCredit", description="Gera crédito PIS/COFINS", examples=["1"]
     )

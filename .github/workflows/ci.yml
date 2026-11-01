@@ -19,6 +19,23 @@ jobs:
       - run: cargo clippy --workspace --locked -- -D warnings
       - run: cargo test --workspace --locked
 
+  coverage:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: git clone --depth 1 https://github.com/totvs/ttalk-standard-message.git .ttalk-source
+      - run: python -m venv .venv
+      - run: |
+          .venv/bin/python -m pip install --upgrade pip maturin datamodel-code-generator httpx pydantic
+          .venv/bin/maturin develop --locked -m crates/ttalk-fast-py/Cargo.toml
+          .venv/bin/python tools/build.py .ttalk-source
+          .venv/bin/python tools/coverage.py .ttalk-source
+          git diff --exit-code
+
   python:
     runs-on: ubuntu-22.04
     strategy:

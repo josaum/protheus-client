@@ -1,4 +1,4 @@
-"""Evento Totalizador S-5503 — generated from FGTSPerWorkerInLaborProcess_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Evento Totalizador S-5503 — generated from FGTSPerWorkerInLaborProcess_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -30,7 +30,7 @@ class FGTSPerWorkerInLaborProcessList(BaseModel):
 
 
 class InvalidRequest(BaseModel):
-    code: float = Field(..., description="Código identificador do erro", examples=[400], max_length=3)
+    code: float = Field(..., description="Código identificador do erro", examples=[400])
     message: str = Field(
         ...,
         description="Literal no idioma da requisição descrevendo o erro para o cliente",
@@ -47,7 +47,7 @@ class InvalidRequest(BaseModel):
 
 
 class InternalServerError(BaseModel):
-    code: float = Field(..., description="Código identificador do erro", examples=[500], max_length=3)
+    code: float = Field(..., description="Código identificador do erro", examples=[500])
     message: str = Field(
         ...,
         description="Literal no idioma da requisição descrevendo o erro para o cliente",
@@ -68,7 +68,7 @@ class Id(RootModel[str]):
 
 
 class NotFound(BaseModel):
-    code: float = Field(..., description="Código identificador do erro", examples=[404], max_length=3)
+    code: float = Field(..., description="Código identificador do erro", examples=[404])
     message: str = Field(
         ...,
         description="Literal no idioma da requisição descrevendo o erro para o cliente",
@@ -107,7 +107,7 @@ class FGTSPerWorkerInLaborProcessWorkerRegistrationAndCategoryList(BaseModel):
     origin_category: str = Field(
         ..., alias="originCategory", description="Categoria de Origem do Funcionário", examples=["101"], max_length=3
     )
-    fgts_tot: float = Field(..., alias="fgtsTot", description="Total de FGTS", examples=["27000.15"], max_length=16)
+    fgts_tot: float = Field(..., alias="fgtsTot", description="Total de FGTS", examples=["27000.15"])
     type_of_inscription: str = Field(
         ..., alias="typeOfInscription", description="Tipo de Inscrição do Funcionário", examples=["1"], max_length=1
     )
@@ -127,46 +127,28 @@ class FGTSPerWorkerInLaborProcessWorkerPaymentAndAmountsList(BaseModel):
     )
     category: str = Field(..., description="Categoria do Funcionário", examples=["101"], max_length=3)
     type_of_labor_process_value: float = Field(
-        ...,
-        alias="typeOfLaborProcessValue",
-        description="Tipo do valor do Processo Trabalhista",
-        examples=["71"],
-        max_length=2,
+        ..., alias="typeOfLaborProcessValue", description="Tipo do valor do Processo Trabalhista", examples=["71"]
     )
     rem_fgts_proc_trab: float = Field(
-        ...,
-        alias="remFGTSProcTrab",
-        description="Valor histórico sobre base reconhecida",
-        examples=["59000.99"],
-        max_length=16,
+        ..., alias="remFGTSProcTrab", description="Valor histórico sobre base reconhecida", examples=["59000.99"]
     )
     rem_fgts_sefip: float = Field(
-        ...,
-        alias="remFGTSSefip",
-        description="Valor base Sefip ainda não recolhida",
-        examples=["845.00"],
-        max_length=16,
+        ..., alias="remFGTSSefip", description="Valor base Sefip ainda não recolhida", examples=["845.00"]
     )
     dps_fgts_sefip: float = Field(
-        ...,
-        alias="dpsFGTSSefip",
-        description="Valor de base já declarada na Segip",
-        examples=["23500.45"],
-        max_length=16,
+        ..., alias="dpsFGTSSefip", description="Valor de base já declarada na Segip", examples=["23500.45"]
     )
     rem_fgts_dec_ant: float = Field(
         ...,
         alias="remFGTSDecAnt",
         description="Valor de base declarado no eSocial e não recolhido",
         examples=["5015.19"],
-        max_length=16,
     )
     dps_fgts_dec_ant: float = Field(
         ...,
         alias="dpsFGTSDecAnt",
         description="Valor Histórico sobre base já declarada no eSocial",
         examples=["23055.45"],
-        max_length=16,
     )
 
 

@@ -1,4 +1,4 @@
-"""Calendário Contábil — generated from AccountingCalendar_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Calendário Contábil — generated from AccountingCalendar_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -51,7 +51,7 @@ class Status(StrEnum):
     field_5 = "5"
 
 
-class ListOfProces(BaseModel):
+class ListOfProcessItem(BaseModel):
     code: Code = Field(
         ...,
         alias="Code",
@@ -75,7 +75,9 @@ class ListOfAccountingPeriod(BaseModel):
         alias="PeriodStatus",
         description="Status do Período PROTHEUS: ( 1.Aberto 4.Bloqueado) / 1 - Aberto / 4 - Bloqueado",
     )
-    list_of_process: list[ListOfProces] | None = Field(None, alias="ListOfProcess", description="Lista de processos")
+    list_of_process: list[ListOfProcessItem] | None = Field(
+        None, alias="ListOfProcess", description="Lista de processos"
+    )
 
 
 class BusinessContentType(BaseModel):
@@ -92,21 +94,6 @@ class BusinessContentType(BaseModel):
     )
 
 
-class ListOfProces1(BaseModel):
-    code: Code = Field(
-        ...,
-        alias="Code",
-        description="Bloqueio de Processo / ATF001 - Ativo fixo / COM001 - Compras / CTB001 - Contábil / EST001 - Estoque / FIN001 - Financeiro (contas a pagar) / FIN002 - Financeiro (contas a receber) / FIS001 - Livros fiscais / GCT001 - Gestão de contratos / GPE001 - Gestão pessoal / PLS000 - Planos de saúde (geral) / PLS001 - Planos de saúde (liberação para pagamento) / PLS002 - Planos de saúde (recurso de glosa) / PLS003 - Planos de saúde (cancelamento de protocolo) / PLS004 - Planos de saúde (consolidação de coparticipação) / PLS005 - Planos de saúde (recálculo da coparticipação) / PLS006 - Planos de saúde (estorno de pagamento) / PLS007 - Planos de saúde (clone de guias) / PLS008 - Planos de saúde (liberação para pagamento da autorização) / PLS009 - Planos de saúde (acerto de reembolso) / PLS010 - Planos de saúde (cancelamento de reembolso) / PLS011 - Planos de saúde (digitação de contas) / PLS012 - Planos de saúde (reconsolidação individual) / TUR001 - Gestão de viagens e turismo",
-    )
-    status: Status = Field(
-        ...,
-        alias="Status",
-        description="Status do Processo / 1 - Aberto / 2 - Fechado / 3 - Transportado / 4 - Bloqueado / 5 - Período",
-    )
-    start_date: date | None = Field(None, alias="StartDate", description="Data Inicial do Período Bloqueio")
-    end_date: date | None = Field(None, alias="EndDate", description="Data Final do Período Bloqueio")
-
-
 class PeriodOfAccountType(BaseModel):
     period_code: str = Field(..., alias="PeriodCode", description="Código Periodo Contabil", max_length=2)
     initial_date: date = Field(..., alias="InitialDate", description="Data Inicial do Período")
@@ -116,7 +103,9 @@ class PeriodOfAccountType(BaseModel):
         alias="PeriodStatus",
         description="Status do Período PROTHEUS: ( 1.Aberto 4.Bloqueado) / 1 - Aberto / 4 - Bloqueado",
     )
-    list_of_process: list[ListOfProces1] | None = Field(None, alias="ListOfProcess", description="Lista de processos")
+    list_of_process: list[ListOfProcessItem] | None = Field(
+        None, alias="ListOfProcess", description="Lista de processos"
+    )
 
 
 class ProcessType(BaseModel):

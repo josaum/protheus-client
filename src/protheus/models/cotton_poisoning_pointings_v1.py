@@ -1,4 +1,4 @@
-"""CottonPoisoningPointings — generated from CottonPoisoningPointings_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""CottonPoisoningPointings — generated from CottonPoisoningPointings_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -94,10 +94,8 @@ class CottonPoisoningPointingsType(BaseModel):
         None, alias="CottonBaleCode", description="Código do fardão.", examples=["000003"]
     )
     block_code: str | None = Field(None, alias="BlockCode", description="Código do bloco.", examples=["000002"])
-    classification_packing_list: (
-        str | None
-    ) = (
-        Field(None, alias="ClassificationPackingList", description="Código do romaneio de classificação.", examples=["000226"])
+    classification_packing_list: str | None = Field(
+        None, alias="ClassificationPackingList", description="Código do romaneio de classificação.", examples=["000226"]
     )
     entity_code: str | None = Field(None, alias="EntityCode", description="Código da entidade.", examples=["000001"])
     entity_store_code: str | None = Field(
@@ -109,9 +107,9 @@ class CottonPoisoningPointingsType(BaseModel):
     cotton_wrap_code: str | None = Field(
         None, alias="CottonWrapCode", description="Código do fardinho.", examples=["000001"]
     )
-    classification_packing_list_type: (
-        ClassificationPackingListType | None
-    ) = Field(None, alias="ClassificationPackingListType", description="Tipo da mala de classificação.", examples=["1"])
+    classification_packing_list_type: ClassificationPackingListType | None = Field(
+        None, alias="ClassificationPackingListType", description="Tipo da mala de classificação.", examples=["1"]
+    )
 
 
 class ErrorModelBase(BaseModel):

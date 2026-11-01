@@ -1,4 +1,4 @@
-"""Transportadora — generated from Carrier_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Transportadora — generated from Carrier_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -56,9 +56,9 @@ class ListofComunicationInformation(BaseModel):
     home_page: str | None = Field(None, alias="HomePage", description="Página da WEB")
     email: str | None = Field(None, alias="Email", description="Correio Eletrônico")
     dialling_code: str | None = Field(None, alias="DiallingCode", description="DDD - Discagem Direta a Distancia")
-    international_dialling_code: (
-        str | None
-    ) = Field(None, alias="InternationalDiallingCode", description="DDI - Discagem Direta Internal")
+    international_dialling_code: str | None = Field(
+        None, alias="InternationalDiallingCode", description="DDI - Discagem Direta Internal"
+    )
 
 
 class CarrierType(StrEnum):
@@ -158,9 +158,9 @@ class CommunicationInformationType(BaseModel):
     home_page: str | None = Field(None, alias="HomePage", description="Página da WEB")
     email: str | None = Field(None, alias="Email", description="Correio Eletrônico")
     dialling_code: str | None = Field(None, alias="DiallingCode", description="DDD - Discagem Direta a Distancia")
-    international_dialling_code: (
-        str | None
-    ) = Field(None, alias="InternationalDiallingCode", description="DDI - Discagem Direta Internal")
+    international_dialling_code: str | None = Field(
+        None, alias="InternationalDiallingCode", description="DDI - Discagem Direta Internal"
+    )
 
 
 class ErrorModelBase(BaseModel):
@@ -176,7 +176,7 @@ class ErrorDetail(BaseModel):
     details: list[ErrorModelBase] | None = None
 
 
-class Addres(BaseModel):
+class AddressItem(BaseModel):
     items: list[AddressType] | None = None
 
 
@@ -201,7 +201,7 @@ class CarrierInfo(BaseModel):
     governamental_information: list[list[GovernamentalInformation] | GovernamentalInformation1] | None = Field(
         None, alias="governamentalInformation", description="Informações Governamentais"
     )
-    address: list[Addres] | None = Field(None, description="Informações de endereço")
+    address: list[AddressItem] | None = Field(None, description="Informações de endereço")
     listof_comunication_information: list[ListofComunicationInformation] | None = Field(
         None, alias="listofComunicationInformation", description="Informações de comunicação"
     )

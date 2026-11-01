@@ -1,4 +1,4 @@
-"""Campanhas — generated from Campaigns_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Campanhas — generated from Campaigns_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -119,10 +119,11 @@ class CampaignsInfo(BaseModel):
         examples=["2"],
         max_length=1,
     )
-    campaign_evolution_status: (
-        CampaignEvolutionStatus | None
-    ) = (
-        Field(None, alias="Campaign_Evolution_Status", description="Status da evolução da campanha (1-Pronta para ser lançada, 2-Lançada, 3-Concluída, 4-Cancelada, 5-Suspensa)", examples=["1"])
+    campaign_evolution_status: CampaignEvolutionStatus | None = Field(
+        None,
+        alias="Campaign_Evolution_Status",
+        description="Status da evolução da campanha (1-Pronta para ser lançada, 2-Lançada, 3-Concluída, 4-Cancelada, 5-Suspensa)",
+        examples=["1"],
     )
     campaing_type: str | None = Field(
         None, alias="CampaingType", description="Tipo da campanha.", examples=["000001"], max_length=6

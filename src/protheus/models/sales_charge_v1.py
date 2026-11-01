@@ -1,4 +1,4 @@
-"""Comissão de Venda — generated from SalesCharge_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Comissão de Venda — generated from SalesCharge_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -18,35 +18,27 @@ class SalesChargeInfo(BaseModel):
     internal_id: str | None = Field(None, alias="InternalId", description="Identificador único da Comissão")
     seller_internal_id: str | None = Field(None, alias="SellerInternalId", description="InternalId do Vendedor")
     seller_id: str | None = Field(None, alias="SellerId", description="Código do Vendedor")
-    account_receivable_document_internal_id: (
-        str | None
-    ) = (
-        Field(None, alias="AccountReceivableDocumentInternalId", description="InternalId do Título a Receber que originou a comissão")
+    account_receivable_document_internal_id: str | None = Field(
+        None,
+        alias="AccountReceivableDocumentInternalId",
+        description="InternalId do Título a Receber que originou a comissão",
     )
-    account_receivable_document_prefix: (
-        str | None
-    ) = (
-        Field(None, alias="AccountReceivableDocumentPrefix", description="Prefixo do Título a Receber que originou a comissão")
+    account_receivable_document_prefix: str | None = Field(
+        None, alias="AccountReceivableDocumentPrefix", description="Prefixo do Título a Receber que originou a comissão"
     )
-    account_receivable_document_number: (
-        str | None
-    ) = (
-        Field(None, alias="AccountReceivableDocumentNumber", description="Número do Título a Receber que originou a comissão")
+    account_receivable_document_number: str | None = Field(
+        None, alias="AccountReceivableDocumentNumber", description="Número do Título a Receber que originou a comissão"
     )
-    account_receivable_document_parcel: (
-        str | None
-    ) = (
-        Field(None, alias="AccountReceivableDocumentParcel", description="Parcela do Título a Receber que originou a comissão")
+    account_receivable_document_parcel: str | None = Field(
+        None, alias="AccountReceivableDocumentParcel", description="Parcela do Título a Receber que originou a comissão"
     )
-    account_receivable_document_type_code: (
-        str | None
-    ) = (
-        Field(None, alias="AccountReceivableDocumentTypeCode", description="Tipo do Título a Receber que originou a comissão")
+    account_receivable_document_type_code: str | None = Field(
+        None, alias="AccountReceivableDocumentTypeCode", description="Tipo do Título a Receber que originou a comissão"
     )
-    customer_vendor_internal_id: (
-        str | None
-    ) = (
-        Field(None, alias="CustomerVendorInternalId", description="Identificador único do Cliente do título a Receber que originou a comissão")
+    customer_vendor_internal_id: str | None = Field(
+        None,
+        alias="CustomerVendorInternalId",
+        description="Identificador único do Cliente do título a Receber que originou a comissão",
     )
     customer_vendor_code: str | None = Field(
         None, alias="CustomerVendorCode", description="Código do Cliente do título a Receber que originou a comissão"
@@ -65,9 +57,9 @@ class SalesChargeInfo(BaseModel):
         None, alias="CurrencyInternalId", description="InternalId da Moeda da Comissão"
     )
     currency: str | None = Field(None, alias="Currency", description="Moeda da Comissão")
-    hotel_invoice_internal_id: (
-        str | None
-    ) = Field(None, alias="HotelInvoiceInternalID", description="Identificador único da fatura de hotel")
+    hotel_invoice_internal_id: str | None = Field(
+        None, alias="HotelInvoiceInternalID", description="Identificador único da fatura de hotel"
+    )
 
 
 class ErrorModelBase(BaseModel):

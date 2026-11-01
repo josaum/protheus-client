@@ -72,3 +72,8 @@ def test_generator_is_deterministic(tmp_path: Path) -> None:
         capture_output=True,
     )
     assert index.read_bytes() == before
+
+
+@pytest.mark.skipif(not os.environ.get("TTALK_REPO"), reason="set TTALK_REPO to a ttalk-standard-message checkout")
+def test_complete_available_operation_coverage() -> None:
+    subprocess.run([sys.executable, str(ROOT / "tools" / "coverage.py"), os.environ["TTALK_REPO"]], check=True)

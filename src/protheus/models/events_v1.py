@@ -1,4 +1,4 @@
-"""Eventos — generated from Events_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Eventos — generated from Events_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -42,9 +42,7 @@ class ListOfEvent(BaseModel):
         None, alias="Responsible", description="Responsavel pelo evento", examples=["Anderson José"], max_length=30
     )
     room: str | None = Field(None, alias="Room", description="Sala do evento", examples=["Sala 10"], max_length=10)
-    room_capacity: float | None = Field(
-        None, alias="RoomCapacity", description="Capacidade da Sala", examples=["200"], max_length=999999
-    )
+    room_capacity: float | None = Field(None, alias="RoomCapacity", description="Capacidade da Sala", examples=["200"])
     grade_init_date: str | None = Field(
         None,
         alias="GradeInitDate",
@@ -135,9 +133,7 @@ class ListEvent(BaseModel):
         None, alias="Responsible", description="Responsavel pelo evento", examples=["Anderson José"], max_length=30
     )
     room: str | None = Field(None, alias="Room", description="Sala do evento", examples=["Sala 10"], max_length=10)
-    room_capacity: float | None = Field(
-        None, alias="RoomCapacity", description="Capacidade da Sala", examples=["200"], max_length=999999
-    )
+    room_capacity: float | None = Field(None, alias="RoomCapacity", description="Capacidade da Sala", examples=["200"])
     grade_init_date: str | None = Field(
         None,
         alias="GradeInitDate",

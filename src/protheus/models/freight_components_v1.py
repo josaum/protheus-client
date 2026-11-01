@@ -1,4 +1,4 @@
-"""Freight Components — generated from FreightComponents_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Freight Components — generated from FreightComponents_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -77,10 +77,10 @@ class FreightComponents(BaseModel):
         None, alias="InternalId", description="InternalId do Solicitante no ERP", max_length=28
     )
     description: str | None = Field(None, alias="Description", description="Descrição Componente", max_length=50)
-    attribute_for_calculation: (
-        AttributeForCalculation | None
-    ) = (
-        Field(None, alias="AttributeForCalculation", description="Atributo para cálculo (01-Peso, 02-Valor Carga, 03-Quantidade de Itens, 04-Volume, 05-Quantidade de Volumes, 06-Distancia, 07-Quantidade de Entrega, 08-Valor Fixo, 09-Valor Frete, 10-Peso Liquido, 11-Quantidade de ServiÃ§os, 12-Valor Liquido)")
+    attribute_for_calculation: AttributeForCalculation | None = Field(
+        None,
+        alias="AttributeForCalculation",
+        description="Atributo para cálculo (01-Peso, 02-Valor Carga, 03-Quantidade de Itens, 04-Volume, 05-Quantidade de Volumes, 06-Distancia, 07-Quantidade de Entrega, 08-Valor Fixo, 09-Valor Frete, 10-Peso Liquido, 11-Quantidade de ServiÃ§os, 12-Valor Liquido)",
     )
     suframa_table: SuframaTable | None = Field(
         None,
@@ -96,10 +96,8 @@ class FreightComponents(BaseModel):
     value_per_load_manifest: ValuePerLoadManifest | None = Field(
         None, alias="ValuePerLoadManifest", description="Valor por Romaneio de Carga (1-Sim, 2-Nao)"
     )
-    daily_value_freelance_calculation: (
-        DailyValueFreelanceCalculation | None
-    ) = (
-        Field(None, alias="DailyValueFreelanceCalculation", description="CÃ¡lculo do Valor Diário Autônomo (1-Sim, 2-Nao)")
+    daily_value_freelance_calculation: DailyValueFreelanceCalculation | None = Field(
+        None, alias="DailyValueFreelanceCalculation", description="CÃ¡lculo do Valor Diário Autônomo (1-Sim, 2-Nao)"
     )
     group_values: GroupValues | None = Field(
         None, alias="GroupValues", description="Agrupa Valores Por (1-Entrega, 2-Romaneio)"

@@ -1,4 +1,4 @@
-"""Limite de credito do Cliente — generated from CustomerCreditLimit_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Limite de credito do Cliente — generated from CustomerCreditLimit_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -39,20 +39,29 @@ class CustomerCreditLimitInfo(BaseModel):
         ge=0.0,
         le=999999999.99,
     )
-    credit_limit_used_by_billing: (
-        float | None
-    ) = (
-        Field(None, alias="CreditLimitUsedByBilling", description="Limite de crédito usado por faturamento", examples=[7000.71], ge=0.0, le=999999999.99)
+    credit_limit_used_by_billing: float | None = Field(
+        None,
+        alias="CreditLimitUsedByBilling",
+        description="Limite de crédito usado por faturamento",
+        examples=[7000.71],
+        ge=0.0,
+        le=999999999.99,
     )
-    credit_limit_used_by_sales_orders: (
-        float | None
-    ) = (
-        Field(None, alias="CreditLimitUsedBySalesOrders", description="Limite de crédito usado por pedidos de venda em aberto/liberados", examples=[8000.81], ge=0.0, le=999999999.99)
+    credit_limit_used_by_sales_orders: float | None = Field(
+        None,
+        alias="CreditLimitUsedBySalesOrders",
+        description="Limite de crédito usado por pedidos de venda em aberto/liberados",
+        examples=[8000.81],
+        ge=0.0,
+        le=999999999.99,
     )
-    credit_limit_used_by_orders_and_finance: (
-        float | None
-    ) = (
-        Field(None, alias="CreditLimitUsedByOrdersAndFinance", description="Limite de crédito usado por pedidos e financeiro", examples=[9000.92], ge=0.0, le=999999999.99)
+    credit_limit_used_by_orders_and_finance: float | None = Field(
+        None,
+        alias="CreditLimitUsedByOrdersAndFinance",
+        description="Limite de crédito usado por pedidos e financeiro",
+        examples=[9000.92],
+        ge=0.0,
+        le=999999999.99,
     )
 
 

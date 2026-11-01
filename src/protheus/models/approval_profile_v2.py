@@ -1,4 +1,4 @@
-"""Perfil/Grade de Aprovação — generated from ApprovalProfile_v2_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Perfil/Grade de Aprovação — generated from ApprovalProfile_v2_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -49,17 +49,15 @@ class ApprovalProfileInfo(BaseModel):
         alias="approveValueLimitMin",
         description="Valor Minimo do Limite de Aprovação do Perfil.",
         examples=["0.00"],
-        max_length=17,
     )
     approve_value_limit_max: float | None = Field(
         None,
         alias="approveValueLimitMax",
         description="Valor Máximo do Limite de Aprovação do Perfil.",
         examples=["0.00"],
-        max_length=17,
     )
     approve_limit_approver: float | None = Field(
-        None, alias="approveLimitApprover", description="Limite do Aprovador", examples=["0.00"], max_length=14
+        None, alias="approveLimitApprover", description="Limite do Aprovador", examples=["0.00"]
     )
     type_profile: TypeProfile | None = Field(
         None,
@@ -68,13 +66,11 @@ class ApprovalProfileInfo(BaseModel):
         examples=["D - Diario, S - Semanal, M - Mensal."],
     )
     currency_profile_approve: float | None = Field(
-        None, alias="currencyProfileApprove", description="Código de Moeda.", examples=[""], max_length=2
+        None, alias="currencyProfileApprove", description="Código de Moeda.", examples=[""]
     )
-    expense_type_initial: float | None = Field(
-        None, alias="expenseTypeInitial", description="", examples=[""], max_length=4
-    )
-    expense_type_end: float | None = Field(None, alias="expenseTypeEnd", description="", examples=[""], max_length=4)
-    version: float | None = Field(None, description="", examples=[""], max_length=3)
+    expense_type_initial: float | None = Field(None, alias="expenseTypeInitial", description="", examples=[""])
+    expense_type_end: float | None = Field(None, alias="expenseTypeEnd", description="", examples=[""])
+    version: float | None = Field(None, description="", examples=[""])
     situation: str | None = Field(None, description="Situação da grade de aprovação", max_length=1)
     code_authority_level: list[CodeAuthorityLevel] | None = Field(None, alias="codeAuthorityLevel")
 

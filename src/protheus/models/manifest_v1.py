@@ -1,4 +1,4 @@
-"""Manifest — generated from Manifest_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Manifest — generated from Manifest_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -90,16 +90,14 @@ class Manifest(BaseModel):
     )
     return_date: str | None = Field(None, alias="ReturnDate", description="Data Retorno.", examples=["2020-07-07"])
     return_time: str | None = Field(None, alias="ReturnTime", description="Hora Retorno.", examples=["09:00"])
-    departure_odometer_readin: (
-        str | None
-    ) = Field(None, alias="DepartureOdometerReadin", description="Hodômetro Saída.", examples=["101500"])
+    departure_odometer_readin: str | None = Field(
+        None, alias="DepartureOdometerReadin", description="Hodômetro Saída.", examples=["101500"]
+    )
     return_odometer_reading: str | None = Field(
         None, alias="ReturnOdometerReading", description="Hodômetro Retorno.", examples=["102709"]
     )
     tracing_code: str | None = Field(None, alias="TracingCode", description="Código Rastreamento.", examples=["102709"])
-    toll_amount: str | None = Field(
-        None, alias="TollAmount", description="Valor Pedágio.", examples=["48,00"], ge=0, le=99999.99
-    )
+    toll_amount: str | None = Field(None, alias="TollAmount", description="Valor Pedágio.", examples=["48,00"])
     toll_voucher: TollVoucher | None = Field(None, alias="TollVoucher", description="Vale Pedágio.", examples=["1"])
     serial_number: str | None = Field(None, alias="SerialNumber", description="Número do Lacre.", examples=["00011"])
     trip_number: str | None = Field(None, alias="TripNumber", description="Viagem.", examples=["00000500"])

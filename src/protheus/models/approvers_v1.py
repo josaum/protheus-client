@@ -1,4 +1,4 @@
-"""Aprovadores — generated from Approvers_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Aprovadores — generated from Approvers_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -63,24 +63,21 @@ class ApproversInfo(BaseModel):
         alias="approveValueLimitMin",
         description="Valor Minimo do Limite de Aprovação do Aprovador.",
         examples=["0.00"],
-        max_length=14,
     )
     approve_value_limit_max: float | None = Field(
         None,
         alias="approveValueLimitMax",
         description="Valor Máximo do Limite de Aprovação do Aprovador.",
         examples=["0.00"],
-        max_length=14,
     )
     currency_approve: float | None = Field(
         None,
         alias="currencyApprove",
         description="Identifica qual Tipo de Moeda (US$, R$, €) o Aprovador ira trabalhar no sistema.",
         examples=["1,2,3,4 ou 5."],
-        max_length=5,
     )
     approve_limit_approver: float | None = Field(
-        None, alias="approveLimitApprover", description="Limite do Aprovador", examples=["0.00"], max_length=14
+        None, alias="approveLimitApprover", description="Limite do Aprovador", examples=["0.00"]
     )
     type_limit_approve: TypeLimitApprove | None = Field(
         None,
@@ -88,7 +85,7 @@ class ApproversInfo(BaseModel):
         description="Tipo de limite que sera atribuido D-Diario/S-Semanal/M-Mensal. O Padrão é D-Diario.",
         examples=["D - Diario, S - Semanal, M - Mensal."],
     )
-    limited_order: float | None = Field(None, alias="limitedOrder", description="", examples=[""], max_length=13)
+    limited_order: float | None = Field(None, alias="limitedOrder", description="", examples=[""])
     user_login: UserLogin | None = Field(
         None,
         alias="userLogin",
@@ -108,10 +105,10 @@ class ApproversInfo(BaseModel):
     view_pending_value: bool | None = Field(
         None, alias="viewPendingValue", description="Visualiza Valor da Pendência na Moeda do Aprovador?"
     )
-    conversion_date_pending_value: (
-        ConversionDatePendingValue | None
-    ) = (
-        Field(None, alias="conversionDatePendingValue", description="Data que deve ser utilizada para converter o valor da pendência para a moeda do Aprovador: 1 = Data Aprovação; 2 = Data da Geração da Pendência")
+    conversion_date_pending_value: ConversionDatePendingValue | None = Field(
+        None,
+        alias="conversionDatePendingValue",
+        description="Data que deve ser utilizada para converter o valor da pendência para a moeda do Aprovador: 1 = Data Aprovação; 2 = Data da Geração da Pendência",
     )
     lotation_destiny: LotationDestiny | None = Field(
         None,

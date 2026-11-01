@@ -1,4 +1,4 @@
-"""Impostos do Pedido de Venda — generated from SalesTaxes_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Impostos do Pedido de Venda — generated from SalesTaxes_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -55,9 +55,9 @@ class ReturnSalesTaxes(BaseModel):
     valor_mercadoria: float | None = Field(
         None, description="Valor Total de Mercadorias", examples=[135000], ge=0.0, le=999999999.99
     )
-    total_impostos_sem_incidencia: (
-        float | None
-    ) = Field(None, description="Valor de Tributos sem Incidência", examples=[0], ge=0.0, le=999999999.99)
+    total_impostos_sem_incidencia: float | None = Field(
+        None, description="Valor de Tributos sem Incidência", examples=[0], ge=0.0, le=999999999.99
+    )
     total_impostos_embutidos: float | None = Field(
         None, description="Total de Tributos Embutidos", examples=[13145.63], ge=0.0, le=999999999.99
     )

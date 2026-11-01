@@ -1,4 +1,4 @@
-"""Grupo de Região — generated from RegionGroups_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Grupo de Região — generated from RegionGroups_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -83,13 +83,15 @@ class RegionGroupsInfo(BaseModel):
     destination_branch: str | None = Field(
         None, alias="DestinationBranch", description="Filial", examples=["M SP 01 "], max_length=12
     )
-    associated_company_region_code: (
-        str | None
-    ) = Field(None, alias="AssociatedCompanyRegionCode", description="Código da Região Coligada", examples=["Q56453"])
-    associated_company_region_description: (
-        str | None
-    ) = (
-        Field(None, alias="AssociatedCompanyRegionDescription", description="Descrição do Grupo de Região Coligada", examples=["VARGEM GRANDE PAULISTA"], max_length=30)
+    associated_company_region_code: str | None = Field(
+        None, alias="AssociatedCompanyRegionCode", description="Código da Região Coligada", examples=["Q56453"]
+    )
+    associated_company_region_description: str | None = Field(
+        None,
+        alias="AssociatedCompanyRegionDescription",
+        description="Descrição do Grupo de Região Coligada",
+        examples=["VARGEM GRANDE PAULISTA"],
+        max_length=30,
     )
     region_category: RegionCategory | None = Field(
         None, alias="RegionCategory", description="Categoria da Região", examples=["1"]

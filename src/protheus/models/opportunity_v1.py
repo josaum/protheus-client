@@ -1,4 +1,4 @@
-"""Oportunidades — generated from Opportunity_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Oportunidades — generated from Opportunity_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -89,22 +89,22 @@ class ContactInformationAddress(BaseModel):
 
 class ListOfContact(BaseModel):
     contact_information_code: str | None = Field(None, alias="ContactInformationCode", description="Código do Contato")
-    contact_information_internal_id: (
-        str | None
-    ) = Field(None, alias="ContactInformationInternalId", description="InternalId do ContactInformationCode")
-    contact_information_title: (
-        str | None
-    ) = Field(None, alias="ContactInformationTitle", description="Título do Contato")
+    contact_information_internal_id: str | None = Field(
+        None, alias="ContactInformationInternalId", description="InternalId do ContactInformationCode"
+    )
+    contact_information_title: str | None = Field(
+        None, alias="ContactInformationTitle", description="Título do Contato"
+    )
     contact_information_name: str | None = Field(None, alias="ContactInformationName", description="Nome do Contato")
-    contact_information_department: (
-        str | None
-    ) = Field(None, alias="ContactInformationDepartment", description="Departamento do Contato")
-    communication_information: (
-        CommunicationInformation | None
-    ) = Field(None, alias="CommunicationInformation", description="Informações para Contato")
-    contact_information_address: (
-        ContactInformationAddress | None
-    ) = Field(None, alias="ContactInformationAddress", description="Endereço do Contato")
+    contact_information_department: str | None = Field(
+        None, alias="ContactInformationDepartment", description="Departamento do Contato"
+    )
+    communication_information: CommunicationInformation | None = Field(
+        None, alias="CommunicationInformation", description="Informações para Contato"
+    )
+    contact_information_address: ContactInformationAddress | None = Field(
+        None, alias="ContactInformationAddress", description="Endereço do Contato"
+    )
 
 
 class OpportunityInfo(BaseModel):
@@ -184,37 +184,24 @@ class ConsumerData(BaseModel):
     )
 
 
-class ContactInformationAddress1(BaseModel):
-    address: str | None = Field(None, alias="Address", description="Rua, Avenida, Rodovia, etc. Ex.: Rua Nações Unidas")
-    number: str | None = Field(None, alias="Number", description="Número do Endereço.")
-    complement: str | None = Field(None, alias="Complement", description="Informações complementares do endereço.")
-    city: City | None = Field(None, alias="City", description="Informações do Município")
-    district: str | None = Field(None, alias="District", description="Bairro")
-    state: State | None = Field(None, alias="State", description="Distrito")
-    country: Country | None = Field(None, alias="Country", description="País")
-    zip_code: str | None = Field(None, alias="ZIPCode", description="CEP")
-    region: str | None = Field(None, alias="Region", description="Região")
-    po_box: str | None = Field(None, alias="POBox", description="Caixa Postal")
-
-
 class ContactInformationType(BaseModel):
     contact_information_code: str | None = Field(None, alias="ContactInformationCode", description="Código do Contato")
-    contact_information_internal_id: (
-        str | None
-    ) = Field(None, alias="ContactInformationInternalId", description="InternalId do ContactInformationCode")
-    contact_information_title: (
-        str | None
-    ) = Field(None, alias="ContactInformationTitle", description="Título do Contato")
+    contact_information_internal_id: str | None = Field(
+        None, alias="ContactInformationInternalId", description="InternalId do ContactInformationCode"
+    )
+    contact_information_title: str | None = Field(
+        None, alias="ContactInformationTitle", description="Título do Contato"
+    )
     contact_information_name: str | None = Field(None, alias="ContactInformationName", description="Nome do Contato")
-    contact_information_department: (
-        str | None
-    ) = Field(None, alias="ContactInformationDepartment", description="Departamento do Contato")
-    communication_information: (
-        CommunicationInformation | None
-    ) = Field(None, alias="CommunicationInformation", description="Informações para Contato")
-    contact_information_address: (
-        ContactInformationAddress1 | None
-    ) = Field(None, alias="ContactInformationAddress", description="Endereço do Contato")
+    contact_information_department: str | None = Field(
+        None, alias="ContactInformationDepartment", description="Departamento do Contato"
+    )
+    communication_information: CommunicationInformation | None = Field(
+        None, alias="CommunicationInformation", description="Informações para Contato"
+    )
+    contact_information_address: ContactInformationAddress | None = Field(
+        None, alias="ContactInformationAddress", description="Endereço do Contato"
+    )
 
 
 class CommunicationInformationType(BaseModel):

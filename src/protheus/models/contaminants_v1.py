@@ -1,4 +1,4 @@
-"""Contaminants — generated from Contaminants_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Contaminants — generated from Contaminants_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -37,12 +37,7 @@ class ContaminantValuesType(BaseModel):
         None, alias="Result", description="Valor do contaminante", examples=["Mediana contaminação"]
     )
     start_range: str | None = Field(
-        None,
-        alias="StartRange",
-        description="Faixa inicial",
-        examples=["9,999,999,999.99999"],
-        ge=0,
-        le=9999999999.99999,
+        None, alias="StartRange", description="Faixa inicial", examples=["9,999,999,999.99999"]
     )
     end_range: float | None = Field(
         None, alias="EndRange", description="Faixa Final", examples=["9,999,999,999.99999"], ge=0.0, le=9999999999.99999
@@ -92,17 +87,15 @@ class ContaminantsType(BaseModel):
         None, alias="Status", description="Informa se o contaminante está ativo para uso.", examples=["1"]
     )
     result_type: ResultType | None = Field(None, alias="ResultType", description="Tipo do contaminante", examples=["4"])
-    result_size: str | None = Field(
-        None, alias="ResultSize", description="Descrição do contaminante", examples=["14"], ge=0, le=14
-    )
+    result_size: str | None = Field(None, alias="ResultSize", description="Descrição do contaminante", examples=["14"])
     result_precision: str | None = Field(
-        None, alias="ResultPrecision", description="Descrição do contaminante", examples=["3"], ge=0, le=5
+        None, alias="ResultPrecision", description="Descrição do contaminante", examples=["3"]
     )
     ws_available: WsAvailable | None = Field(
         None, alias="WSAvailable", description="Informa se contaminante é disponível via Web Service", examples=["1"]
     )
     propagation_level: str | None = Field(
-        None, alias="PropagationLevel", description="Nível de propagação", examples=["99"], ge=1, le=99
+        None, alias="PropagationLevel", description="Nível de propagação", examples=["99"]
     )
     inclusion_date: str | None = Field(
         None, alias="InclusionDate", description="Data de inclusão", examples=["20181105"]
@@ -112,9 +105,9 @@ class ContaminantsType(BaseModel):
     )
     update_date: str | None = Field(None, alias="UpdateDate", description="Data de atualização", examples=["20181105"])
     update_hour: str | None = Field(None, alias="UpdateHour", description="Hora de atualização", examples=["17:59:00"])
-    list_of_contaminant_values: (
-        ListOfContaminantValues | None
-    ) = Field(None, alias="ListOfContaminantValues", description="Lista dos valores do contaminante.")
+    list_of_contaminant_values: ListOfContaminantValues | None = Field(
+        None, alias="ListOfContaminantValues", description="Lista dos valores do contaminante."
+    )
 
 
 class ErrorModel(ErrorModelBase, ErrorDetail):

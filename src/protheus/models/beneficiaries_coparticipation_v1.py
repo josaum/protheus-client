@@ -1,4 +1,4 @@
-"""Relação de Coparticipações dos Beneficiários e seus dependentes - Global — generated from BeneficiariesCoparticipation_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Relação de Coparticipações dos Beneficiários e seus dependentes - Global — generated from BeneficiariesCoparticipation_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -58,9 +58,9 @@ class BeneficiariesCoparticipationItem(BaseModel):
     dependent_name: str | None = Field(
         None, alias="DependentName", description="Nome do Dependente do Beneficiário dentro do Produto TOTVS."
     )
-    degree_employee_dependency: (
-        str | None
-    ) = Field(None, alias="DegreeEmployeeDependency", description="Grau de dependência do Funcionário no Datasul.")
+    degree_employee_dependency: str | None = Field(
+        None, alias="DegreeEmployeeDependency", description="Grau de dependência do Funcionário no Datasul."
+    )
     occurrency_date: AwareDatetime | None = Field(
         None,
         alias="OccurrencyDate",
@@ -69,15 +69,15 @@ class BeneficiariesCoparticipationItem(BaseModel):
     service_provider: str | None = Field(
         None, alias="ServiceProvider", description="Identificador do Prestador de Serviço"
     )
-    service_provider_contract_type: (
-        ServiceProviderContractType | None
-    ) = (
-        Field(None, alias="ServiceProviderContractType", description="Tipo de Contrato do Prestador de Serviço indicado no lançamento da Coparticipação do Beneficiário: 1 - Assistência Médica | 2 - Assistência Odontológica | 3 - VR | 4 - VA | 5 - VT | 9 - Outros")
+    service_provider_contract_type: ServiceProviderContractType | None = Field(
+        None,
+        alias="ServiceProviderContractType",
+        description="Tipo de Contrato do Prestador de Serviço indicado no lançamento da Coparticipação do Beneficiário: 1 - Assistência Médica | 2 - Assistência Odontológica | 3 - VR | 4 - VA | 5 - VT | 9 - Outros",
     )
-    service_provider_contract: (
-        str | None
-    ) = (
-        Field(None, alias="ServiceProviderContract", description="Número do Contrato do Prestador de Serviço indicado no lançamento da Coparticipação do Beneficiário.")
+    service_provider_contract: str | None = Field(
+        None,
+        alias="ServiceProviderContract",
+        description="Número do Contrato do Prestador de Serviço indicado no lançamento da Coparticipação do Beneficiário.",
     )
     coparticipation_value: int | None = Field(
         None,
@@ -104,10 +104,10 @@ class BeneficiariesCoparticipationItem(BaseModel):
         alias="SpecialtyName",
         description="Nome da especialidade do Prestador de Serviço referente ao lançamento da coparticipação do beneficiário no Produto TOTVS.",
     )
-    international_code_diseases: (
-        str | None
-    ) = (
-        Field(None, alias="InternationalCodeDiseases", description="Código internacional de Doenças lançado da coparticipação do beneficiário no Produto TOTVS.")
+    international_code_diseases: str | None = Field(
+        None,
+        alias="InternationalCodeDiseases",
+        description="Código internacional de Doenças lançado da coparticipação do beneficiário no Produto TOTVS.",
     )
     service_type: ServiceType | None = Field(
         None,
@@ -119,10 +119,10 @@ class BeneficiariesCoparticipationItem(BaseModel):
         alias="AmountUse",
         description="Quantidade de utilização de coparticipação por parte do beneficiário e seus dependentes dentro do Produto TOTVS.",
     )
-    coparticipation_description: (
-        str | None
-    ) = (
-        Field(None, alias="CoparticipationDescription", description="Descrição da Coparticipação referente ao lançamento no histórico do beneficiário no Produto TOTVS.")
+    coparticipation_description: str | None = Field(
+        None,
+        alias="CoparticipationDescription",
+        description="Descrição da Coparticipação referente ao lançamento no histórico do beneficiário no Produto TOTVS.",
     )
 
 

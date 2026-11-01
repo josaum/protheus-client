@@ -1,4 +1,4 @@
-"""Tópico de Auditorias — generated from AuditTopic_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Tópico de Auditorias — generated from AuditTopic_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -25,11 +25,11 @@ class ItensTableTopic(BaseModel):
 class AuditTopicType(BaseModel):
     company_id: str | None = Field(None, alias="companyId", description="Empresa", max_length=3)
     branch_id: str | None = Field(None, alias="branchId", description="Filial", examples=["D MG 01"])
-    check_list: str | None = Field(None, alias="checkList", description="Número do Check List", le=6)
+    check_list: str | None = Field(None, alias="checkList", description="Número do Check List")
     internal_id: str | None = Field(None, alias="internalId", description="InternalId do Questionário de Auditoria")
-    revision: str | None = Field(None, description="Revisão do Topico", le=2)
+    revision: str | None = Field(None, description="Revisão do Topico")
     last_revision: date | None = Field(
-        None, alias="lastRevision", description="Última Revisão", examples=["01-01-2019"], max_length=8
+        None, alias="lastRevision", description="Última Revisão", examples=["01-01-2019"]
     )
     itens_table_topic: list[ItensTableTopicItem] | ItensTableTopic | None = Field(None, alias="itensTableTopic")
 

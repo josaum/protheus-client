@@ -1,4 +1,4 @@
-"""Produtos Varejo — generated from RetailItem_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Produtos Varejo — generated from RetailItem_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -27,12 +27,12 @@ class ItemInfo(BaseModel):
     cost_center_code: str | None = Field(None, alias="CostCenterCode", description="Centro de Custo")
     account_item: str | None = Field(None, alias="AccountItem", description="Item Conta Contabíl")
     group_code: str | None = Field(None, alias="GroupCode", description="Grupo")
-    second_unit_of_measure_code: (
-        str | None
-    ) = Field(None, alias="SecondUnitOfMeasureCode", description="Segunda Unidade de Medida")
-    multiplication_factor_value: (
-        float | None
-    ) = Field(None, alias="MultiplicationFactorValue", description="Fator de Conversão")
+    second_unit_of_measure_code: str | None = Field(
+        None, alias="SecondUnitOfMeasureCode", description="Segunda Unidade de Medida"
+    )
+    multiplication_factor_value: float | None = Field(
+        None, alias="MultiplicationFactorValue", description="Fator de Conversão"
+    )
     product_type: str | None = Field(None, alias="ProductType", description="Tipo de Produto")
     trail: str | None = Field(None, alias="Trail", description="Rastreabilidade Produto")
     addressing_control: str | None = Field(None, alias="AddressingControl", description="Controla Enderecamento")

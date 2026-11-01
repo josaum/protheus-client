@@ -1,4 +1,4 @@
-"""Coletor — generated from UrbanoColetor_v1_000.json (ttalk ca5e26a). Do not edit by hand."""
+"""Coletor — generated from UrbanoColetor_v1_000.json (ttalk 1240435). Do not edit by hand."""
 
 from __future__ import annotations
 
@@ -34,65 +34,41 @@ class Cabecalho(BaseModel):
     cartao_motorista: str = Field(
         ..., alias="cartaoMotorista", description="Permissão do Evento.", examples=["true"], max_length=15
     )
-    mat_cobrador: bool = Field(
-        ..., alias="matCobrador", description="Permissão do Evento.", examples=["true"], max_length=15
-    )
-    cartao_cobrador: bool = Field(
-        ..., alias="cartaoCobrador", description="Permissão do Evento.", examples=["true"], max_length=15
-    )
-    data_movimento: bool = Field(
-        ..., alias="dataMovimento", description="Permissão do Evento.", examples=["true"], max_length=15
-    )
-    filipeta: bool = Field(..., description="Permissão do Evento.", examples=["true"], max_length=15)
+    mat_cobrador: bool = Field(..., alias="matCobrador", description="Permissão do Evento.", examples=["true"])
+    cartao_cobrador: bool = Field(..., alias="cartaoCobrador", description="Permissão do Evento.", examples=["true"])
+    data_movimento: bool = Field(..., alias="dataMovimento", description="Permissão do Evento.", examples=["true"])
+    filipeta: bool = Field(..., description="Permissão do Evento.", examples=["true"])
 
 
 class Servicos(BaseModel):
-    cod_servico: bool = Field(
-        ..., alias="codServico", description="Permissão do Evento.", examples=["true"], max_length=15
-    )
-    cod_veiculo: bool = Field(
-        ..., alias="codVeiculo", description="Permissão do Evento.", examples=["true"], max_length=15
-    )
-    prefixo_linha: bool = Field(
-        ..., alias="prefixoLinha", description="Permissão do Evento.", examples=["true"], max_length=15
-    )
-    codigo_linha: bool = Field(
-        ..., alias="codigoLinha", description="Permissão do Evento.", examples=["true"], max_length=15
-    )
-    turno: bool = Field(..., description="Permissão do Evento.", examples=["true"], max_length=15)
+    cod_servico: bool = Field(..., alias="codServico", description="Permissão do Evento.", examples=["true"])
+    cod_veiculo: bool = Field(..., alias="codVeiculo", description="Permissão do Evento.", examples=["true"])
+    prefixo_linha: bool = Field(..., alias="prefixoLinha", description="Permissão do Evento.", examples=["true"])
+    codigo_linha: bool = Field(..., alias="codigoLinha", description="Permissão do Evento.", examples=["true"])
+    turno: bool = Field(..., description="Permissão do Evento.", examples=["true"])
     data_inicio_viagem: bool = Field(
-        ..., alias="dataInicioViagem", description="Permissão do Evento.", examples=["true"], max_length=15
+        ..., alias="dataInicioViagem", description="Permissão do Evento.", examples=["true"]
     )
     data_termino_viagem: bool = Field(
-        ..., alias="dataTerminoViagem", description="Permissão do Evento.", examples=["true"], max_length=15
+        ..., alias="dataTerminoViagem", description="Permissão do Evento.", examples=["true"]
     )
-    hr_inicio: bool = Field(..., alias="hrInicio", description="Permissão do Evento.", examples=["true"], max_length=15)
-    hr_fim: bool = Field(..., alias="hrFim", description="Permissão do Evento.", examples=["true"], max_length=15)
+    hr_inicio: bool = Field(..., alias="hrInicio", description="Permissão do Evento.", examples=["true"])
+    hr_fim: bool = Field(..., alias="hrFim", description="Permissão do Evento.", examples=["true"])
     roleta_inicio_validador: bool = Field(
-        ..., alias="roletaInicioValidador", description="Permissão do Evento.", examples=["true"], max_length=15
+        ..., alias="roletaInicioValidador", description="Permissão do Evento.", examples=["true"]
     )
-    roleta_fim: bool = Field(
-        ..., alias="roletaFim", description="Permissão do Evento.", examples=["true"], max_length=15
-    )
-    tipo_pagamento: bool = Field(
-        ..., alias="tipoPagamento", description="Permissão do Evento.", examples=["true"], max_length=15
-    )
+    roleta_fim: bool = Field(..., alias="roletaFim", description="Permissão do Evento.", examples=["true"])
+    tipo_pagamento: bool = Field(..., alias="tipoPagamento", description="Permissão do Evento.", examples=["true"])
     quantidade_passageiros: bool = Field(
-        ..., alias="quantidadePassageiros", description="Permissão do Evento.", examples=["true"], max_length=15
+        ..., alias="quantidadePassageiros", description="Permissão do Evento.", examples=["true"]
     )
-    valor_unitario: bool = Field(
-        ..., alias="valorUnitario", description="Permissão do Evento.", examples=["true"], max_length=15
-    )
-    total_arrecadado: bool = Field(
-        ..., alias="totalArrecadado", description="Permissão do Evento.", examples=["true"], max_length=15
-    )
+    valor_unitario: bool = Field(..., alias="valorUnitario", description="Permissão do Evento.", examples=["true"])
+    total_arrecadado: bool = Field(..., alias="totalArrecadado", description="Permissão do Evento.", examples=["true"])
     total_gratuidades: bool = Field(
-        ..., alias="totalGratuidades", description="Permissão do Evento.", examples=["true"], max_length=15
+        ..., alias="totalGratuidades", description="Permissão do Evento.", examples=["true"]
     )
-    total_dinheiro: bool = Field(
-        ..., alias="totalDinheiro", description="Permissão do Evento.", examples=["true"], max_length=15
-    )
-    diferenca: bool = Field(..., description="Permissão do Evento.", examples=["true"], max_length=15)
+    total_dinheiro: bool = Field(..., alias="totalDinheiro", description="Permissão do Evento.", examples=["true"])
+    diferenca: bool = Field(..., description="Permissão do Evento.", examples=["true"])
 
 
 class RespostaColetor(BaseModel):
