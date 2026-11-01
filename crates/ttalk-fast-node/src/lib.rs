@@ -29,6 +29,14 @@ pub struct DecoderLimits {
     pub max_ipc_bytes: Option<u32>,
 }
 
+#[napi(object)]
+pub struct Provenance {
+    pub repository: String,
+    pub commit: String,
+    #[napi(js_name = "commitDate")]
+    pub commit_date: String,
+}
+
 impl DecoderLimits {
     fn apply(&self, limits: &mut DecodeLimits) {
         if let Some(value) = self.max_input_bytes {
@@ -75,10 +83,23 @@ pub fn build_spec_index(
     repo: String,
     product: Option<String>,
     out_dir: Option<String>,
+    provenance: Option<Provenance>,
 ) -> Result<Value> {
     let product = product.unwrap_or_else(|| "Protheus".to_string());
     let out_dir = out_dir.unwrap_or_else(|| "ttalk-build".to_string());
-    let build = ttalk_fast_core::build(Path::new(&repo), &product).map_err(err)?;
+    let build = match provenance {
+        Some(provenance) => ttalk_fast_core::build_with_provenance(
+            Path::new(&repo),
+            &product,
+            ttalk_fast_core::load::Provenance {
+                repository: provenance.repository,
+                commit: provenance.commit,
+                commit_date: provenance.commit_date,
+            },
+        )
+        .map_err(err)?,
+        None => ttalk_fast_core::build(Path::new(&repo), &product).map_err(err)?,
+    };
     ttalk_fast_core::write_build(&build, Path::new(&out_dir)).map_err(err)?;
     serde_json::to_value(&build.summary).map_err(err)
 }

@@ -47,7 +47,7 @@ client.sales_charge_v1.create_sales_charge(body={...})      # dict or pydantic m
 ## What is generated, from what
 
 | Artifact | Made by | Notes |
-|---|---|---|
+| --- | --- | --- |
 | `protheus/spec/index.json` | Rust engine, model names + pydantic verdicts added by `build.py` | 122 APIs, 550 operations; provenance (`commit`, `commit_date`) pinned |
 | `protheus/spec/schemas/<api>.json` | Rust engine | bundled component schemas, used by the runtime Arrow decoder |
 | `protheus/apis/<api>_v<n>.py` | `build.py` | one class per API/version, sync + async, one method per operation |
@@ -123,9 +123,7 @@ flight through `decodeAsync` complete in ~66 ms on two cores.
 - **Auth.** `BasicAuth`, `BearerAuth`, or `OAuth2PasswordAuth` — password grant
   on `POST <base_url>/api/oauth2/v1/token` with credentials in the query
   string, cached token, refresh grant on expiry, one password re-grant on 401.
-  The spec enum says `PASSWORD`/`REFRESH_TOKEN`; TOTVS documentation and
-  servers use lowercase, which is what is sent. The auth object is not
-  synchronised: concurrent first requests may fetch the token twice.
+  The auth object is not synchronised: concurrent first requests may fetch the token twice.
 - **Errors.** Status >= 400 raises `ProtheusError` with the TTALK `ErrorModel`
   fields (`code`, `message`, `detailed_message`, `help_url`, `details`) or the
   raw body when the response is not an envelope. Network failures raise
@@ -175,6 +173,21 @@ byte-identical. Porting note: the Rust engine reproduces the original Python
 generator field for field (the committed index was the oracle), the only
 intentional change being the `type` normalisation above, which turned a
 handful of `Any` fields into real types.
+
+For source archives without `.git`, pass explicit provenance so generation
+remains reproducible:
+
+```python
+ttalk_fast.build_spec_index(
+    checkout, "Protheus", "build/",
+    {"repository": "https://github.com/totvs/ttalk-standard-message",
+     "commit": "<40-hex-commit>", "commit_date": "<ISO-8601-date>"}
+)
+```
+
+The equivalent Node call accepts `{ repository, commit, commitDate }` as the
+fourth argument to `buildSpecIndex`. When no override is supplied, the engine
+continues to read provenance from Git as before.
 
 ## Using the index without the client
 

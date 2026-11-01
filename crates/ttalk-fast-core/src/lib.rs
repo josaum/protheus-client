@@ -91,6 +91,20 @@ pub fn build(repo: &Path, product: &str) -> Result<Build, Error> {
         .canonicalize()
         .map_err(|e| Error::Io(repo.display().to_string(), e))?;
     let provenance = load::git_provenance(&repo)?;
+    build_with_provenance(&repo, product, provenance)
+}
+
+/// Run the full pipeline with explicit provenance. This supports source archives
+/// and other builds where Git metadata is unavailable, while keeping generation
+/// reproducible. Callers own the accuracy of the supplied commit information.
+pub fn build_with_provenance(
+    repo: &Path,
+    product: &str,
+    provenance: load::Provenance,
+) -> Result<Build, Error> {
+    let repo = repo
+        .canonicalize()
+        .map_err(|e| Error::Io(repo.display().to_string(), e))?;
     let apis_dir = repo.join("jsonschema").join("apis");
     let mut spec_paths: Vec<std::path::PathBuf> = std::fs::read_dir(&apis_dir)
         .map_err(|e| Error::Io(apis_dir.display().to_string(), e))?

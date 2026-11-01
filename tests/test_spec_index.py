@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 import sys
@@ -20,6 +21,50 @@ def test_provenance_is_pinned() -> None:
     assert len(prov["commit"]) == 40 and prov["commit_date"]
     assert prov["product"] == "Protheus"
     assert prov["generator"].startswith("crates/ttalk-fast-core")
+
+
+def test_archive_build_accepts_explicit_provenance(tmp_path: Path) -> None:
+    """Source archives can be indexed without .git when provenance is supplied."""
+    ttalk_fast = pytest.importorskip("ttalk_fast")
+    api_dir = tmp_path / "jsonschema" / "apis"
+    api_dir.mkdir(parents=True)
+    minimal = {
+        "openapi": "3.0.1",
+        "info": {"x-totvs": {"productInformation": [{"product": "Protheus"}]}},
+        "paths": {
+            "/minimal": {
+                "get": {
+                    "operationId": "getMinimal",
+                    "responses": {
+                        "200": {
+                            "description": "OK",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {"value": {"type": "string"}},
+                                    }
+                                }
+                            },
+                        }
+                    },
+                }
+            }
+        },
+    }
+    (api_dir / "minimal_v1_000.json").write_text(json.dumps(minimal), encoding="utf-8")
+    provenance = {
+        "repository": "https://example.test/archive",
+        "commit": "abc123",
+        "commit_date": "2026-01-02T03:04:05Z",
+    }
+    out_dir = tmp_path / "out"
+    summary = json.loads(ttalk_fast.build_spec_index(str(tmp_path), "Protheus", str(out_dir), provenance))
+    assert summary["apis"] == 1
+    index = json.loads((out_dir / "spec-index.json").read_text(encoding="utf-8"))
+    assert index["provenance"] == provenance
+    with pytest.raises(ValueError, match="unknown provenance key"):
+        ttalk_fast.build_spec_index(str(tmp_path), "Protheus", str(out_dir), provenance | {"unexpected": True})
 
 
 def test_only_protheus_available_operations_are_indexed() -> None:
