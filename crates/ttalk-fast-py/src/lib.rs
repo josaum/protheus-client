@@ -13,6 +13,7 @@ use pyo3::types::{PyBytes, PyDict};
 use std::path::Path;
 use std::time::Duration;
 use ttalk_fast_core::arrow::DecodeLimits;
+use ttalk_fast_core::load::Provenance;
 
 pyo3::create_exception!(ttalk_fast, DecodeError, PyValueError);
 pyo3::create_exception!(ttalk_fast, ResourceLimitError, DecodeError);
@@ -74,16 +75,59 @@ fn decode_limits(dict: Option<Bound<'_, PyDict>>) -> PyResult<DecodeLimits> {
     Ok(limits)
 }
 
+fn provenance_override(dict: Option<Bound<'_, PyDict>>) -> PyResult<Option<Provenance>> {
+    let Some(dict) = dict else {
+        return Ok(None);
+    };
+    const KEYS: &[&str] = &["repository", "commit", "commit_date"];
+    for key in dict.keys().iter() {
+        let key = key.extract::<String>()?;
+        if !KEYS.contains(&key.as_str()) {
+            return Err(PyValueError::new_err(format!(
+                "unknown provenance key {key:?}"
+            )));
+        }
+    }
+    let required = |name: &str| -> PyResult<String> {
+        dict.get_item(name)?
+            .ok_or_else(|| {
+                PyValueError::new_err(format!(
+                    "provenance requires repository, commit and commit_date (missing {name:?})"
+                ))
+            })?
+            .extract::<String>()
+    };
+    Ok(Some(Provenance {
+        repository: required("repository")?,
+        commit: required("commit")?,
+        commit_date: required("commit_date")?,
+    }))
+}
+
 /// Run the spec engine over a TTALK checkout and write `spec-index.json`,
 /// `fixtures.json` and `bundles/<api_id>.json` into `out_dir`. Returns the
 /// summary as a JSON string.
 #[pyfunction]
-#[pyo3(signature = (repo, product = "Protheus", out_dir = "ttalk-build"))]
-fn build_spec_index(py: Python<'_>, repo: &str, product: &str, out_dir: &str) -> PyResult<String> {
+#[pyo3(signature = (repo, product = "Protheus", out_dir = "ttalk-build", provenance = None))]
+fn build_spec_index(
+    py: Python<'_>,
+    repo: &str,
+    product: &str,
+    out_dir: &str,
+    provenance: Option<Bound<'_, PyDict>>,
+) -> PyResult<String> {
     let (repo, product, out_dir) = (repo.to_string(), product.to_string(), out_dir.to_string());
+    let provenance = provenance_override(provenance)?;
     let summary = py.detach(move || -> Result<String, String> {
-        let build =
-            ttalk_fast_core::build(Path::new(&repo), &product).map_err(|e| e.to_string())?;
+        let build = match provenance {
+            Some(provenance) => {
+                ttalk_fast_core::build_with_provenance(Path::new(&repo), &product, provenance)
+                    .map_err(|e| e.to_string())?
+            }
+            None => {
+                ttalk_fast_core::build(Path::new(&repo), &product).map_err(|e| e.to_string())?
+            }
+        };
         ttalk_fast_core::write_build(&build, Path::new(&out_dir)).map_err(|e| e.to_string())?;
         serde_json::to_string(&build.summary).map_err(|e| e.to_string())
     });

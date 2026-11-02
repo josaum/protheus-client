@@ -1,6 +1,12 @@
 /** Crate / binding version string. */
 export declare function version(): string;
 
+export interface Provenance {
+  repository: string;
+  commit: string;
+  commitDate: string;
+}
+
 export interface BuildSummary {
   apis: number;
   operations: number;
@@ -13,7 +19,7 @@ export interface BuildSummary {
  * Run the spec engine over a TTALK checkout and write `spec-index.json`,
  * `fixtures.json` and `bundles/<api_id>.json` into `outDir` (default `ttalk-build`).
  */
-export declare function buildSpecIndex(repo: string, product?: string, outDir?: string): BuildSummary;
+export declare function buildSpecIndex(repo: string, product?: string, outDir?: string, provenance?: Provenance): BuildSummary;
 
 export interface Violation {
   row: number;

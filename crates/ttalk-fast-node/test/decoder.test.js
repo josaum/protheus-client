@@ -3,6 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const os = require('node:os');
 
 const { version, Decoder, buildSpecIndex } = require('..');
 const schemas = fs.readFileSync(
@@ -32,6 +33,40 @@ test('version and constructor validation', () => {
   assert.throws(() => new Decoder('{not json', 'PagedRegionGroups'), /bundleJson/);
   assert.throws(() => new Decoder(schemas, 'Nope'), /unknown schema/);
   assert.equal(typeof buildSpecIndex, 'function');
+});
+
+test('archive builds accept explicit provenance without .git', () => {
+  const repo = fs.mkdtempSync(path.join(os.tmpdir(), 'ttalk-archive-'));
+  try {
+    const apiDir = path.join(repo, 'jsonschema', 'apis');
+    fs.mkdirSync(apiDir, { recursive: true });
+    const minimal = {
+      openapi: '3.0.1',
+      info: { 'x-totvs': { productInformation: [{ product: 'Protheus' }] } },
+      paths: {
+        '/minimal': {
+          get: {
+            operationId: 'getMinimal',
+            responses: {
+              200: {
+                description: 'OK',
+                content: { 'application/json': { schema: { type: 'object', properties: { value: { type: 'string' } } } } },
+              },
+            },
+          },
+        },
+      },
+    };
+    fs.writeFileSync(path.join(apiDir, 'minimal_v1_000.json'), JSON.stringify(minimal));
+    const outDir = path.join(repo, 'out');
+    const provenance = { repository: 'https://example.test/archive', commit: 'abc123', commitDate: '2026-01-02T03:04:05Z' };
+    const summary = buildSpecIndex(repo, 'Protheus', outDir, provenance);
+    assert.equal(summary.apis, 1);
+    const index = JSON.parse(fs.readFileSync(path.join(outDir, 'spec-index.json'), 'utf8'));
+    assert.deepEqual(index.provenance, { repository: provenance.repository, commit: provenance.commit, commit_date: provenance.commitDate });
+  } finally {
+    fs.rmSync(repo, { recursive: true, force: true });
+  }
 });
 
 test('decode validates, demotes and keeps every row', () => {
